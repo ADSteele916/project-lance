@@ -1,0 +1,689 @@
+[
+    {
+        "cls": "DamagingMove",
+        "name": "Pound",
+        "pp": 56,
+        "move_type": "Normal",
+        "power": 40,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "cls": "HighCriticalChanceDamagingMove",
+        "name": "Karate Chop",
+        "pp": 40,
+        "move_type": "Normal",
+        "power": 50,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Double SLap"
+    },
+    {
+        "name": "Comet Punch"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Mega Punch",
+        "pp": 32,
+        "move_type": "Normal",
+        "power": 80,
+        "accuracy": 85,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Pay Day",
+        "pp": 32,
+        "move_type": "Normal",
+        "power": 40,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Fire Punch"
+    },
+    {
+        "name": "Ice Punch"
+    },
+    {
+        "name": "Thunder Punch"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Scratch",
+        "pp": 56,
+        "move_type": "Normal",
+        "power": 40,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Vice Grip",
+        "pp": 48,
+        "move_type": "Normal",
+        "power": 55,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Guillotine"
+    },
+    {
+        "name": "Razor Wind"
+    },
+    {
+        "name": "Swords Dance"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Cut",
+        "pp": 48,
+        "move_type": "Normal",
+        "power": 50,
+        "accuracy": 95,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Gust",
+        "pp": 56,
+        "move_type": "Normal",
+        "power": 40,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Wing Attack",
+        "pp": 56,
+        "move_type": "Flying",
+        "power": 35,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Whirlwind"
+    },
+    {
+        "name": "Fly"
+    },
+    {
+        "name": "Bind"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Slam",
+        "pp": 32,
+        "move_type": "Normal",
+        "power": 80,
+        "accuracy": 75,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Vine Whip",
+        "pp": 16,
+        "move_type": "Grass",
+        "power": 35,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Stomp"
+    },
+    {
+        "name": "Double Kick"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Mega Kick",
+        "pp": 8,
+        "move_type": "Normal",
+        "power": 120,
+        "accuracy": 75,
+        "priority": 0
+    },
+    {
+        "name": "Jump Kick"
+    },
+    {
+        "name": "Rolling Kick"
+    },
+    {
+        "name": "Sand Attack"
+    },
+    {
+        "name": "Headbutt"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Horn Attack",
+        "pp": 40,
+        "move_type": "Normal",
+        "power": 65,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Fury Attack"
+    },
+    {
+        "name": "Horn Drill"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Tackle",
+        "pp": 56,
+        "move_type": "Normal",
+        "power": 35,
+        "accuracy": 95,
+        "priority": 0
+    },
+    {
+        "name": "Body Slam"
+    },
+    {
+        "name": "Wrap"
+    },
+    {
+        "name": "Take Down"
+    },
+    {
+        "name": "Thrash"
+    },
+    {
+        "name": "Double-Edge"
+    },
+    {
+        "name": "Tail Whip"
+    },
+    {
+        "name": "Poison Sting"
+    },
+    {
+        "name": "Twineedle"
+    },
+    {
+        "name": "Pin Missile"
+    },
+    {
+        "name": "Leer"
+    },
+    {
+        "name": "Bite"
+    },
+    {
+        "name": "Growl"
+    },
+    {
+        "name": "Roar"
+    },
+    {
+        "name": "Sing"
+    },
+    {
+        "name": "Supersonic"
+    },
+    {
+        "name": "Sonic Boom"
+    },
+    {
+        "name": "Disable"
+    },
+    {
+        "name": "Acid"
+    },
+    {
+        "name": "Ember"
+    },
+    {
+        "name": "Flamethrower"
+    },
+    {
+        "name": "Mist"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Water Gun",
+        "pp": 40,
+        "move_type": "Water",
+        "power": 40,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Hydro Pump",
+        "pp": 8,
+        "move_type": "Water",
+        "power": 120,
+        "accuracy": 80,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Surf",
+        "pp": 24,
+        "move_type": "Water",
+        "power": 95,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Ice Beam"
+    },
+    {
+        "name": "Blizzard"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Psybeam",
+        "pp": 32,
+        "move_type": "Psychic",
+        "power": 65,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Bubble Beam"
+    },
+    {
+        "name": "Aurora Beam"
+    },
+    {
+        "name": "Hyper Beam"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Peck",
+        "pp": 56,
+        "move_type": "Flying",
+        "power": 35,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Drill Peck",
+        "pp": 32,
+        "move_type": "Flying",
+        "power": 80,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Submission"
+    },
+    {
+        "name": "Low Kick"
+    },
+    {
+        "name": "Counter"
+    },
+    {
+        "name": "Seismic Toss"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Strength",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 80,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Absorb"
+    },
+    {
+        "name": "Mega Drain"
+    },
+    {
+        "name": "Leech Seed"
+    },
+    {
+        "name": "Growth"
+    },
+    {
+        "cls": "HighCriticalChanceDamagingMove",
+        "name": "Razor Leaf",
+        "pp": 40,
+        "move_type": "Grass",
+        "power": 55,
+        "accuracy": 95,
+        "priority": 0
+    },
+    {
+        "name": "Solar Beam"
+    },
+    {
+        "name": "Poison Powder"
+    },
+    {
+        "name": "Stun Spore"
+    },
+    {
+        "name": "Sleep Powder"
+    },
+    {
+        "name": "Petal Dance"
+    },
+    {
+        "name": "String Shot"
+    },
+    {
+        "name": "Dragon Rage"
+    },
+    {
+        "name": "Fire Spin"
+    },
+    {
+        "name": "Thunder Shock"
+    },
+    {
+        "name": "Thunderbolt"
+    },
+    {
+        "name": "Thunder Wave"
+    },
+    {
+        "name": "Thunder"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Rock Throw",
+        "pp": 24,
+        "move_type": "Rock",
+        "power": 50,
+        "accuracy": 65,
+        "priority": 0
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Earthquake",
+        "pp": 16,
+        "move_type": "Ground",
+        "power": 100,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Fissure"
+    },
+    {
+        "name": "Dig"
+    },
+    {
+        "name": "Toxic"
+    },
+    {
+        "name": "Confusion"
+    },
+    {
+        "name": "Psychic"
+    },
+    {
+        "name": "Hypnosis"
+    },
+    {
+        "name": "Meditate"
+    },
+    {
+        "name": "Agility"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Quick Attack",
+        "pp": 48,
+        "move_type": "Normal",
+        "power": 40,
+        "accuracy": 100,
+        "priority": 1
+    },
+    {
+        "name": "Rage"
+    },
+    {
+        "name": "Teleport"
+    },
+    {
+        "name": "Night Shade"
+    },
+    {
+        "name": "Mimic"
+    },
+    {
+        "name": "Screech"
+    },
+    {
+        "name": "Double Team"
+    },
+    {
+        "name": "Recover"
+    },
+    {
+        "name": "Harden"
+    },
+    {
+        "name": "Minimize"
+    },
+    {
+        "name": "Smokescreen"
+    },
+    {
+        "name": "Confuse Ray"
+    },
+    {
+        "name": "Withdraw"
+    },
+    {
+        "name": "Defense Curl"
+    },
+    {
+        "name": "Barrier"
+    },
+    {
+        "name": "Light Screen"
+    },
+    {
+        "name": "Haze"
+    },
+    {
+        "name": "Reflect"
+    },
+    {
+        "name": "Focus Energy"
+    },
+    {
+        "name": "Bide"
+    },
+    {
+        "name": "Metronome"
+    },
+    {
+        "name": "Mirror Move"
+    },
+    {
+        "name": "Self-Destruct"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Egg Bomb",
+        "pp": 16,
+        "move_type": "Normal",
+        "power": 100,
+        "accuracy": 75,
+        "priority": 0
+    },
+    {
+        "name": "Lick"
+    },
+    {
+        "name": "Smog"
+    },
+    {
+        "name": "Sludge"
+    },
+    {
+        "name": "Bone Club"
+    },
+    {
+        "name": "Fire Blast"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Waterfall",
+        "pp": 24,
+        "move_type": "Water",
+        "power": 80,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Clamp"
+    },
+    {
+        "name": "Swift"
+    },
+    {
+        "name": "Skull Bash"
+    },
+    {
+        "name": "Spike Cannon"
+    },
+    {
+        "name": "Constrict"
+    },
+    {
+        "name": "Amnesia"
+    },
+    {
+        "name": "Kinesis"
+    },
+    {
+        "name": "Soft-Boiled"
+    },
+    {
+        "name": "High Jump Kick"
+    },
+    {
+        "name": "Glare"
+    },
+    {
+        "name": "Dream Eater"
+    },
+    {
+        "name": "Poison Gas"
+    },
+    {
+        "name": "Barrage"
+    },
+    {
+        "name": "Leech Life"
+    },
+    {
+        "name": "Lovely Kiss"
+    },
+    {
+        "name": "Sky Attack"
+    },
+    {
+        "name": "Transform"
+    },
+    {
+        "name": "Bubble"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Dizzy Punch",
+        "pp": 16,
+        "move_type": "Normal",
+        "power": 70,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Spore"
+    },
+    {
+        "name": "Flash"
+    },
+    {
+        "name": "Psywave"
+    },
+    {
+        "name": "Splash"
+    },
+    {
+        "name": "Acid Armor"
+    },
+    {
+        "cls": "HighCriticalChanceDamagingMove",
+        "name": "Crabhammer",
+        "pp": 16,
+        "move_type": "Water",
+        "power": 90,
+        "accuracy": 85,
+        "priority": 0
+    },
+    {
+        "name": "Explosion"
+    },
+    {
+        "name": "Fury Swipes"
+    },
+    {
+        "name": "Bonemerang"
+    },
+    {
+        "name": "Rest"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Rock Slide",
+        "pp": 16,
+        "move_type": "Rock",
+        "power": 75,
+        "accuracy": 90,
+        "priority": 0
+    },
+    {
+        "name": "Hyper Fang"
+    },
+    {
+        "name": "Sharpen"
+    },
+    {
+        "name": "Conversion"
+    },
+    {
+        "cls": "DamagingMove",
+        "name": "Tri Attack",
+        "pp": 16,
+        "move_type": "Rock",
+        "power": 80,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Super Fang"
+    },
+    {
+        "cls": "HighCriticalChanceDamagingMove",
+        "name": "Slash",
+        "pp": 32,
+        "move_type": "Normal",
+        "power": 70,
+        "accuracy": 100,
+        "priority": 0
+    },
+    {
+        "name": "Substitute"
+    },
+    {
+        "name": "Struggle"
+    }
+]
