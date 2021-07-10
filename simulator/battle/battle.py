@@ -150,14 +150,14 @@ class Battle:
         if action.is_switch:
             if SWITCH_SLOTS[action] == self.team_cursors[player]:
                 raise AlreadyInBattleException(self.active_pokemon[player])
-            if len(self.teams[player]) <= SWITCH_SLOTS[action] + 1:
+            if len(self.teams[player]) < SWITCH_SLOTS[action] + 1:
                 raise NoPokemonInSlotException(SWITCH_SLOTS[action] + 1)
-            if self.teams[player][SWITCH_SLOTS[action]].knocked_out is True:
+            if self.teams[player][SWITCH_SLOTS[action]].knocked_out:
                 raise FaintedPokemonException(self.teams[player][SWITCH_SLOTS[action]])
         if action.is_move:
-            if self.teams[player][self.team_cursors[player]].pokemon.moves[MOVE_SLOTS[action]] is None:
+            if len(self.active_pokemon[player].moves) < MOVE_SLOTS[action] + 1:
                 raise NoMoveInSlotException(MOVE_SLOTS[action] + 1)
-            if self.teams[player][self.team_cursors[player]].pp[MOVE_SLOTS[action]] == 0:
+            if self.active_pokemon[player].pp[MOVE_SLOTS[action]] == 0:
                 raise OutOfPPException(self.teams[player][self.team_cursors[player]].pokemon.moves[MOVE_SLOTS[action]])
 
         if player == Player.P1:

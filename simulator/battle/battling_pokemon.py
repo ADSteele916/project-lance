@@ -1,36 +1,44 @@
 """Functionality for a Pokemon currently in battle, with variable HP, Status, and PP"""
 
-from typing import TYPE_CHECKING, List
+from typing import List
 
+from simulator.moves.move import Move
 from simulator.pokemon.party_pokemon import PartyPokemon
 from simulator.status import Status
 
-if TYPE_CHECKING:
-    from simulator.battle.battle import Battle, Player
 
+class InvalidHPException(Exception):
 
-class ZeroPPException(Exception):
-
-    def __init__(self):
-        super().__init__("PP is zero and cannot be decremented further.")
+    def __init__(self, invalid_hp: int):
+        super().__init__(f"{invalid_hp} is an invalid HP. HP values must be between 0 and the Pokemon's maximum HP.")
 
 
 class BattlingPokemon:
     """A Pokemon that is currently in a battle, but may or may not be active."""
 
     def __init__(self, pokemon: PartyPokemon):
-        self.__pokemon = pokemon
+        self.__party_pokemon = pokemon
         self.__hp = pokemon.hp
         self.__status = Status.NONE
         self.__pp = list(map(lambda m: None if m is None else m.pp, pokemon.moves))
 
     @property
     def pokemon(self) -> PartyPokemon:
-        return self.__pokemon
+        return self.__party_pokemon
 
     @property
     def hp(self) -> int:
         return self.__hp
+
+    @hp.setter
+    def hp(self, new_hp: int):
+        if not 0 <= new_hp <= self.max_hp:
+            raise InvalidHPException(new_hp)
+        self.__hp = new_hp
+
+    @property
+    def max_hp(self) -> int:
+        return self.pokemon.hp
 
     @property
     def attack(self) -> int:
@@ -57,24 +65,13 @@ class BattlingPokemon:
         self.__status = new_status
 
     @property
+    def moves(self) -> List[Move]:
+        return self.pokemon.moves
+
+    @property
     def pp(self) -> List[int]:
         return self.__pp
 
     @property
     def knocked_out(self) -> bool:
         return self.hp == 0
-
-    def deal_damage(self, damage: int):
-        self.__hp = self.__hp - damage if self.__hp - damage > 0 else 0
-
-    def heal(self, damage: int):
-        self.__hp = self.__hp + damage if self.__hp + damage < self.pokemon.hp else self.pokemon.hp
-
-    def use_move(self, move_index: int, battle: "Battle", player: "Player"):
-        self.decrement_pp(move_index)
-        self.pokemon.moves[move_index].execute(battle, player)
-
-    def decrement_pp(self, move_index: int):
-        if self.__pp[move_index] == 0:
-            raise ZeroPPException()
-        self.__pp[move_index] -= 1

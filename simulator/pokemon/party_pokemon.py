@@ -52,7 +52,7 @@ class PartyPokemon:
 
     def __init__(
             self,
-            base: PokemonSpecies,
+            species: PokemonSpecies,
             level: int,
             moves: List["Move"],
             atk_dv: int,
@@ -66,7 +66,7 @@ class PartyPokemon:
             spc_stat_exp: int,
             nickname: str = "",
     ):
-        self.__base_pokemon = base
+        self.__pokemon_species = species
         self.level = level
         self.moves = moves
         self.atk_dv = atk_dv
@@ -81,11 +81,11 @@ class PartyPokemon:
         self.nickname = nickname
 
     def __str__(self):
-        return self.nickname if len(self.nickname) > 0 else self.base_pokemon.name
+        return self.nickname if len(self.nickname) > 0 else self.species.name
 
     @property
-    def base_pokemon(self) -> PokemonSpecies:
-        return self.__base_pokemon
+    def species(self) -> PokemonSpecies:
+        return self.__pokemon_species
 
     @property
     def level(self) -> int:
@@ -109,8 +109,8 @@ class PartyPokemon:
         if not 1 <= len(new_moves) <= 4:
             raise InvalidMoveCountException(len(new_moves))
         for move in new_moves:
-            if move is not None and move not in self.base_pokemon.moveset:
-                raise InvalidMoveException(move, self.base_pokemon)
+            if move is not None and move not in self.species.moveset:
+                raise InvalidMoveException(move, self.species)
         self.__moves = new_moves
 
     @property
@@ -226,34 +226,34 @@ class PartyPokemon:
     @property
     def hp(self) -> int:
         return (
-                np.floor(((self.base_pokemon.base_hp + self.hp_dv) + np.floor(np.sqrt(self.hp_stat_exp) / 4))
+                np.floor(((self.species.base_hp + self.hp_dv) + np.floor(np.sqrt(self.hp_stat_exp) / 4))
                          * self.level / 100) + self.level + 10
         )
 
     @property
     def attack(self) -> int:
         return (
-                np.floor(((self.base_pokemon.base_atk + self.__atk_dv) + np.floor(np.sqrt(self.atk_stat_exp) / 4))
+                np.floor(((self.species.base_atk + self.__atk_dv) + np.floor(np.sqrt(self.atk_stat_exp) / 4))
                          * self.level / 100) + 5
         )
 
     @property
     def defense(self) -> int:
         return (
-                np.floor(((self.base_pokemon.base_def + self.__def_dv) + np.floor(np.sqrt(self.def_stat_exp) / 4))
+                np.floor(((self.species.base_def + self.__def_dv) + np.floor(np.sqrt(self.def_stat_exp) / 4))
                          * self.level / 100) + 5
         )
 
     @property
     def speed(self) -> int:
         return (
-                np.floor(((self.base_pokemon.base_spe + self.__spe_dv) + np.floor(np.sqrt(self.spe_stat_exp) / 4))
+                np.floor(((self.species.base_spe + self.__spe_dv) + np.floor(np.sqrt(self.spe_stat_exp) / 4))
                          * self.level / 100) + 5
         )
 
     @property
     def special(self) -> int:
         return (
-                np.floor(((self.base_pokemon.base_spc + self.__spc_dv) + np.floor(np.sqrt(self.spc_stat_exp) / 4))
+                np.floor(((self.species.base_spc + self.__spc_dv) + np.floor(np.sqrt(self.spc_stat_exp) / 4))
                          * self.level / 100) + 5
         )

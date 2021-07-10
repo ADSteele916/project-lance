@@ -43,7 +43,7 @@ class DamagingMove(Move):
             bool: Whether or not the attack is a critical hit.
         """
         crit_roll = np.random.randint(0, high=256)
-        threshold = attacker.pokemon.pokemon.base_pokemon.critical_hit_threshold(False, attacker.focus_energy)
+        threshold = attacker.pokemon.pokemon.species.critical_hit_threshold(False, attacker.focus_energy)
         return crit_roll < threshold
 
     def get_damage(self, attacker: ActivePokemon, target: ActivePokemon, critical: bool) -> int:
@@ -65,10 +65,10 @@ class DamagingMove(Move):
             effective_attack = attacker.attack if self.move_type.is_physical else attacker.special
             effective_defense = target.defense if self.move_type.is_physical else target.special
         stab = (
-                1.5 if self.move_type == attacker.pokemon.pokemon.base_pokemon.primary_type
-                or self.move_type == attacker.pokemon.pokemon.base_pokemon.secondary_type else 1.0
+                1.5 if self.move_type == attacker.pokemon.pokemon.species.primary_type
+                or self.move_type == attacker.pokemon.pokemon.species.secondary_type else 1.0
         )
-        type_effectiveness = target.pokemon.pokemon.base_pokemon.attack_effectiveness(self.move_type)
+        type_effectiveness = target.pokemon.pokemon.species.attack_effectiveness(self.move_type)
         rand = np.random.randint(217, high=256)
 
         adjusted_level = (2 * level) // 5 + 2

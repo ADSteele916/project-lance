@@ -12,5 +12,5 @@ class HighCriticalChanceDamagingMove(DamagingMove):
     @staticmethod
     def is_critical_hit(attacker: ActivePokemon):
         crit_roll = np.random.randint(0, high=256)
-        threshold = attacker.pokemon.pokemon.base_pokemon.critical_hit_threshold(True, attacker.focus_energy)
+        threshold = attacker.pokemon.pokemon.species.critical_hit_threshold(True, attacker.focus_energy)
         return crit_roll < threshold
