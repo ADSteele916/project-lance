@@ -104,6 +104,8 @@ class Battle:
         self.__active_pokemon: List[ActivePokemon] = [ActivePokemon(self.teams[0][0]), ActivePokemon(self.teams[1][0])]
         self.__turn = 1
 
+        self.victor: Optional[Player] = None
+
         self.__action_lock = Lock()
         self.__action_lock.acquire()
         self.__pending_actions: List[Optional[Action]] = [None, None]
@@ -135,6 +137,25 @@ class Battle:
     def increment_turn(self):
         self.__turn += 1
 
+    def __switch_checks(self, player: Player, switch: Action):
+        """Raises an exception if the pending switch is invalid.
+
+        Args:
+            player (Player): The Player whose pending action will be set.
+            switch (Action): The switch that the player wishes to make.
+
+        Raises:
+            AlreadyInBattleException: The player is trying to switch to a Pokemon that is already active.
+            NoPokemonInSlotException: The player is trying to switch to a slot that he or she has not filled.
+            FaintedPokemonException: The player is trying to switch to a Pokemon that has fainted.
+        """
+        if SWITCH_SLOTS[switch] == self.team_cursors[player]:
+            raise AlreadyInBattleException(self.__active_pokemon[player])
+        if len(self.teams[player]) < SWITCH_SLOTS[switch] + 1:
+            raise NoPokemonInSlotException(SWITCH_SLOTS[switch] + 1)
+        if self.teams[player][SWITCH_SLOTS[switch]].knocked_out:
+            raise FaintedPokemonException(self.teams[player][SWITCH_SLOTS[switch]])
+
     def set_pending_action(self, player: Player, action: Action):
         """Sets the Player's pending action to the given Action.
 
@@ -150,12 +171,7 @@ class Battle:
             OutOfPPException: The player is trying to use a move that is out of PP.
         """
         if action.is_switch:
-            if SWITCH_SLOTS[action] == self.team_cursors[player]:
-                raise AlreadyInBattleException(self.__active_pokemon[player])
-            if len(self.teams[player]) < SWITCH_SLOTS[action] + 1:
-                raise NoPokemonInSlotException(SWITCH_SLOTS[action] + 1)
-            if self.teams[player][SWITCH_SLOTS[action]].knocked_out:
-                raise FaintedPokemonException(self.teams[player][SWITCH_SLOTS[action]])
+            self.__switch_checks(player, action)
         if action.is_move:
             if len(self.__active_pokemon[player].moves) < MOVE_SLOTS[action] + 1:
                 raise NoMoveInSlotException(MOVE_SLOTS[action] + 1)
@@ -185,12 +201,7 @@ class Battle:
             raise SwitchNotRequestedException(player)
         if action.is_move:
             raise MoveNotSwitchException(player)
-        if SWITCH_SLOTS[action] == self.team_cursors[player]:
-            raise AlreadyInBattleException(self.__active_pokemon[player])
-        if len(self.teams[player]) < SWITCH_SLOTS[action] + 1:
-            raise NoPokemonInSlotException(SWITCH_SLOTS[action] + 1)
-        if self.teams[player][SWITCH_SLOTS[action]].knocked_out:
-            raise FaintedPokemonException(self.teams[player][SWITCH_SLOTS[action]])
+        self.__switch_checks(player, action)
 
         self.__pending_switches[player] = action
 
@@ -281,8 +292,14 @@ class Battle:
         self.__execute_action(first_mover)
         if not self.__active_pokemon[second_mover].knocked_out:
             self.__execute_action(second_mover)
+        else:
+            if all(map(lambda p: p.knocked_out, self.teams[second_mover])):
+                self.victor = first_mover
+                return
 
-        # TODO: Check if the second mover has been defeated (i.e. all Pokemon knocked out).
+        if all(map(lambda p: p.knocked_out, self.teams[first_mover])):
+            self.victor = second_mover
+            return
 
         if self.p1_active_pokemon.knocked_out:
             self.__wait_for_switch(Player.P1)
@@ -305,7 +322,8 @@ class Battle:
             # Execute switches and moves of the currently-active Pokemon.
             self.__execute_actions()
 
-        # TODO: Stop if the battle has ended.
+        if self.victor is not None:
+            return
 
         with self.__switch_lock:
             # Replace any Pokemon that have fainted.
