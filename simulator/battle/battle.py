@@ -3,7 +3,7 @@
 
 from enum import IntEnum
 from threading import Lock
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -92,6 +92,7 @@ class Battle:
             team_two: List[PartyPokemon],
             agent_one: PlayerAgent,
             agent_two: PlayerAgent,
+            max_allowed_turns: Optional[int] = 1000
     ):
         if not 1 <= len(team_one) <= 6:
             raise InvalidTeamSizeException(len(team_one))
@@ -102,12 +103,12 @@ class Battle:
         self.agents = (agent_one, agent_two)
         self.team_cursors: List[int] = [0, 0]
         self.__active_pokemon: List[ActivePokemon] = [ActivePokemon(self.teams[0][0]), ActivePokemon(self.teams[1][0])]
-        self.__turn = 1
 
+        self.__turn = 0
+        self.__max_allowed_turns = max_allowed_turns
         self.victor: Optional[Player] = None
 
         self.__action_lock = Lock()
-        self.__action_lock.acquire()
         self.__pending_actions: List[Optional[Action]] = [None, None]
 
         self.__switch_lock = Lock()
@@ -318,6 +319,8 @@ class Battle:
 
     def play_turn(self):
         """Plays out one turn of the battle."""
+        self.__turn += 1
+
         with self.__action_lock:
             # Execute switches and moves of the currently-active Pokemon.
             self.__execute_actions()
@@ -329,6 +332,21 @@ class Battle:
             # Replace any Pokemon that have fainted.
             self.__execute_switches()
 
-        self.__turn += 1
-
         self.__action_lock.acquire()
+
+    def __under_turn_max(self):
+        return self.__max_allowed_turns is None or self.turn > self.__max_allowed_turns
+
+    def play(self) -> Tuple[Optional[Player], int]:
+        """Plays out the entire battle to completion.
+
+        Returns:
+            Optional[Player]: The winner of the battle.
+            int: The turn count of the battle.
+        """
+        self.__action_lock.acquire()
+
+        while self.victor is None and self.__under_turn_max():
+            self.play_turn()
+
+        return self.victor, self.turn
