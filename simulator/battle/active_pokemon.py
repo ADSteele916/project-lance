@@ -1,7 +1,7 @@
 """Functionality for the Pokemon in a battle that is currently active."""
 
 from enum import IntEnum
-from typing import Optional, List, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional
 
 from simulator.battle.battling_pokemon import BattlingPokemon
 from simulator.moves.move import Move
@@ -97,11 +97,23 @@ class ActivePokemon:
         return self.pokemon.moves
 
     @property
+    def knocked_out(self) -> bool:
+        return self.pokemon.knocked_out
+
+    @property
     def pp(self) -> List[int]:
         return self.pokemon.pp
 
     @staticmethod
-    def __stat_change_multiplier(modifier: int):
+    def __stat_change_multiplier(modifier: int) -> float:
+        """Produces the stat multiplier corresponding to the given modifier amount
+
+        Args:
+            modifier (int): A stat modifier between -6 and 6, inclusive.
+
+        Returns:
+            float: The number by which the stat being modified should be multiplied during calculations.
+        """
         if not -6 <= modifier <= 6:
             raise ValueError("Modifier must be in [-6, 6].")
         numerators = (25, 28, 33, 40, 50, 66, 100, 150, 200, 250, 300, 350, 400)

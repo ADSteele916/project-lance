@@ -226,8 +226,8 @@ class PartyPokemon:
     @property
     def hp(self) -> int:
         return (
-                np.floor(((self.species.base_hp + self.hp_dv) + np.floor(np.sqrt(self.hp_stat_exp) / 4))
-                         * self.level / 100) + self.level + 10
+                np.floor(((self.species.base_hp + self.hp_dv) + np.floor(np.sqrt(self.hp_stat_exp) / 4)) * self.level
+                         / 100) + self.level + 10
         )
 
     @property
