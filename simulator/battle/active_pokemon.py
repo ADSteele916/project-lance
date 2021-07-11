@@ -113,6 +113,9 @@ class ActivePokemon:
 
         Returns:
             float: The number by which the stat being modified should be multiplied during calculations.
+
+        Raises:
+            ValueError: The given modifier is outside of the valid range.
         """
         if not -6 <= modifier <= 6:
             raise ValueError("Modifier must be in [-6, 6].")
