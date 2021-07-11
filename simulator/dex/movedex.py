@@ -2,6 +2,8 @@
 
 import json
 
+import numpy as np
+
 from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.high_critical_chance_damaging_move import HighCriticalChanceDamagingMove
 from simulator.type import Type
@@ -19,7 +21,7 @@ for __move in __movedex_dict_list:
                     __move["pp"],
                     Type[__move["move_type"].upper()],
                     __move["power"],
-                    __move["accuracy"],
+                    np.floor(__move["accuracy"] * 255 / 100),
                     __move["priority"]
             )
         elif __move["cls"] == "HighCriticalChanceDamagingMove":
@@ -28,6 +30,6 @@ for __move in __movedex_dict_list:
                     __move["pp"],
                     Type[__move["move_type"].upper()],
                     __move["power"],
-                    __move["accuracy"],
+                    np.floor(__move["accuracy"] * 255 / 100),
                     __move["priority"]
             )
