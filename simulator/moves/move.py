@@ -1,13 +1,15 @@
 """Functionality related to Pokemon moves."""
 
 from abc import ABCMeta, abstractmethod
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
-from simulator.battle.active_pokemon import ActivePokemon
-from simulator.battle.battle import Battle, Player
 from simulator.type import Type
+
+if TYPE_CHECKING:
+    from simulator.battle.active_pokemon import ActivePokemon
+    from simulator.battle.battle import Battle, Player
 
 
 class InvalidPPException(Exception):
@@ -47,7 +49,7 @@ class Move(metaclass=ABCMeta):
     def __str__(self):
         return self.name
 
-    def accuracy_check(self, attacker: ActivePokemon, target: ActivePokemon) -> bool:
+    def accuracy_check(self, attacker: "ActivePokemon", target: "ActivePokemon") -> bool:
         """Randomly determines whether or not the attacker will be be able to hit the target using this Move.
 
         Args:
@@ -69,7 +71,7 @@ class Move(metaclass=ABCMeta):
         return accuracy_roll < threshold
 
     @abstractmethod
-    def execute(self, battle: Battle, player: Player):
+    def execute(self, battle: "Battle", player: "Player"):
         """Executes the move, updating the given Battle environment as necessary.
 
         Args:

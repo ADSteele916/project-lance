@@ -1,13 +1,15 @@
 """Functionality for a move that deals damage to the opposing ActivePokemon."""
 
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 import numpy as np
 
-from simulator.battle.active_pokemon import ActivePokemon
-from simulator.battle.battle import Battle, Player
 from simulator.moves.move import Move
 from simulator.type import Type
+
+if TYPE_CHECKING:
+    from simulator.battle.active_pokemon import ActivePokemon
+    from simulator.battle.battle import Battle, Player
 
 
 class InvalidDamageException(Exception):
@@ -25,15 +27,15 @@ class DamagingMove(Move):
         super().__init__(name, pp, move_type, accuracy, priority)
         self.power = power
 
-    def execute(self, battle: Battle, player: Player):
-        attacker: ActivePokemon = battle.teams[player][battle.team_cursors[player]]
-        target: ActivePokemon = battle.teams[1 - player][battle.team_cursors[1 - player]]
+    def execute(self, battle: "Battle", player: "Player"):
+        attacker: "ActivePokemon" = battle.teams[player][battle.team_cursors[player]]
+        target: "ActivePokemon" = battle.teams[1 - player][battle.team_cursors[1 - player]]
         critical = self.is_critical_hit(attacker)
 
-        target.pokemon.deal_damage(self.get_damage(attacker, target, critical))
+        target.deal_damage(self.get_damage(attacker, target, critical))
 
     @staticmethod
-    def is_critical_hit(attacker: ActivePokemon) -> bool:
+    def is_critical_hit(attacker: "ActivePokemon") -> bool:
         """Randomly determines whether this attack is a critical hit based on the attacker's base speed.
 
         Args:
@@ -46,7 +48,7 @@ class DamagingMove(Move):
         threshold = attacker.pokemon.pokemon.species.critical_hit_threshold(False, attacker.focus_energy)
         return crit_roll < threshold
 
-    def get_damage(self, attacker: ActivePokemon, target: ActivePokemon, critical: bool) -> int:
+    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool) -> int:
         """Produces the total HP damage that will be dealt to the target by the attacker using this move.
 
         Args:
