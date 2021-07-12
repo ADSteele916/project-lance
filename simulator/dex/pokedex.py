@@ -1,12 +1,13 @@
 """Loads a list containing an instance of a PokemonSpecies for every available Pokemon."""
 
 import json
+import os.path
 
 from simulator.dex.movedex import MOVEDEX
 from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.type import Type
 
-with open("simulator/dex/pokedex.json") as json_file:
+with open(os.path.join(os.path.dirname(__file__), "pokedex.json")) as json_file:
     __dex_dict_list = json.load(json_file)
 
 POKEDEX = []

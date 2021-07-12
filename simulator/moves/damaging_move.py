@@ -27,11 +27,8 @@ class DamagingMove(Move):
         super().__init__(name, pp, move_type, accuracy, priority)
         self.power = power
 
-    def execute(self, battle: "Battle", player: "Player"):
-        attacker: "ActivePokemon" = battle.teams[player][battle.team_cursors[player]]
-        target: "ActivePokemon" = battle.teams[1 - player][battle.team_cursors[1 - player]]
+    def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
         critical = self.is_critical_hit(attacker)
-
         target.deal_damage(self.get_damage(attacker, target, critical))
 
     @staticmethod

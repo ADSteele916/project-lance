@@ -1,9 +1,9 @@
 """Functionality for the Pokemon in a battle that is currently active."""
 
-from enum import IntEnum
 from typing import TYPE_CHECKING, List, Optional
 
 from simulator.battle.battling_pokemon import BattlingPokemon
+from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.move import Move
 from simulator.status import Status
 
@@ -15,17 +15,6 @@ class ZeroPPException(Exception):
 
     def __init__(self):
         super().__init__("PP is zero and cannot be decremented further.")
-
-
-class ModifiableStat(IntEnum):
-    """Indices for ActivePokemon.__stat_modifiers' modifier values"""
-
-    ATTACK = 0
-    DEFENSE = 1
-    SPECIAL = 2
-    SPEED = 3
-    EVASION = 4
-    ACCURACY = 5
 
 
 class ActivePokemon:

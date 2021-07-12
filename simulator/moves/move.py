@@ -70,12 +70,25 @@ class Move(metaclass=ABCMeta):
 
         return accuracy_roll < threshold
 
-    @abstractmethod
     def execute(self, battle: "Battle", player: "Player"):
-        """Executes the move, updating the given Battle environment as necessary.
+        """Executes the move pending an accuracy check, updating the given Battle environment as necessary.
 
         Args:
             battle (Battle): The Battle environment in which the move is being used.
             player (Player): The Player who used the move.
+        """
+        attacker: "ActivePokemon" = battle.teams[player][battle.team_cursors[player]]
+        target: "ActivePokemon" = battle.teams[1 - player][battle.team_cursors[1 - player]]
+
+        if self.accuracy_check(attacker, target):
+            self.apply_effects(attacker, target)
+
+    @abstractmethod
+    def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
+        """Applies the effects of the move to the attacker and/or target.
+
+        Args:
+            attacker (ActivePokemon): The Pokemon using this move.
+            target (ActivePokemon): The Pokemon targeted by this move.
         """
         pass

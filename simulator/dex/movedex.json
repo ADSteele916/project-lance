@@ -75,7 +75,14 @@
         "name": "Razor Wind"
     },
     {
-        "name": "Swords Dance"
+        "cls": "StatRaisingMove",
+        "name": "Swords Dance",
+        "pp": 48,
+        "move_type": "Normal",
+        "stat": "Attack",
+        "stages": 2,
+        "accuracy": null,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -153,7 +160,14 @@
         "name": "Rolling Kick"
     },
     {
-        "name": "Sand Attack"
+        "cls": "StatLoweringMove",
+        "name": "Sand Attack",
+        "pp": 24,
+        "move_type": "Normal",
+        "stat": "Accuracy",
+        "stages": 1,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "name": "Headbutt"
@@ -198,7 +212,14 @@
         "name": "Double-Edge"
     },
     {
-        "name": "Tail Whip"
+        "cls": "StatLoweringMove",
+        "name": "Tail Whip",
+        "pp": 48,
+        "move_type": "Normal",
+        "stat": "Defense",
+        "stages": 1,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "name": "Poison Sting"
@@ -210,13 +231,27 @@
         "name": "Pin Missile"
     },
     {
-        "name": "Leer"
+        "cls": "StatLoweringMove",
+        "name": "Leer",
+        "pp": 48,
+        "move_type": "Normal",
+        "stat": "Defense",
+        "stages": 1,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "name": "Bite"
     },
     {
-        "name": "Growl"
+        "cls": "StatLoweringMove",
+        "name": "Growl",
+        "pp": 64,
+        "move_type": "Normal",
+        "stat": "Attack",
+        "stages": 1,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "name": "Roar"
@@ -345,7 +380,14 @@
         "name": "Leech Seed"
     },
     {
-        "name": "Growth"
+        "cls": "StatRaisingMove",
+        "name": "Growth",
+        "pp": 64,
+        "move_type": "Normal",
+        "stat": "Special",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
         "cls": "HighCriticalChanceDamagingMove",
@@ -372,7 +414,14 @@
         "name": "Petal Dance"
     },
     {
-        "name": "String Shot"
+        "cls": "StatLoweringMove",
+        "name": "String Shot",
+        "pp": 64,
+        "move_type": "Bug",
+        "stat": "Speed",
+        "stages": 1,
+        "accuracy": 95,
+        "priority": 0
     },
     {
         "name": "Dragon Rage"
@@ -429,10 +478,24 @@
         "name": "Hypnosis"
     },
     {
-        "name": "Meditate"
+        "cls": "StatRaisingMove",
+        "name": "Meditate",
+        "pp": 64,
+        "move_type": "Psychic",
+        "stat": "Attack",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
-        "name": "Agility"
+        "cls": "StatRaisingMove",
+        "name": "Agility",
+        "pp": 48,
+        "move_type": "Psychic",
+        "stat": "Speed",
+        "stages": 2,
+        "accuracy": null,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -456,34 +519,90 @@
         "name": "Mimic"
     },
     {
-        "name": "Screech"
+        "cls": "StatLoweringMove",
+        "name": "Screech",
+        "pp": 64,
+        "move_type": "Normal",
+        "stat": "Defense",
+        "stages": 2,
+        "accuracy": 85,
+        "priority": 0
     },
     {
-        "name": "Double Team"
+        "cls": "StatRaisingMove",
+        "name": "Double Team",
+        "pp": 24,
+        "move_type": "Normal",
+        "stat": "Evasion",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
         "name": "Recover"
     },
     {
-        "name": "Harden"
+        "cls": "StatRaisingMove",
+        "name": "Harden",
+        "pp": 48,
+        "move_type": "Normal",
+        "stat": "Defense",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
-        "name": "Minimize"
+        "cls": "StatRaisingMove",
+        "name": "Minimize",
+        "pp": 32,
+        "move_type": "Normal",
+        "stat": "Evasion",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
-        "name": "Smokescreen"
+        "cls": "StatLoweringMove",
+        "name": "Smokescreen",
+        "pp": 32,
+        "move_type": "Normal",
+        "stat": "Accuracy",
+        "stages": 1,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "name": "Confuse Ray"
     },
     {
-        "name": "Withdraw"
+        "cls": "StatRaisingMove",
+        "name": "Withdraw",
+        "pp": 64,
+        "move_type": "Water",
+        "stat": "Defense",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
-        "name": "Defense Curl"
+        "cls": "StatRaisingMove",
+        "name": "Defense Curl",
+        "pp": 64,
+        "move_type": "Normal",
+        "stat": "Defense",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
-        "name": "Barrier"
+        "cls": "StatRaisingMove",
+        "name": "Barrier",
+        "pp": 48,
+        "move_type": "Psychic",
+        "stat": "Defense",
+        "stages": 2,
+        "accuracy": null,
+        "priority": 0
     },
     {
         "name": "Light Screen"
@@ -558,10 +677,24 @@
         "name": "Constrict"
     },
     {
-        "name": "Amnesia"
+        "cls": "StatRaisingMove",
+        "name": "Amnesia",
+        "pp": 32,
+        "move_type": "Psychic",
+        "stat": "Special",
+        "stages": 2,
+        "accuracy": null,
+        "priority": 0
     },
     {
-        "name": "Kinesis"
+        "cls": "StatLoweringMove",
+        "name": "Kinesis",
+        "pp": 24,
+        "move_type": "Psychic",
+        "stat": "Accuracy",
+        "stages": 1,
+        "accuracy": 80,
+        "priority": 0
     },
     {
         "name": "Soft-Boiled"
@@ -609,7 +742,14 @@
         "name": "Spore"
     },
     {
-        "name": "Flash"
+        "cls": "StatLoweringMove",
+        "name": "Flash",
+        "pp": 32,
+        "move_type": "Normal",
+        "stat": "Accuracy",
+        "stages": 1,
+        "accuracy": 70,
+        "priority": 0
     },
     {
         "name": "Psywave"
@@ -618,7 +758,14 @@
         "name": "Splash"
     },
     {
-        "name": "Acid Armor"
+        "cls": "StatRaisingMove",
+        "name": "Acid Armor",
+        "pp": 64,
+        "move_type": "Poison",
+        "stat": "Defense",
+        "stages": 2,
+        "accuracy": null,
+        "priority": 0
     },
     {
         "cls": "HighCriticalChanceDamagingMove",
@@ -654,7 +801,14 @@
         "name": "Hyper Fang"
     },
     {
-        "name": "Sharpen"
+        "cls": "StatRaisingMove",
+        "name": "Sharpen",
+        "pp": 48,
+        "move_type": "Normal",
+        "stat": "Attack",
+        "stages": 1,
+        "accuracy": null,
+        "priority": 0
     },
     {
         "name": "Conversion"
