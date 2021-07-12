@@ -8,7 +8,7 @@ from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.high_critical_chance_damaging_move import HighCriticalChanceDamagingMove
 from simulator.type import Type
 
-with open("movedex.json") as json_file:
+with open("simulator/dex/movedex.json") as json_file:
     __movedex_dict_list = json.load(json_file)
 
 MOVEDEX = {}

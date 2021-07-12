@@ -6,7 +6,7 @@ from simulator.dex.movedex import MOVEDEX
 from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.type import Type
 
-with open("pokedex.json") as json_file:
+with open("simulator/dex/pokedex.json") as json_file:
     __dex_dict_list = json.load(json_file)
 
 POKEDEX = []
