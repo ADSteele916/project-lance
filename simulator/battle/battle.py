@@ -339,7 +339,7 @@ class Battle:
         self.__action_lock.acquire()
 
     def __under_turn_max(self):
-        return self.__max_allowed_turns is None or self.turn > self.__max_allowed_turns
+        return self.__max_allowed_turns is None or self.turn < self.__max_allowed_turns
 
     def play(self) -> Tuple[Optional[Player], int]:
         """Plays out the entire battle to completion.
