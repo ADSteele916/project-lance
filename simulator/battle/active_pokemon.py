@@ -48,19 +48,27 @@ class ActivePokemon:
 
     @property
     def attack(self) -> int:
-        return self.pokemon.attack * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.ATTACK])
+        burn_multiplier = 0.5 if self.status == Status.BURN else 1.0
+        return int(
+                self.pokemon.attack * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.ATTACK])
+                * burn_multiplier
+        )
 
     @property
     def defense(self) -> int:
-        return self.pokemon.defense * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.DEFENSE])
+        return int(self.pokemon.defense * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.DEFENSE]))
 
     @property
     def special(self) -> int:
-        return self.pokemon.special * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.SPECIAL])
+        return int(self.pokemon.special * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.SPECIAL]))
 
     @property
     def speed(self) -> int:
-        return self.pokemon.speed * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.SPEED])
+        paralysis_multiplier = 0.25 if self.status == Status.PARALYZE else 1.0
+        return int(
+                self.pokemon.speed * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.SPEED])
+                * paralysis_multiplier
+        )
 
     @property
     def evasion_multiplier(self) -> float:
