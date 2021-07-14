@@ -116,6 +116,10 @@ class Battle:
         self.__pending_switches: List[Optional[Action]] = [None, None]
 
     @property
+    def actives(self) -> List[ActivePokemon]:
+        return [self.p1_active_pokemon, self.p2_active_pokemon]
+
+    @property
     def p1_active_pokemon(self) -> ActivePokemon:
         return self.__active_pokemon[Player.P1]
 

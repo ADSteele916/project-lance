@@ -2,6 +2,8 @@
 
 from typing import TYPE_CHECKING, List, Optional
 
+import numpy as np
+
 from simulator.battle.battling_pokemon import BattlingPokemon
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.move import Move
@@ -126,8 +128,34 @@ class ActivePokemon:
         self.hp = self.hp + damage if self.hp + damage < self.max_hp else self.max_hp
 
     def use_move(self, move_index: int, battle: "Battle", player: "Player"):
+        """Uses the move with the given index.
+
+        If the Pokemon is paralyzed, there is a 25% chance it cannot move. If frozen, it will not be able to move until
+        thawed. If burned or poisoned, one sixteenth of the Pokemon's max health will be dealt as damage if the opponent
+        was not just knocked out.
+
+        Args:
+            move_index (int): The index of the move that should be used.
+            battle (Battle): The Battle in which the move is being used.
+            player (Player): The Player whose Pokemon is using the move.
+
+        Raises:
+            ValueError: The given index is out of range.
+        """
+        if not 0 <= move_index < len(self.moves):
+            raise ValueError(f"Move index must be in [0, {len(self.moves)}).")
+
+        if self.status == Status.PARALYZE:
+            roll = np.random.random()
+            if roll < 0.25:
+                return
+        if self.status == Status.FREEZE:
+            return
         self.decrement_pp(move_index)
         self.moves[move_index].execute(battle, player)
+
+        if self.status in (Status.POISON, Status.BURN) and not battle.actives[player.opponent].knocked_out:
+            self.deal_damage(self.max_hp // 16)
 
     def decrement_pp(self, move_index: int):
         if self.pp[move_index] == 0:

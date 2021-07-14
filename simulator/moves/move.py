@@ -77,8 +77,8 @@ class Move(metaclass=ABCMeta):
             battle (Battle): The Battle environment in which the move is being used.
             player (Player): The Player who used the move.
         """
-        attacker: "ActivePokemon" = battle.teams[player][battle.team_cursors[player]]
-        target: "ActivePokemon" = battle.teams[1 - player][battle.team_cursors[1 - player]]
+        attacker: "ActivePokemon" = battle.actives[player]
+        target: "ActivePokemon" = battle.actives[player.opponent]
 
         if self.accuracy_check(attacker, target):
             self.apply_effects(attacker, target)

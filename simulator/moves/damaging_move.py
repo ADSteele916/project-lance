@@ -9,7 +9,6 @@ from simulator.type import Type
 
 if TYPE_CHECKING:
     from simulator.battle.active_pokemon import ActivePokemon
-    from simulator.battle.battle import Battle, Player
 
 
 class InvalidDamageException(Exception):

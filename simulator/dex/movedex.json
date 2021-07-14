@@ -42,13 +42,37 @@
         "priority": 0
     },
     {
-        "name": "Fire Punch"
+        "cls": "StatusDamagingMove",
+        "name": "Fire Punch",
+        "pp": 24,
+        "move_type": "Fire",
+        "power": 75,
+        "accuracy": 100,
+        "status": "Burn",
+        "status_chance": 10,
+        "priority": 0
     },
     {
-        "name": "Ice Punch"
+        "cls": "StatusDamagingMove",
+        "name": "Ice Punch",
+        "pp": 24,
+        "move_type": "Ice",
+        "power": 75,
+        "accuracy": 100,
+        "status": "Freeze",
+        "status_chance": 10,
+        "priority": 0
     },
     {
-        "name": "Thunder Punch"
+        "cls": "StatusDamagingMove",
+        "name": "Thunder Punch",
+        "pp": 24,
+        "move_type": "Electric",
+        "power": 75,
+        "accuracy": 100,
+        "status": "Paralyze",
+        "status_chance": 10,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -197,7 +221,15 @@
         "priority": 0
     },
     {
-        "name": "Body Slam"
+        "cls": "StatusDamagingMove",
+        "name": "Body Slam",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 85,
+        "accuracy": 100,
+        "status": "Paralyze",
+        "status_chance": 30,
+        "priority": 0
     },
     {
         "name": "Wrap"
@@ -222,7 +254,15 @@
         "priority": 0
     },
     {
-        "name": "Poison Sting"
+        "cls": "StatusDamagingMove",
+        "name": "Poison Sting",
+        "pp": 56,
+        "move_type": "Poison",
+        "power": 15,
+        "accuracy": 100,
+        "status": "Poison",
+        "status_chance": 20,
+        "priority": 0
     },
     {
         "name": "Twineedle"
@@ -269,13 +309,38 @@
         "name": "Disable"
     },
     {
-        "name": "Acid"
+        "cls": "DebuffingDamagingMove",
+        "name": "Acid",
+        "pp": 48,
+        "move_type": "Poison",
+        "power": 40,
+        "accuracy": 100,
+        "debuff_stat": "Defense",
+        "debuff_stages": 1,
+        "debuff_chance": 33,
+        "priority": 0
     },
     {
-        "name": "Ember"
+        "cls": "StatusDamagingMove",
+        "name": "Ember",
+        "pp": 40,
+        "move_type": "Fire",
+        "power": 40,
+        "accuracy": 100,
+        "status": "Burn",
+        "status_chance": 10,
+        "priority": 0
     },
     {
-        "name": "Flamethrower"
+        "cls": "StatusDamagingMove",
+        "name": "Flamethrower",
+        "pp": 24,
+        "move_type": "Fire",
+        "power": 95,
+        "accuracy": 100,
+        "status": "Burn",
+        "status_chance": 10,
+        "priority": 0
     },
     {
         "name": "Mist"
@@ -308,10 +373,26 @@
         "priority": 0
     },
     {
-        "name": "Ice Beam"
+        "cls": "StatusDamagingMove",
+        "name": "Ice Beam",
+        "pp": 16,
+        "move_type": "Ice",
+        "power": 95,
+        "accuracy": 100,
+        "status": "Freeze",
+        "status_chance": 10,
+        "priority": 0
     },
     {
-        "name": "Blizzard"
+        "cls": "StatusDamagingMove",
+        "name": "Blizzard",
+        "pp": 8,
+        "move_type": "Ice",
+        "power": 120,
+        "accuracy": 90,
+        "status": "Freeze",
+        "status_chance": 10,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -323,10 +404,28 @@
         "priority": 0
     },
     {
-        "name": "Bubble Beam"
+        "cls": "DebuffingDamagingMove",
+        "name": "Bubble Beam",
+        "pp": 32,
+        "move_type": "Water",
+        "power": 65,
+        "accuracy": 100,
+        "debuff_stat": "Speed",
+        "debuff_stages": 1,
+        "debuff_chance": 33,
+        "priority": 0
     },
     {
-        "name": "Aurora Beam"
+        "cls": "DebuffingDamagingMove",
+        "name": "Aurora Beam",
+        "pp": 32,
+        "move_type": "Ice",
+        "power": 65,
+        "accuracy": 100,
+        "debuff_stat": "Attack",
+        "debuff_stages": 1,
+        "debuff_chance": 33,
+        "priority": 0
     },
     {
         "name": "Hyper Beam"
@@ -430,16 +529,40 @@
         "name": "Fire Spin"
     },
     {
-        "name": "Thunder Shock"
+        "cls": "StatusDamagingMove",
+        "name": "Thunder Shock",
+        "pp": 48,
+        "move_type": "Electric",
+        "power": 40,
+        "accuracy": 100,
+        "status": "Paralyze",
+        "status_chance": 10,
+        "priority": 0
     },
     {
-        "name": "Thunderbolt"
+        "cls": "StatusDamagingMove",
+        "name": "Thunderbolt",
+        "pp": 24,
+        "move_type": "Electric",
+        "power": 95,
+        "accuracy": 100,
+        "status": "Paralyze",
+        "status_chance": 10,
+        "priority": 0
     },
     {
         "name": "Thunder Wave"
     },
     {
-        "name": "Thunder"
+        "cls": "StatusDamagingMove",
+        "name": "Thunder",
+        "pp": 16,
+        "move_type": "Electric",
+        "power": 120,
+        "accuracy": 70,
+        "status": "Paralyze",
+        "status_chance": 10,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -472,7 +595,16 @@
         "name": "Confusion"
     },
     {
-        "name": "Psychic"
+        "cls": "DebuffingDamagingMove",
+        "name": "Psychic",
+        "pp": 16,
+        "move_type": "Psychic",
+        "power": 90,
+        "accuracy": 100,
+        "debuff_stat": "Special",
+        "debuff_stages": 1,
+        "debuff_chance": 33,
+        "priority": 0
     },
     {
         "name": "Hypnosis"
@@ -638,19 +770,51 @@
         "priority": 0
     },
     {
-        "name": "Lick"
+        "cls": "StatusDamagingMove",
+        "name": "Lick",
+        "pp": 48,
+        "move_type": "Ghost",
+        "power": 20,
+        "accuracy": 100,
+        "status": "Paralyze",
+        "status_chance": 30,
+        "priority": 0
     },
     {
-        "name": "Smog"
+        "cls": "StatusDamagingMove",
+        "name": "Smog",
+        "pp": 32,
+        "move_type": "Poison",
+        "power": 20,
+        "accuracy": 70,
+        "status": "Poison",
+        "status_chance": 40,
+        "priority": 0
     },
     {
-        "name": "Sludge"
+        "cls": "StatusDamagingMove",
+        "name": "Sludge",
+        "pp": 32,
+        "move_type": "Poison",
+        "power": 65,
+        "accuracy": 100,
+        "status": "Poison",
+        "status_chance": 40,
+        "priority": 0
     },
     {
         "name": "Bone Club"
     },
     {
-        "name": "Fire Blast"
+        "cls": "StatusDamagingMove",
+        "name": "Fire Blast",
+        "pp": 8,
+        "move_type": "Fire",
+        "power": 120,
+        "accuracy": 85,
+        "status": "Burn",
+        "status_chance": 30,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -674,7 +838,16 @@
         "name": "Spike Cannon"
     },
     {
-        "name": "Constrict"
+        "cls": "DebuffingDamagingMove",
+        "name": "Constrict",
+        "pp": 56,
+        "move_type": "Normal",
+        "power": 10,
+        "accuracy": 100,
+        "debuff_stat": "Speed",
+        "debuff_stages": 1,
+        "debuff_chance": 33,
+        "priority": 0
     },
     {
         "cls": "StatRaisingMove",
@@ -727,7 +900,16 @@
         "name": "Transform"
     },
     {
-        "name": "Bubble"
+        "cls": "DebuffingDamagingMove",
+        "name": "Bubble",
+        "pp": 48,
+        "move_type": "Water",
+        "power": 20,
+        "accuracy": 100,
+        "debuff_stat": "Speed",
+        "debuff_stages": 1,
+        "debuff_chance": 33,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",

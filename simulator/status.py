@@ -7,8 +7,8 @@ class Status(Enum):
     """Mutually-exclusive, non-volatile status conditions."""
 
     NONE = auto()
-    ASLEEP = auto()
-    POISONED = auto()
-    BURNED = auto()
-    FROZEN = auto()
-    PARALYZED = auto()
+    SLEEP = auto()
+    POISON = auto()
+    BURN = auto()
+    FREEZE = auto()
+    PARALYZE = auto()
