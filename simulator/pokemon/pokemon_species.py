@@ -48,6 +48,11 @@ class PokemonSpecies:
     def __str__(self):
         return self.name
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({repr(self.name)}, {self.dex_num}, {self.base_hp}, {self.base_atk}, " \
+               f"{self.base_def}, {self.base_spe}, {self.base_spc}, {self.moveset}, {self.primary_type}, " \
+               f"{self.secondary_type})"
+
     def attack_effectiveness(self, attacking_type: Type) -> float:
         """Produces the type effectiveness of a given attack type against this Pokemon.
 

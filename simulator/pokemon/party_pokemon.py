@@ -83,6 +83,12 @@ class PartyPokemon:
     def __str__(self):
         return self.nickname if len(self.nickname) > 0 else self.species.name
 
+    def __repr__(self):
+        return f"{self.__class__.__name__}({repr(self.__pokemon_species)}, {self.level}, {self.moves}, " \
+               f"{self.atk_dv}, {self.def_dv}, {self.spe_dv}, {self.spc_dv}, {self.hp_stat_exp}, " \
+               f"{self.atk_stat_exp}, {self.def_stat_exp}, {self.spe_stat_exp}, {self.spc_stat_exp}, " \
+               f"{repr(self.nickname)})"
+
     @property
     def species(self) -> PokemonSpecies:
         return self.__pokemon_species
