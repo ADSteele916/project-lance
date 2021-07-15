@@ -3,15 +3,17 @@
 
 from enum import IntEnum
 from threading import Lock
-from typing import List, Optional, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 import numpy as np
 
 from simulator.battle.action import MOVE_SLOTS, SWITCH_SLOTS, Action
 from simulator.battle.active_pokemon import ActivePokemon
 from simulator.battle.battling_pokemon import BattlingPokemon
-from simulator.battle.player_agent import PlayerAgent
 from simulator.pokemon.party_pokemon import PartyPokemon
+
+if TYPE_CHECKING:
+    from simulator.agents.agent import Agent
 
 
 class Player(IntEnum):
@@ -90,8 +92,8 @@ class Battle:
             self,
             team_one: List[PartyPokemon],
             team_two: List[PartyPokemon],
-            agent_one: PlayerAgent,
-            agent_two: PlayerAgent,
+            agent_one: "Agent",
+            agent_two: "Agent",
             max_allowed_turns: Optional[int] = 1000
     ):
         if not 1 <= len(team_one) <= 6:
@@ -156,7 +158,7 @@ class Battle:
         """
         if SWITCH_SLOTS[switch] == self.team_cursors[player]:
             raise AlreadyInBattleException(self.__active_pokemon[player])
-        if len(self.teams[player]) < SWITCH_SLOTS[switch] + 1:
+        if len(self.teams[player]) <= SWITCH_SLOTS[switch]:
             raise NoPokemonInSlotException(SWITCH_SLOTS[switch] + 1)
         if self.teams[player][SWITCH_SLOTS[switch]].knocked_out:
             raise FaintedPokemonException(self.teams[player][SWITCH_SLOTS[switch]])
@@ -178,7 +180,7 @@ class Battle:
         if action.is_switch:
             self.__switch_checks(player, action)
         if action.is_move:
-            if len(self.__active_pokemon[player].moves) < MOVE_SLOTS[action] + 1:
+            if len(self.__active_pokemon[player].moves) <= MOVE_SLOTS[action]:
                 raise NoMoveInSlotException(MOVE_SLOTS[action] + 1)
             if self.__active_pokemon[player].pp[MOVE_SLOTS[action]] == 0:
                 raise OutOfPPException(self.teams[player][self.team_cursors[player]].pokemon.moves[MOVE_SLOTS[action]])
@@ -234,7 +236,7 @@ class Battle:
             player (Player): The player to move or switch.
         """
         action = self.p1_pending_action if player == Player.P1 else self.p2_pending_action
-        active_pokemon = self.p1_active_pokemon if player == Player.P2 else self.p2_active_pokemon
+        active_pokemon = self.p1_active_pokemon if player == Player.P1 else self.p2_active_pokemon
         if action.is_switch:
             self.__execute_switch(player, SWITCH_SLOTS[self.__pending_actions[player]])
         else:
@@ -275,16 +277,26 @@ class Battle:
             return Player.P1
         return Player.P2
 
+    def __wait_for_action(self, player: Player):
+        """Require the given player to choose an action.
+
+        Args:
+            player (Player): The player who must provide an action.
+        """
+        if not self.__action_lock.locked():
+            self.__action_lock.acquire()
+        self.agents[player].notify_action_required(self, player)
+
     def __wait_for_switch(self, player: Player):
         """Require the given player to switch Pokemon.
 
         Args:
             player (Player): The player who must switch.
         """
-        self.agents[player].notify_switch_required(self)
         self.__waiting_for_switch[player] = True
         if not self.__switch_lock.locked():
             self.__switch_lock.acquire()
+        self.agents[player].notify_switch_required(self, player)
 
     def __execute_actions(self):
         """Execute the pending actions for all players in sequence"""
@@ -324,6 +336,9 @@ class Battle:
     def play_turn(self):
         """Plays out one turn of the battle."""
         self.__turn += 1
+
+        self.__wait_for_action(Player.P1)
+        self.__wait_for_action(Player.P2)
 
         with self.__action_lock:
             # Execute switches and moves of the currently-active Pokemon.
