@@ -18,7 +18,7 @@
         "priority": 0
     },
     {
-        "name": "Double SLap"
+        "name": "Double Slap"
     },
     {
         "name": "Comet Punch"
@@ -476,7 +476,12 @@
         "name": "Mega Drain"
     },
     {
-        "name": "Leech Seed"
+        "cls": "LeechSeed",
+        "name": "Leech Seed",
+        "pp": 16,
+        "move_type": "Grass",
+        "accuracy": 90,
+        "priority": 0
     },
     {
         "cls": "StatRaisingMove",

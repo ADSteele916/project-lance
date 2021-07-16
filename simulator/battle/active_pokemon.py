@@ -154,8 +154,14 @@ class ActivePokemon:
         self.decrement_pp(move_index)
         self.moves[move_index].execute(battle, player)
 
-        if self.status in (Status.POISON, Status.BURN) and not battle.actives[player.opponent].knocked_out:
-            self.deal_damage(self.max_hp // 16)
+        if not battle.actives[player.opponent].knocked_out:
+            if self.status in (Status.POISON, Status.BURN):
+                self.deal_damage(self.__status_damage())
+            if self.leech_seed:
+                self.deal_damage(self.__status_damage())
+
+    def __status_damage(self):
+        return max(self.max_hp // 16, 1)
 
     def decrement_pp(self, move_index: int):
         if self.pp[move_index] == 0:

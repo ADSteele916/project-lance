@@ -8,6 +8,7 @@ from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.debuffing_damaging_move import DebuffingDamagingMove
 from simulator.moves.high_critical_chance_damaging_move import HighCriticalChanceDamagingMove
+from simulator.moves.misc_moves import LeechSeed
 from simulator.moves.stat_lowering_move import StatLoweringMove
 from simulator.moves.stat_raising_move import StatRaisingMove
 from simulator.moves.status_damaging_move import StatusDamagingMove
@@ -80,5 +81,13 @@ for __move in __movedex_dict_list:
                     None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
                     Status[__move["status"].upper()],
                     __move["status_chance"],
+                    __move["priority"]
+            )
+        elif __move["cls"] == "LeechSeed":
+            MOVEDEX[__move["name"]] = LeechSeed(
+                    __move["name"],
+                    __move["pp"],
+                    Type[__move["move_type"].upper()],
+                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
                     __move["priority"]
             )

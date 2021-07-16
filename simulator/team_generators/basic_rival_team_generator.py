@@ -24,7 +24,7 @@ class BasicRivalTeamGenerator(TeamGenerator):
                     [
                             MOVEDEX["Tackle"],
                             MOVEDEX["Growl"],
-                            # MOVEDEX["Leech Seed"],
+                            MOVEDEX["Leech Seed"],
                             MOVEDEX["Vine Whip"]
                     ]
             ),
