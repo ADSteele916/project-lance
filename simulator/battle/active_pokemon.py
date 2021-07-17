@@ -132,7 +132,7 @@ class ActivePokemon:
 
         If the Pokemon is paralyzed, there is a 25% chance it cannot move. If frozen, it will not be able to move until
         thawed. If burned or poisoned, one sixteenth of the Pokemon's max health will be dealt as damage if the opponent
-        was not just knocked out.
+        was not just knocked out. If seeded, another sixteenth of the Pokemon's max health is given to the opponent.
 
         Args:
             move_index (int): The index of the move that should be used.
@@ -154,14 +154,14 @@ class ActivePokemon:
         self.decrement_pp(move_index)
         self.moves[move_index].execute(battle, player)
 
-        if not battle.actives[player.opponent].knocked_out:
+        opponent = battle.actives[player.opponent]
+        if not opponent.knocked_out:
+            status_damage = max(self.max_hp // 16, 1)
             if self.status in (Status.POISON, Status.BURN):
-                self.deal_damage(self.__status_damage())
+                self.deal_damage(status_damage)
             if self.leech_seed:
-                self.deal_damage(self.__status_damage())
-
-    def __status_damage(self):
-        return max(self.max_hp // 16, 1)
+                self.deal_damage(status_damage)
+                opponent.heal(status_damage)
 
     def decrement_pp(self, move_index: int):
         if self.pp[move_index] == 0:
