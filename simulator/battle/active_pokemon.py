@@ -37,6 +37,10 @@ class ActivePokemon:
         return self.__pokemon
 
     @property
+    def stat_modifiers(self) -> List[int]:
+        return self.__stat_modifiers.copy()
+
+    @property
     def hp(self) -> int:
         return self.pokemon.hp
 

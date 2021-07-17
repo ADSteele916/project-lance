@@ -21,12 +21,10 @@ class BasicRivalTeamGenerator(TeamGenerator):
             PartyPokemon(
                     POKEDEX["Bulbasaur"],
                     17,
-                    [
-                            MOVEDEX["Tackle"],
-                            MOVEDEX["Growl"],
-                            MOVEDEX["Leech Seed"],
-                            MOVEDEX["Vine Whip"]
-                    ]
+                    [MOVEDEX["Tackle"],
+                     MOVEDEX["Growl"],
+                     MOVEDEX["Leech Seed"],
+                     MOVEDEX["Vine Whip"]]
             ),
             PartyPokemon(
                     POKEDEX["Charmander"],
