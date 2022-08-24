@@ -32,6 +32,7 @@ class ActivePokemon:
         self.light_screen = False
         self.focus_energy = False
         self.mist = False
+        self.flinch = False
 
     @property
     def pokemon(self) -> BattlingPokemon:
@@ -149,6 +150,9 @@ class ActivePokemon:
         """
         if not 0 <= move_index < len(self.moves):
             raise ValueError(f"Move index must be in [0, {len(self.moves)}).")
+
+        if self.flinch:
+            return
 
         if self.status == Status.PARALYZE:
             roll = np.random.random()

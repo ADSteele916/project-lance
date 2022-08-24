@@ -163,7 +163,14 @@
         "priority": 0
     },
     {
-        "name": "Stomp"
+        "cls": "FlinchingDamagingMove",
+        "name": "Stomp",
+        "pp": 32,
+        "move_type": "Fighting",
+        "power": 65,
+        "accuracy": 100,
+        "flinch_chance": 30,
+        "priority": 0
     },
     {
         "name": "Double Kick"
@@ -181,7 +188,14 @@
         "name": "Jump Kick"
     },
     {
-        "name": "Rolling Kick"
+        "cls": "FlinchingDamagingMove",
+        "name": "Rolling Kick",
+        "pp": 24,
+        "move_type": "Fighting",
+        "power": 60,
+        "accuracy": 85,
+        "flinch_chance": 30,
+        "priority": 0
     },
     {
         "cls": "StatLoweringMove",
@@ -194,7 +208,14 @@
         "priority": 0
     },
     {
-        "name": "Headbutt"
+        "cls": "FlinchingDamagingMove",
+        "name": "Headbutt",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 70,
+        "accuracy": 100,
+        "flinch_chance": 30,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -281,7 +302,14 @@
         "priority": 0
     },
     {
-        "name": "Bite"
+        "cls": "FlinchingDamagingMove",
+        "name": "Bite",
+        "pp": 40,
+        "move_type": "Normal",
+        "power": 60,
+        "accuracy": 10,
+        "flinch_chance": 10,
+        "priority": 0
     },
     {
         "cls": "StatLoweringMove",
@@ -463,7 +491,14 @@
         "name": "Submission"
     },
     {
-        "name": "Low Kick"
+        "cls": "FlinchingDamagingMove",
+        "name": "Low Kick",
+        "pp": 32,
+        "move_type": "Fighting",
+        "power": 50,
+        "accuracy": 90,
+        "flinch_chance": 30,
+        "priority": 0
     },
     {
         "name": "Counter"
@@ -837,7 +872,14 @@
         "priority": 0
     },
     {
-        "name": "Bone Club"
+        "cls": "FlinchingDamagingMove",
+        "name": "Bone Club",
+        "pp": 32,
+        "move_type": "Ground",
+        "power": 65,
+        "accuracy": 85,
+        "flinch_chance": 10,
+        "priority": 0
     },
     {
         "cls": "StatusDamagingMove",
@@ -1014,7 +1056,14 @@
         "priority": 0
     },
     {
-        "name": "Hyper Fang"
+        "cls": "FlinchingDamagingMove",
+        "name": "Hyper Fang",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 80,
+        "accuracy": 90,
+        "flinch_chance": 10,
+        "priority": 0
     },
     {
         "cls": "StatRaisingMove",

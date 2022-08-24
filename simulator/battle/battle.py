@@ -310,6 +310,9 @@ class Battle:
         if not self.__active_pokemon[first_mover].knocked_out and not self.__active_pokemon[second_mover].knocked_out:
             self.__execute_action(second_mover)
 
+        for pokemon in self.__active_pokemon:
+            pokemon.flinch = False
+
         if all(map(lambda p: p.knocked_out, self.teams[first_mover])):
             self.victor = second_mover
             return

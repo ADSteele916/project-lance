@@ -7,6 +7,7 @@ from typing import Dict
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.debuffing_damaging_move import DebuffingDamagingMove
+from simulator.moves.flinching_damaging_move import FlinchingDamagingMove
 from simulator.moves.high_critical_chance_damaging_move import HighCriticalChanceDamagingMove
 from simulator.moves.misc_moves import ConstantDamageMove, LeechSeed, LevelDamagingMove, Mist
 from simulator.moves.move import Move
@@ -26,6 +27,7 @@ def _gen_movedex() -> Dict[str, Move]:
             "HighCriticalChanceDamagingMove": HighCriticalChanceDamagingMove,
             "StatRaisingMove": StatRaisingMove,
             "StatLoweringMove": StatLoweringMove,
+            "FlinchingDamagingMove": FlinchingDamagingMove,
             "DebuffingDamagingMove": DebuffingDamagingMove,
             "StatusDamagingMove": StatusDamagingMove,
             "ConstantDamageMove": ConstantDamageMove,
