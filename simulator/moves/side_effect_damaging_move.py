@@ -23,9 +23,11 @@ class SideEffectDamagingMove(DamagingMove, metaclass=ABCMeta):
             power: int,
             accuracy: Optional[int],
             effect_chance: int,
-            priority: int = 0
+            priority: int = 0,
+            *args,
+            **kwargs
     ):
-        super().__init__(name, pp, move_type, power, accuracy, priority)
+        super().__init__(name, pp, move_type, power, accuracy, priority, *args, **kwargs)
         self.effect_chance = effect_chance
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):

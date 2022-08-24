@@ -19,8 +19,10 @@ class StatModifyingMove(Move, metaclass=ABCMeta):
             stat: ModifiableStat,
             stages: int,
             accuracy: Optional[int],
-            priority: int = 0
+            priority: int = 0,
+            *args,
+            **kwargs
     ):
-        super().__init__(name, pp, move_type, accuracy, priority)
+        super().__init__(name, pp, move_type, accuracy, priority, *args, **kwargs)
         self.stat = stat
         self.stages = stages

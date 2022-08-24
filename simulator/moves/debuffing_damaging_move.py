@@ -23,9 +23,11 @@ class DebuffingDamagingMove(SideEffectDamagingMove):
             debuff_stat: ModifiableStat,
             debuff_stages: int,
             debuff_chance: int,
-            priority
+            priority,
+            *args,
+            **kwargs
     ):
-        super().__init__(name, pp, move_type, power, accuracy, debuff_chance, priority)
+        super().__init__(name, pp, move_type, power, accuracy, debuff_chance, priority, *args, **kwargs)
         self.debuff_stat = debuff_stat
         self.debuff_stages = debuff_stages
 

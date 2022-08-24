@@ -33,7 +33,7 @@ class InvalidPriorityException(Exception):
 class Move(metaclass=ABCMeta):
     """Abstract Base Class for a Pokemon Move, that can freely modify that Battle state."""
 
-    def __init__(self, name: str, pp: int, move_type: Type, accuracy: Optional[int], priority: int = 0):
+    def __init__(self, name: str, pp: int, move_type: str, accuracy: Optional[int], priority: int = 0, *args, **kwargs):
         if pp <= 0:
             raise InvalidPPException(pp)
         if accuracy is not None and not 0 < accuracy <= 255:
@@ -42,8 +42,8 @@ class Move(metaclass=ABCMeta):
             raise InvalidPriorityException(priority)
         self.name = name
         self.pp = pp
-        self.move_type = move_type
-        self.accuracy = accuracy
+        self.move_type = Type[move_type.upper()]
+        self.accuracy = None if accuracy is None else (accuracy * 255) // 100
         self.priority = priority
 
     def __str__(self):

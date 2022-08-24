@@ -22,9 +22,11 @@ class StatusDamagingMove(SideEffectDamagingMove):
             accuracy: Optional[int],
             status: Status,
             status_chance: int,
-            priority
+            priority,
+            *args,
+            **kwargs
     ):
-        super().__init__(name, pp, move_type, power, accuracy, status_chance, priority)
+        super().__init__(name, pp, move_type, power, accuracy, status_chance, priority, *args, **kwargs)
         self.status = status
 
     def side_effect(self, attacker: "ActivePokemon", target: "ActivePokemon"):

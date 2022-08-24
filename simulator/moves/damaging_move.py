@@ -20,10 +20,20 @@ class InvalidDamageException(Exception):
 class DamagingMove(Move):
     """A Pokemon move that deals damage to its target."""
 
-    def __init__(self, name: str, pp: int, move_type: Type, power: int, accuracy: Optional[int], priority: int = 0):
+    def __init__(
+            self,
+            name: str,
+            pp: int,
+            move_type: Type,
+            power: int,
+            accuracy: Optional[int],
+            priority: int = 0,
+            *args,
+            **kwargs
+    ):
         if power <= 0:
             raise InvalidDamageException(power)
-        super().__init__(name, pp, move_type, accuracy, priority)
+        super().__init__(name, pp, move_type, accuracy, priority, *args, **kwargs)
         self.power = power
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):

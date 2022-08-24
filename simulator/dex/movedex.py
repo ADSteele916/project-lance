@@ -2,92 +2,58 @@
 
 import json
 import os.path
-from math import floor
+from typing import Dict
 
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.debuffing_damaging_move import DebuffingDamagingMove
 from simulator.moves.high_critical_chance_damaging_move import HighCriticalChanceDamagingMove
 from simulator.moves.misc_moves import LeechSeed
+from simulator.moves.move import Move
 from simulator.moves.stat_lowering_move import StatLoweringMove
 from simulator.moves.stat_raising_move import StatRaisingMove
 from simulator.moves.status_damaging_move import StatusDamagingMove
-from simulator.status import Status
-from simulator.type import Type
 
-with open(os.path.join(os.path.dirname(__file__), "movedex.json")) as json_file:
-    __movedex_dict_list = json.load(json_file)
 
-MOVEDEX = {}
+def _gen_movedex() -> Dict[str, Move]:
+    with open(os.path.join(os.path.dirname(__file__), "movedex.json")) as json_file:
+        movedex_dict_list = json.load(json_file)
 
-for __move in __movedex_dict_list:
-    if "cls" in __move:
-        if __move["cls"] == "DamagingMove":
-            MOVEDEX[__move["name"]] = DamagingMove(
-                    __move["name"],
-                    __move["pp"],
-                    Type[__move["move_type"].upper()],
-                    __move["power"],
-                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
-                    __move["priority"]
-            )
-        elif __move["cls"] == "HighCriticalChanceDamagingMove":
-            MOVEDEX[__move["name"]] = HighCriticalChanceDamagingMove(
-                    __move["name"],
-                    __move["pp"],
-                    Type[__move["move_type"].upper()],
-                    __move["power"],
-                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
-                    __move["priority"]
-            )
-        elif __move["cls"] == "StatRaisingMove":
-            MOVEDEX[__move["name"]] = StatRaisingMove(
-                    __move["name"],
-                    __move["pp"],
-                    Type[__move["move_type"].upper()],
-                    ModifiableStat[__move["stat"].upper()],
-                    __move["stages"],
-                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
-                    __move["priority"]
-            )
-        elif __move["cls"] == "StatLoweringMove":
-            MOVEDEX[__move["name"]] = StatLoweringMove(
-                    __move["name"],
-                    __move["pp"],
-                    Type[__move["move_type"].upper()],
-                    ModifiableStat[__move["stat"].upper()],
-                    __move["stages"],
-                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
-                    __move["priority"]
-            )
-        elif __move["cls"] == "DebuffingDamagingMove":
-            MOVEDEX[__move["name"]] = DebuffingDamagingMove(
-                    __move["name"],
-                    __move["pp"],
-                    Type[__move["move_type"].upper()],
-                    __move["power"],
-                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
-                    ModifiableStat[__move["debuff_stat"].upper()],
-                    __move["debuff_stages"],
-                    __move["debuff_chance"],
-                    __move["priority"]
-            )
-        elif __move["cls"] == "StatusDamagingMove":
-            MOVEDEX[__move["name"]] = StatusDamagingMove(
-                    __move["name"],
-                    __move["pp"],
-                    Type[__move["move_type"].upper()],
-                    __move["power"],
-                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
-                    Status[__move["status"].upper()],
-                    __move["status_chance"],
-                    __move["priority"]
-            )
-        elif __move["cls"] == "LeechSeed":
-            MOVEDEX[__move["name"]] = LeechSeed(
-                    __move["name"],
-                    __move["pp"],
-                    Type[__move["move_type"].upper()],
-                    None if __move["accuracy"] is None else floor(__move["accuracy"] * 255 / 100),
-                    __move["priority"]
-            )
+    movedex = {}
+
+    classes = {
+            "DamagingMove": DamagingMove,
+            "HighCriticalChanceDamagingMove": HighCriticalChanceDamagingMove,
+            "StatRaisingMove": StatRaisingMove,
+            "StatLoweringMove": StatLoweringMove,
+            "DebuffingDamagingMove": DebuffingDamagingMove,
+            "StatusDamagingMove": StatusDamagingMove,
+            "LeechSeed": LeechSeed,
+    }
+
+    stat_mapping = {
+        "Attack": ModifiableStat.ATTACK,
+        "Defense": ModifiableStat.DEFENSE,
+        "Special": ModifiableStat.SPECIAL,
+        "Speed": ModifiableStat.SPEED,
+        "Evasion": ModifiableStat.EVASION,
+        "Accuracy": ModifiableStat.ACCURACY,
+    }
+
+    for move in movedex_dict_list:
+        try:
+            move_class = classes[move["cls"]]
+        except KeyError:
+            continue
+        move_dict = {**move}
+        if "stat" in move_dict:
+            move_dict["stat"] = stat_mapping[move_dict["stat"]]
+        if "debuff_stat" in move_dict:
+            move_dict["debuff_stat"] = stat_mapping[move_dict["debuff_stat"]]
+
+        movedex[move["name"]] = move_class(**move_dict)
+
+    return movedex
+
+
+MOVEDEX = _gen_movedex()
