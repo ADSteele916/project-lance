@@ -20,6 +20,16 @@ class ConstantDamageMove(DamagingMove):
         return self.power
 
 
+class LevelDamagingMove(DamagingMove):
+
+    @staticmethod
+    def is_critical_hit(attacker: "ActivePokemon") -> bool:
+        return False
+
+    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool) -> int:
+        return attacker.pokemon.pokemon.level
+
+
 class LeechSeed(Move):
     """Applies the leech seed volatile status condition to its target."""
 

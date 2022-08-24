@@ -469,7 +469,13 @@
         "name": "Counter"
     },
     {
-        "name": "Seismic Toss"
+        "cls": "LevelDamagingMove",
+        "name": "Seismic Toss",
+        "pp": 32,
+        "move_type": "Fighting",
+        "power": 1,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -667,7 +673,13 @@
         "name": "Teleport"
     },
     {
-        "name": "Night Shade"
+        "cls": "LevelDamagingMove",
+        "name": "Night Shade",
+        "pp": 24,
+        "move_type": "Ghost",
+        "power": 1,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "name": "Mimic"
