@@ -2,11 +2,22 @@
 
 from typing import TYPE_CHECKING
 
+from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.move import Move
 from simulator.type import Type
 
 if TYPE_CHECKING:
     from simulator.battle.active_pokemon import ActivePokemon
+
+
+class ConstantDamageMove(DamagingMove):
+
+    @staticmethod
+    def is_critical_hit(attacker: "ActivePokemon") -> bool:
+        return False
+
+    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool) -> int:
+        return self.power
 
 
 class LeechSeed(Move):
