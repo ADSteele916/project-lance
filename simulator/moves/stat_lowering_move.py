@@ -12,4 +12,5 @@ class StatLoweringMove(StatModifyingMove):
     """A Pokemon move that debuffs one of its target's stats."""
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
-        target.modify_stat(self.stat, -self.stages)
+        if not target.mist:
+            target.modify_stat(self.stat, -self.stages)

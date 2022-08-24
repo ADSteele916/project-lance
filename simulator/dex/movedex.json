@@ -343,7 +343,12 @@
         "priority": 0
     },
     {
-        "name": "Mist"
+        "cls": "Mist",
+        "name": "Mist",
+        "pp": 48,
+        "move_type": "Ice",
+        "accuracy": null,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",

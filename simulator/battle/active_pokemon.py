@@ -31,6 +31,7 @@ class ActivePokemon:
         self.reflect = False
         self.light_screen = False
         self.focus_energy = False
+        self.mist = False
 
     @property
     def pokemon(self) -> BattlingPokemon:

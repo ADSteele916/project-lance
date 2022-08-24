@@ -18,3 +18,9 @@ class LeechSeed(Move):
                 target.pokemon.pokemon.species.secondary_type
         ) and not target.leech_seed:
             target.leech_seed = True
+
+
+class Mist(Move):
+
+    def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
+        attacker.mist = True
