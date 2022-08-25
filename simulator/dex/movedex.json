@@ -18,9 +18,11 @@
         "priority": 0
     },
     {
+        "cls": "MultiHitMove",
         "name": "Double Slap"
     },
     {
+        "cls": "MultiHitMove",
         "name": "Comet Punch"
     },
     {
@@ -93,9 +95,11 @@
         "priority": 0
     },
     {
+        "cls": "OHKOMove",
         "name": "Guillotine"
     },
     {
+        "cls": "ChargeUpMove",
         "name": "Razor Wind"
     },
     {
@@ -136,12 +140,15 @@
         "priority": 0
     },
     {
+        "cls": "NoOpMove",
         "name": "Whirlwind"
     },
     {
+        "cls": "ImmuneChargeUpMove",
         "name": "Fly"
     },
     {
+        "cls": "BindingMove",
         "name": "Bind"
     },
     {
@@ -173,6 +180,7 @@
         "priority": 0
     },
     {
+        "cls": "DoubleHitMove",
         "name": "Double Kick"
     },
     {
@@ -185,6 +193,7 @@
         "priority": 0
     },
     {
+        "cls": "CrashDamageMove",
         "name": "Jump Kick"
     },
     {
@@ -227,9 +236,11 @@
         "priority": 0
     },
     {
+        "cls": "MultiHitMove",
         "name": "Fury Attack"
     },
     {
+        "cls": "OHKOMove",
         "name": "Horn Drill"
     },
     {
@@ -253,15 +264,19 @@
         "priority": 0
     },
     {
+        "cls": "BindingMove",
         "name": "Wrap"
     },
     {
+        "cls": "RecoilDamagingMove",
         "name": "Take Down"
     },
     {
+        "cls": "MultiTurnAttack",
         "name": "Thrash"
     },
     {
+        "cls": "RecoilDamagingMove",
         "name": "Double-Edge"
     },
     {
@@ -286,9 +301,11 @@
         "priority": 0
     },
     {
+        "cls": "DoubleHitMove",
         "name": "Twineedle"
     },
     {
+        "cls": "MultiHitMove",
         "name": "Pin Missile"
     },
     {
@@ -322,12 +339,15 @@
         "priority": 0
     },
     {
+        "cls": "NoOpMove",
         "name": "Roar"
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Sing"
     },
     {
+        "cls": "ConfusingMove",
         "name": "Supersonic"
     },
     {
@@ -340,6 +360,7 @@
         "priority": 0
     },
     {
+        "cls": "Disable",
         "name": "Disable"
     },
     {
@@ -467,6 +488,7 @@
         "priority": 0
     },
     {
+        "cls": "CoolDownMove",
         "name": "Hyper Beam"
     },
     {
@@ -488,6 +510,7 @@
         "priority": 0
     },
     {
+        "cls": "RecoilDamagingMove",
         "name": "Submission"
     },
     {
@@ -501,6 +524,7 @@
         "priority": 0
     },
     {
+        "cls": "Counter",
         "name": "Counter"
     },
     {
@@ -522,9 +546,11 @@
         "priority": 0
     },
     {
+        "cls": "DrainingMove",
         "name": "Absorb"
     },
     {
+        "cls": "DrainingMove",
         "name": "Mega Drain"
     },
     {
@@ -555,18 +581,23 @@
         "priority": 0
     },
     {
+        "cls": "ChargeUpMove",
         "name": "Solar Beam"
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Poison Powder"
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Stun Spore"
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Sleep Powder"
     },
     {
+        "cls": "MultiTurnAttack",
         "name": "Petal Dance"
     },
     {
@@ -589,6 +620,7 @@
         "priority": 0
     },
     {
+        "cls": "BindingMove",
         "name": "Fire Spin"
     },
     {
@@ -614,6 +646,7 @@
         "priority": 0
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Thunder Wave"
     },
     {
@@ -646,15 +679,19 @@
         "priority": 0
     },
     {
+        "cls": "OHKOMove",
         "name": "Fissure"
     },
     {
+        "cls": "ImmuneChargeUpMove",
         "name": "Dig"
     },
     {
+        "cls": "Toxic",
         "name": "Toxic"
     },
     {
+        "cls": "ConfusionDamagingMove",
         "name": "Confusion"
     },
     {
@@ -670,6 +707,7 @@
         "priority": 0
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Hypnosis"
     },
     {
@@ -702,9 +740,11 @@
         "priority": 1
     },
     {
+        "cls": "Rage",
         "name": "Rage"
     },
     {
+        "cls": "NoOpMove",
         "name": "Teleport"
     },
     {
@@ -717,6 +757,7 @@
         "priority": 0
     },
     {
+        "cls": "Mimic",
         "name": "Mimic"
     },
     {
@@ -740,6 +781,7 @@
         "priority": 0
     },
     {
+        "cls": "HealingMove",
         "name": "Recover"
     },
     {
@@ -773,6 +815,7 @@
         "priority": 0
     },
     {
+        "cls": "ConfusingMove",
         "name": "Confuse Ray"
     },
     {
@@ -806,27 +849,35 @@
         "priority": 0
     },
     {
+        "cls": "LightScreen",
         "name": "Light Screen"
     },
     {
+        "cls": "Haze",
         "name": "Haze"
     },
     {
+        "cls": "Reflect",
         "name": "Reflect"
     },
     {
+        "cls": "FocusEnergy",
         "name": "Focus Energy"
     },
     {
+        "cls": "Bide",
         "name": "Bide"
     },
     {
+        "cls": "Metronome",
         "name": "Metronome"
     },
     {
+        "cls": "MirrorMove",
         "name": "Mirror Move"
     },
     {
+        "cls": "SelfDestructingMove",
         "name": "Self-Destruct"
     },
     {
@@ -902,15 +953,19 @@
         "priority": 0
     },
     {
+        "cls": "BindingMove",
         "name": "Clamp"
     },
     {
+        "cls": "NeverMissMove",
         "name": "Swift"
     },
     {
+        "cls": "ChargeUpMove",
         "name": "Skull Bash"
     },
     {
+        "cls": "MultiHitMove",
         "name": "Spike Cannon"
     },
     {
@@ -946,33 +1001,43 @@
         "priority": 0
     },
     {
+        "cls": "HealingMove",
         "name": "Soft-Boiled"
     },
     {
+        "cls": "CrashDamageMove",
         "name": "High Jump Kick"
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Glare"
     },
     {
+        "cls": "DreamEater",
         "name": "Dream Eater"
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Poison Gas"
     },
     {
+        "cls": "MultiHitMove",
         "name": "Barrage"
     },
     {
+        "cls": "DrainingMove",
         "name": "Leech Life"
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Lovely Kiss"
     },
     {
+        "cls": "ChargeUpMove",
         "name": "Sky Attack"
     },
     {
+        "cls": "Transform",
         "name": "Transform"
     },
     {
@@ -997,6 +1062,7 @@
         "priority": 0
     },
     {
+        "cls": "StatusEffectMove",
         "name": "Spore"
     },
     {
@@ -1010,9 +1076,11 @@
         "priority": 0
     },
     {
+        "cls": "Psywave",
         "name": "Psywave"
     },
     {
+        "cls": "NoOpMove",
         "name": "Splash"
     },
     {
@@ -1035,15 +1103,19 @@
         "priority": 0
     },
     {
+        "cls": "SelfDestructingMove",
         "name": "Explosion"
     },
     {
+        "cls": "MultiHitMove",
         "name": "Fury Swipes"
     },
     {
+        "cls": "DoubleHitMove",
         "name": "Bonemerang"
     },
     {
+        "cls": "Rest",
         "name": "Rest"
     },
     {
@@ -1076,6 +1148,7 @@
         "priority": 0
     },
     {
+        "cls": "Conversion",
         "name": "Conversion"
     },
     {
@@ -1088,6 +1161,7 @@
         "priority": 0
     },
     {
+        "cls": "SuperFang",
         "name": "Super Fang"
     },
     {
@@ -1100,9 +1174,11 @@
         "priority": 0
     },
     {
+        "cls": "Substitute",
         "name": "Substitute"
     },
     {
+        "cls": "RecoilDamagingMove",
         "name": "Struggle"
     }
 ]
