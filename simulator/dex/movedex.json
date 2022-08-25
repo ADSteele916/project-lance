@@ -344,7 +344,12 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Sing"
+        "name": "Sing",
+        "pp": 24,
+        "move_type": "Normal",
+        "accuracy": 55,
+        "status": "Sleep",
+        "priority": 0
     },
     {
         "cls": "ConfusingMove",
@@ -586,15 +591,30 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Poison Powder"
+        "name": "Poison Powder",
+        "pp": 56,
+        "move_type": "Poison",
+        "accuracy": 75,
+        "status": "Poison",
+        "priority": 0
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Stun Spore"
+        "name": "Stun Spore",
+        "pp": 48,
+        "move_type": "Grass",
+        "accuracy": 75,
+        "status": "Paralyze",
+        "priority": 0
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Sleep Powder"
+        "name": "Sleep Powder",
+        "pp": 24,
+        "move_type": "Grass",
+        "accuracy": 75,
+        "status": "Sleep",
+        "priority": 0
     },
     {
         "cls": "MultiTurnAttack",
@@ -647,7 +667,12 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Thunder Wave"
+        "name": "Thunder Wave",
+        "pp": 32,
+        "move_type": "Electric",
+        "accuracy": 100,
+        "status": "Paralyze",
+        "priority": 0
     },
     {
         "cls": "StatusDamagingMove",
@@ -708,7 +733,12 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Hypnosis"
+        "name": "Hypnosis",
+        "pp": 32,
+        "move_type": "Psychic",
+        "accuracy": 60,
+        "status": "Sleep",
+        "priority": 0
     },
     {
         "cls": "StatRaisingMove",
@@ -1010,7 +1040,12 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Glare"
+        "name": "Glare",
+        "pp": 48,
+        "move_type": "Normal",
+        "accuracy": 75,
+        "status": "Paralyze",
+        "priority": 0
     },
     {
         "cls": "DreamEater",
@@ -1018,7 +1053,12 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Poison Gas"
+        "name": "Poison Gas",
+        "pp": 64,
+        "move_type": "Poison",
+        "accuracy": 55,
+        "status": "Poison",
+        "priority": 0
     },
     {
         "cls": "MultiHitMove",
@@ -1030,7 +1070,12 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Lovely Kiss"
+        "name": "Lovely Kiss",
+        "pp": 16,
+        "move_type": "Normal",
+        "accuracy": 75,
+        "status": "Sleep",
+        "priority": 0
     },
     {
         "cls": "ChargeUpMove",
@@ -1063,7 +1108,12 @@
     },
     {
         "cls": "StatusEffectMove",
-        "name": "Spore"
+        "name": "Spore",
+        "pp": 24,
+        "move_type": "Grass",
+        "accuracy": 100,
+        "status": "Sleep",
+        "priority": 0
     },
     {
         "cls": "StatLoweringMove",

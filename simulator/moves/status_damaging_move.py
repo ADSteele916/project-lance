@@ -30,17 +30,4 @@ class StatusDamagingMove(SideEffectDamagingMove):
         self.status = status
 
     def side_effect(self, attacker: "ActivePokemon", target: "ActivePokemon"):
-        if target.status == Status.FREEZE and self.status == Status.BURN:
-            target.status = Status.NONE
-        elif self.status == Status.POISON and Type.POISON in (
-                target.pokemon.pokemon.species.primary_type,
-                target.pokemon.pokemon.species.secondary_type
-        ):
-            return
-        elif self.status == Status.BURN and Type.FIRE in (
-                target.pokemon.pokemon.species.primary_type,
-                target.pokemon.pokemon.species.secondary_type
-        ):
-            return
-        elif target.status == Status.NONE:
-            target.status = self.status
+        target.apply_status(self.status)

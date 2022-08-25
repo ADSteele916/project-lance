@@ -1,6 +1,6 @@
 """Functionality for the Pokemon in a battle that is currently active."""
 
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Type
 
 import numpy as np
 
@@ -132,6 +132,22 @@ class ActivePokemon:
 
     def heal(self, damage: int):
         self.hp = self.hp + damage if self.hp + damage < self.max_hp else self.max_hp
+
+    def apply_status(self, status: Status):
+        if self.status == Status.FREEZE and status == Status.BURN:
+            self.status = Status.NONE
+        elif status == Status.POISON and Type.POISON in (
+                self.pokemon.pokemon.species.primary_type,
+                self.pokemon.pokemon.species.secondary_type
+        ):
+            return
+        elif status == Status.BURN and Type.FIRE in (
+                self.pokemon.pokemon.species.primary_type,
+                self.pokemon.pokemon.species.secondary_type
+        ):
+            return
+        elif self.status == Status.NONE:
+            self.status = status
 
     def use_move(self, move_index: int, battle: "Battle", player: "Player"):
         """Uses the move with the given index.

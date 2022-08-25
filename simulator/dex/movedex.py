@@ -14,6 +14,7 @@ from simulator.moves.move import Move
 from simulator.moves.stat_lowering_move import StatLoweringMove
 from simulator.moves.stat_raising_move import StatRaisingMove
 from simulator.moves.status_damaging_move import StatusDamagingMove
+from simulator.moves.status_effect_move import StatusEffectMove
 
 
 def _gen_movedex() -> Dict[str, Move]:
@@ -25,6 +26,7 @@ def _gen_movedex() -> Dict[str, Move]:
     classes = {
             "DamagingMove": DamagingMove,
             "HighCriticalChanceDamagingMove": HighCriticalChanceDamagingMove,
+            "StatusEffectMove": StatusEffectMove,
             "StatRaisingMove": StatRaisingMove,
             "StatLoweringMove": StatLoweringMove,
             "FlinchingDamagingMove": FlinchingDamagingMove,
