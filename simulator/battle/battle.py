@@ -322,8 +322,12 @@ class Battle:
 
         if self.p1_active_pokemon.knocked_out:
             self.__wait_for_switch(Player.P1)
+        elif self.p1_active_pokemon.toxic_counter is not None:
+            self.p1_active_pokemon.toxic_counter += 1
         if self.p2_active_pokemon.knocked_out:
             self.__wait_for_switch(Player.P2)
+        elif self.p2_active_pokemon.toxic_counter is not None:
+            self.p2_active_pokemon.toxic_counter += 1
 
     def __execute_switches(self):
         """Execute switches for any players with pending switches simultaneously."""

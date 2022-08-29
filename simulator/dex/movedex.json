@@ -743,7 +743,11 @@
     },
     {
         "cls": "Toxic",
-        "name": "Toxic"
+        "name": "Toxic",
+        "pp": 16,
+        "move_type": "Poison",
+        "accuracy": 85,
+        "priority": 0
     },
     {
         "cls": "ConfusionDamagingMove",

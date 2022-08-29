@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.move import Move
+from simulator.status import Status
 from simulator.type import Type
 
 if TYPE_CHECKING:
@@ -45,3 +46,14 @@ class Mist(Move):
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
         attacker.mist = True
+
+
+class Toxic(Move):
+
+    def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
+        if Type.POISON not in (
+                target.pokemon.pokemon.species.primary_type,
+                target.pokemon.pokemon.species.secondary_type
+        ) and not target.status:
+            target.status = Status.POISON
+            target.toxic_counter = 1
