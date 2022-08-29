@@ -19,11 +19,21 @@
     },
     {
         "cls": "MultiHitMove",
-        "name": "Double Slap"
+        "name": "Double Slap",
+        "pp": 16,
+        "move_type": "Normal",
+        "power": 15,
+        "accuracy": 85,
+        "priority": 0
     },
     {
         "cls": "MultiHitMove",
-        "name": "Comet Punch"
+        "name": "Comet Punch",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 18,
+        "accuracy": 85,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -181,7 +191,12 @@
     },
     {
         "cls": "DoubleHitMove",
-        "name": "Double Kick"
+        "name": "Double Kick",
+        "pp": 48,
+        "move_type": "Fighting",
+        "power": 30,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "cls": "DamagingMove",
@@ -237,7 +252,12 @@
     },
     {
         "cls": "MultiHitMove",
-        "name": "Fury Attack"
+        "name": "Fury Attack",
+        "pp": 32,
+        "move_type": "Normal",
+        "power": 15,
+        "accuracy": 85,
+        "priority": 0
     },
     {
         "cls": "OHKOMove",
@@ -302,11 +322,21 @@
     },
     {
         "cls": "DoubleHitMove",
-        "name": "Twineedle"
+        "name": "Twineedle",
+        "pp": 32,
+        "move_type": "Bug",
+        "power": 25,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "cls": "MultiHitMove",
-        "name": "Pin Missile"
+        "name": "Pin Missile",
+        "pp": 32,
+        "move_type": "Bug",
+        "power": 14,
+        "accuracy": 85,
+        "priority": 0
     },
     {
         "cls": "StatLoweringMove",
@@ -996,7 +1026,12 @@
     },
     {
         "cls": "MultiHitMove",
-        "name": "Spike Cannon"
+        "name": "Spike Cannon",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 20,
+        "accuracy": 100,
+        "priority": 0
     },
     {
         "cls": "DebuffingDamagingMove",
@@ -1062,7 +1097,12 @@
     },
     {
         "cls": "MultiHitMove",
-        "name": "Barrage"
+        "name": "Barrage",
+        "pp": 32,
+        "move_type": "Normal",
+        "power": 15,
+        "accuracy": 85,
+        "priority": 0
     },
     {
         "cls": "DrainingMove",
@@ -1158,11 +1198,21 @@
     },
     {
         "cls": "MultiHitMove",
-        "name": "Fury Swipes"
+        "name": "Fury Swipes",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 18,
+        "accuracy": 80,
+        "priority": 0
     },
     {
         "cls": "DoubleHitMove",
-        "name": "Bonemerang"
+        "name": "Bonemerang",
+        "pp": 16,
+        "move_type": "Normal",
+        "power": 50,
+        "accuracy": 90,
+        "priority": 0
     },
     {
         "cls": "Rest",

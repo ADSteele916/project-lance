@@ -7,10 +7,12 @@ from typing import Dict
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.debuffing_damaging_move import DebuffingDamagingMove
+from simulator.moves.double_hit_move import DoubleHitMove
 from simulator.moves.flinching_damaging_move import FlinchingDamagingMove
 from simulator.moves.high_critical_chance_damaging_move import HighCriticalChanceDamagingMove
 from simulator.moves.misc_moves import ConstantDamageMove, LeechSeed, LevelDamagingMove, Mist
 from simulator.moves.move import Move
+from simulator.moves.multi_hit_move import MultiHitMove
 from simulator.moves.stat_lowering_move import StatLoweringMove
 from simulator.moves.stat_raising_move import StatRaisingMove
 from simulator.moves.status_damaging_move import StatusDamagingMove
@@ -26,6 +28,8 @@ def _gen_movedex() -> Dict[str, Move]:
     classes = {
             "DamagingMove": DamagingMove,
             "HighCriticalChanceDamagingMove": HighCriticalChanceDamagingMove,
+            "DoubleHitMove": DoubleHitMove,
+            "MultiHitMove": MultiHitMove,
             "StatusEffectMove": StatusEffectMove,
             "StatRaisingMove": StatRaisingMove,
             "StatLoweringMove": StatLoweringMove,
