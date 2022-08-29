@@ -1,5 +1,7 @@
 """Classes for moves that cannot be generalized into a category."""
 
+from math import floor
+from random import randint
 from typing import TYPE_CHECKING
 
 from simulator.moves.damaging_move import DamagingMove
@@ -46,6 +48,17 @@ class Mist(Move):
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
         attacker.mist = True
+
+
+class Psywave(DamagingMove):
+
+    @staticmethod
+    def is_critical_hit(attacker: "ActivePokemon") -> bool:
+        return False
+
+    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool) -> int:
+        max_damage = max(floor(1.5 * attacker.pokemon.pokemon.level - 1), 1)
+        return randint(0, max_damage)
 
 
 class Toxic(Move):

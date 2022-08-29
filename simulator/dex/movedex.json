@@ -1171,7 +1171,12 @@
     },
     {
         "cls": "Psywave",
-        "name": "Psywave"
+        "name": "Psywave",
+        "pp": 24,
+        "move_type": "Psychic",
+        "power": 1,
+        "accuracy": 80,
+        "priority": 0
     },
     {
         "cls": "NoOpMove",
