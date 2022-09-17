@@ -1,6 +1,6 @@
 """Functionality for Pokemon with customized builds."""
 
-from typing import List, TYPE_CHECKING
+from typing import Final, List, TYPE_CHECKING
 
 import numpy as np
 
@@ -51,8 +51,8 @@ class InvalidMoveCountException(Exception):
 class PartyPokemon:
     """A Pokemon with player-customizable attributes, but no in-battle stats."""
 
-    MAX_DV = 0b1111
-    MAX_STAT_EXP = 0xFFFF
+    MAX_DV: Final[int] = 0b1111
+    MAX_STAT_EXP: Final[int] = 0xFFFF
 
     def __init__(
         self,
@@ -127,8 +127,8 @@ class PartyPokemon:
 
     @property
     def hp_dv(self) -> int:
-        return 8 * (self.__atk_dv % 2) + 4 * (self.__def_dv % 2) + 2 * (
-            self.__spe_dv % 2) + (self.__spc_dv % 2)
+        return 8 * (self.atk_dv % 2) + 4 * (self.def_dv % 2) + 2 * (
+            self.spe_dv % 2) + (self.spc_dv % 2)
 
     @hp_dv.setter
     def hp_dv(self, dv: int):
@@ -138,10 +138,10 @@ class PartyPokemon:
                 f"inclusive.")
         hp_bits = list(f"{dv:004b}")  # 4-bit binary string, e.g. "0100"
 
-        atk_bits = f"{self.__atk_dv:004b}"
-        def_bits = f"{self.__def_dv:004b}"
-        spe_bits = f"{self.__spe_dv:004b}"
-        spc_bits = f"{self.__spc_dv:004b}"
+        atk_bits = f"{self.atk_dv:004b}"
+        def_bits = f"{self.def_dv:004b}"
+        spe_bits = f"{self.spe_dv:004b}"
+        spc_bits = f"{self.spc_dv:004b}"
 
         self.__atk_dv = int(atk_bits[:-1] + hp_bits[0], 2)
         self.__def_dv = int(def_bits[:-1] + hp_bits[1], 2)

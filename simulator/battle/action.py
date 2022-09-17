@@ -19,12 +19,12 @@ class Action(Enum):
     SWITCH_6 = auto()
 
     @property
-    def is_move(self):
+    def is_move(self) -> bool:
         return self in (Action.MOVE_1, Action.MOVE_2, Action.MOVE_3,
                         Action.MOVE_4)
 
     @property
-    def is_switch(self):
+    def is_switch(self) -> bool:
         return self in (
             Action.SWITCH_1,
             Action.SWITCH_2,

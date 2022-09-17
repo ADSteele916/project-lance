@@ -1,6 +1,6 @@
 """Functionality for the Pokemon in a battle that is currently active."""
 
-from typing import List, Optional, Type, TYPE_CHECKING
+from typing import List, Optional, TYPE_CHECKING
 
 import numpy as np
 
@@ -10,6 +10,7 @@ from simulator.moves.move import Move
 from simulator.pokemon.party_pokemon import PartyPokemon
 from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.status import Status
+from simulator.type import Type
 
 if TYPE_CHECKING:
     from simulator.battle.battle import Battle

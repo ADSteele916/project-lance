@@ -2,13 +2,14 @@
 
 import json
 import os.path
+from typing import Dict
 
 from simulator.dex.movedex import MOVEDEX
 from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.type import Type
 
 
-def _gen_pokedex():
+def _gen_pokedex() -> Dict[str, PokemonSpecies]:
     with open(os.path.join(os.path.dirname(__file__), "pokedex.json"),
               encoding="utf-8") as json_file:
         dex_dict_list = json.load(json_file)

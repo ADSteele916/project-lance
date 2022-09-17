@@ -86,13 +86,12 @@ class DamagingMove(Move):
         type_effectiveness = target.species.attack_effectiveness(self.move_type)
         rand = np.random.randint(217, high=256)
 
-        adjusted_level = (2 * level) // 5 + 2
+        adjusted_level = (2 * level) / 5 + 2
         attack_defense_ratio = effective_attack / effective_defense
         unmodified_damage = (
-            adjusted_level * int(self.power * attack_defense_ratio) // 50 + 2)
+            (adjusted_level * self.power * attack_defense_ratio) / 50 + 2)
 
-        return (int(unmodified_damage * stab) * type_effectiveness *
-                rand) // 255
+        return int(unmodified_damage * stab * type_effectiveness * rand) // 255
 
 
 class HighCriticalChanceDamagingMove(DamagingMove):

@@ -56,7 +56,7 @@ def evaluate(genome: Tuple[int, DefaultGenome],
     evaluating_bot = (genome[0], NEATAgent(genome[1], config))
     competitor_bots = list(
         map(lambda g: (g[0], NEATAgent(g[1], config)), competitor_genomes))
-    rewards = {genome[0]: 0}
+    rewards = {genome[0]: 0.0}
 
     brtg = BasicRivalTeamGenerator()
     teams = []
@@ -68,7 +68,7 @@ def evaluate(genome: Tuple[int, DefaultGenome],
     team_matchups = list(product(teams, repeat=2))
 
     for competitor in competitor_bots:
-        rewards[competitor[0]] = 0
+        rewards[competitor[0]] = 0.0
         for team_one, team_two in team_matchups:
             battle = Battle(team_one, team_two, evaluating_bot[1],
                             competitor[1])

@@ -3,7 +3,7 @@
 
 from enum import IntEnum
 from threading import Lock
-from typing import List, Optional, Tuple, TYPE_CHECKING
+from typing import Final, List, Optional, Tuple, TYPE_CHECKING
 
 import numpy as np
 
@@ -12,6 +12,7 @@ from simulator.battle.action import MOVE_SLOTS
 from simulator.battle.action import SWITCH_SLOTS
 from simulator.battle.active_pokemon import ActivePokemon
 from simulator.battle.battling_pokemon import BattlingPokemon
+from simulator.moves.move import Move
 from simulator.pokemon.party_pokemon import PartyPokemon
 
 if TYPE_CHECKING:
@@ -25,7 +26,7 @@ class Player(IntEnum):
     P2 = 1
 
     @property
-    def opponent(self):
+    def opponent(self) -> "Player":
         return Player.P1 if self == Player.P2 else Player.P2
 
 
@@ -37,8 +38,8 @@ class NoMoveInSlotException(Exception):
 
 class OutOfPPException(Exception):
 
-    def __init__(self, move: str):
-        super().__init__(f"{move} is out of PP and cannot be used.")
+    def __init__(self, move: Move):
+        super().__init__(f"{move.name} is out of PP and cannot be used.")
 
 
 class AlreadyInBattleException(Exception):
@@ -49,7 +50,7 @@ class AlreadyInBattleException(Exception):
 
 class FaintedPokemonException(Exception):
 
-    def __init__(self, pokemon: PartyPokemon):
+    def __init__(self, pokemon: BattlingPokemon):
         super().__init__(f"{pokemon} has fainted and cannot switch in.")
 
 
@@ -92,7 +93,7 @@ class SwitchNotSetException(Exception):
 class Battle:
     """A Pokemon battle with all state information for both teams"""
 
-    PLAYERS = (Player.P1, Player.P2)
+    PLAYERS: Final[Tuple[Player, Player]] = (Player.P1, Player.P2)
 
     def __init__(self,
                  team_one: List[PartyPokemon],
@@ -260,13 +261,16 @@ class Battle:
         Args:
             player: The player to move or switch.
         """
+
+        assert self.p1_pending_action is not None
+        assert self.p2_pending_action is not None
+
         action = (self.p1_pending_action
                   if player == Player.P1 else self.p2_pending_action)
         active_pokemon = (self.p1_active_pokemon
                           if player == Player.P1 else self.p2_active_pokemon)
         if action.is_switch:
-            self.__execute_switch(player,
-                                  SWITCH_SLOTS[self.__pending_actions[player]])
+            self.__execute_switch(player, SWITCH_SLOTS[action])
         else:
             active_pokemon.use_move(MOVE_SLOTS[action], self, player)
 
@@ -283,6 +287,10 @@ class Battle:
         Returns:
             The Player who will move first this turn.
         """
+
+        assert self.p1_pending_action is not None
+        assert self.p2_pending_action is not None
+
         if self.p1_active_pokemon.speed > self.p2_active_pokemon.speed:
             faster_player = Player.P1
         elif self.p1_active_pokemon.speed < self.p2_active_pokemon.speed:

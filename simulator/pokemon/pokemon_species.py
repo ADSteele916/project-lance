@@ -1,4 +1,5 @@
 """Representation of a Base Pokemon, without any DVs or EVs."""
+
 from typing import Optional, Set, TYPE_CHECKING
 
 import numpy as np
