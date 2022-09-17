@@ -1,10 +1,8 @@
 """Functionality related to Pokemon moves."""
-
 from abc import ABCMeta
 from abc import abstractmethod
+import random
 from typing import Optional, TYPE_CHECKING
-
-import numpy as np
 
 from simulator.type import Type
 
@@ -82,7 +80,7 @@ class Move(metaclass=ABCMeta):
         evasion = target.evasion_multiplier
         threshold = max(0, min(255, self.accuracy * accuracy * evasion))
 
-        accuracy_roll = np.random.randint(0, high=256)
+        accuracy_roll = random.randint(0, 255)
 
         return accuracy_roll < threshold
 

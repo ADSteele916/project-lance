@@ -1,8 +1,7 @@
 """Representation of a Base Pokemon, without any DVs or EVs."""
 
+from math import floor
 from typing import List, Optional, Set, TYPE_CHECKING
-
-import numpy as np
 
 from simulator.type import get_attack_effectiveness
 from simulator.type import Type
@@ -96,9 +95,9 @@ class PokemonSpecies:
             calculate a critical hit.
         """
         if not high_crit_ratio and not focus_energy:
-            return np.floor(self.base_spe / 2)
+            return floor(self.base_spe / 2)
         if not high_crit_ratio:
-            return np.floor(self.base_spe / 8)
+            return floor(self.base_spe / 8)
         if not focus_energy:
-            return min(8 * np.floor(self.base_spe / 2), 255)
-        return 4 * np.floor(self.base_spe / 4)
+            return min(8 * floor(self.base_spe / 2), 255)
+        return 4 * floor(self.base_spe / 4)

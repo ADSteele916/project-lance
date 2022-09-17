@@ -3,8 +3,6 @@
 from enum import auto
 from enum import Enum
 
-import numpy as np
-
 
 class Type(Enum):
     """Type of a Pokemon or of a move."""
@@ -181,27 +179,6 @@ _ATTACK_EFFECTIVENESS = {
 }
 
 
-def _gen_types_chart() -> np.ndarray:
-    """Generates a table of type effectiveness matchups.
-
-    Returns:
-        A 15 by 15 table of effectiveness multipliers where rows are attacking
-        types and cols are defending types.
-    """
-    types = list(Type)
-    chart = np.ones((15, 15))
-
-    for idx, pokemon_type in enumerate(types):
-        for special_type, effectiveness in _ATTACK_EFFECTIVENESS[
-                pokemon_type].items():
-            chart[idx, types.index(special_type)] = effectiveness
-
-    return chart
-
-
-EFFECTIVENESS_CHART = _gen_types_chart()
-
-
 def get_attack_effectiveness(attacking_type: Type,
                              defending_type: Type) -> float:
     """Looks up the type multiplier for the given attacking and defending types.
@@ -213,6 +190,7 @@ def get_attack_effectiveness(attacking_type: Type,
     Returns:
         float: The type effectiveness multiplier for the given types.
     """
-    types = list(Type)
-    return EFFECTIVENESS_CHART[types.index(attacking_type),
-                               types.index(defending_type)]
+    try:
+        return _ATTACK_EFFECTIVENESS[attacking_type][defending_type]
+    except KeyError:
+        return 1.0

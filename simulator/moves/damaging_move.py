@@ -1,8 +1,7 @@
 """Functionality for a move that deals damage to the opposing ActivePokemon."""
 
+import random
 from typing import Optional, TYPE_CHECKING
-
-import numpy as np
 
 from simulator.moves.move import Move
 
@@ -49,7 +48,7 @@ class DamagingMove(Move):
         Returns:
             Whether the attack is a critical hit.
         """
-        crit_roll = np.random.randint(0, high=256)
+        crit_roll = random.randint(0, 255)
         threshold = attacker.pokemon.pokemon.species.critical_hit_threshold(
             False, attacker.focus_energy)
         return crit_roll < threshold
@@ -82,7 +81,7 @@ class DamagingMove(Move):
                                  else target.special)
         stab = 1.5 if self.move_type in attacker.species.types else 1.0
         type_effectiveness = target.species.attack_effectiveness(self.move_type)
-        rand = np.random.randint(217, high=256)
+        rand = random.randint(217, 255)
 
         adjusted_level = (2 * level) / 5 + 2
         attack_defense_ratio = effective_attack / effective_defense
@@ -97,7 +96,7 @@ class HighCriticalChanceDamagingMove(DamagingMove):
 
     @staticmethod
     def is_critical_hit(attacker: "ActivePokemon"):
-        crit_roll = np.random.randint(0, high=256)
+        crit_roll = random.randint(0, 255)
         threshold = attacker.species.critical_hit_threshold(
             True, attacker.focus_energy)
         return crit_roll < threshold

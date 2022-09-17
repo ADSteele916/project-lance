@@ -1,8 +1,7 @@
 """Functionality for the Pokemon in a battle that is currently active."""
 
+import random
 from typing import List, Optional, TYPE_CHECKING
-
-import numpy as np
 
 from simulator.battle.battling_pokemon import BattlingPokemon
 from simulator.modifiable_stat import ModifiableStat
@@ -182,7 +181,7 @@ class ActivePokemon:
             return
 
         if self.status == Status.PARALYZE:
-            roll = np.random.random()
+            roll = random.random()
             if roll < 0.25:
                 return
         if self.status == Status.FREEZE:

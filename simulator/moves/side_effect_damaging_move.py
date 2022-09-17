@@ -2,9 +2,8 @@
 
 from abc import ABCMeta
 from abc import abstractmethod
+import random
 from typing import Optional, TYPE_CHECKING
-
-import numpy as np
 
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.damaging_move import DamagingMove
@@ -37,7 +36,7 @@ class SideEffectDamagingMove(DamagingMove, metaclass=ABCMeta):
             self.side_effect(attacker, target)
 
     def should_apply_side_effect(self):
-        return np.random.randint(0, 100) < self.effect_chance
+        return random.randint(0, 100) < self.effect_chance
 
     @abstractmethod
     def side_effect(self, attacker: "ActivePokemon", target: "ActivePokemon"):

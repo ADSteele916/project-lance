@@ -1,8 +1,8 @@
 """Functionality for Pokemon with customized builds."""
 
+from math import floor
+from math import sqrt
 from typing import Final, List, TYPE_CHECKING
-
-import numpy as np
 
 from simulator.pokemon.pokemon_species import PokemonSpecies
 
@@ -240,31 +240,30 @@ class PartyPokemon:
 
     @property
     def hp(self) -> int:
-        return (np.floor(
-            ((self.species.base_hp + self.hp_dv) +
-             np.floor(np.sqrt(self.hp_stat_exp) / 4)) * self.level / 100) +
+        return (floor(((self.species.base_hp + self.hp_dv) +
+                       floor(sqrt(self.hp_stat_exp) / 4)) * self.level / 100) +
                 self.level + 10)
 
     @property
     def attack(self) -> int:
-        return (np.floor(
+        return (floor(
             ((self.species.base_atk + self.__atk_dv) +
-             np.floor(np.sqrt(self.atk_stat_exp) / 4)) * self.level / 100) + 5)
+             floor(sqrt(self.atk_stat_exp) / 4)) * self.level / 100) + 5)
 
     @property
     def defense(self) -> int:
-        return (np.floor(
+        return (floor(
             ((self.species.base_def + self.__def_dv) +
-             np.floor(np.sqrt(self.def_stat_exp) / 4)) * self.level / 100) + 5)
+             floor(sqrt(self.def_stat_exp) / 4)) * self.level / 100) + 5)
 
     @property
     def speed(self) -> int:
-        return (np.floor(
+        return (floor(
             ((self.species.base_spe + self.__spe_dv) +
-             np.floor(np.sqrt(self.spe_stat_exp) / 4)) * self.level / 100) + 5)
+             floor(sqrt(self.spe_stat_exp) / 4)) * self.level / 100) + 5)
 
     @property
     def special(self) -> int:
-        return (np.floor(
+        return (floor(
             ((self.species.base_spc + self.__spc_dv) +
-             np.floor(np.sqrt(self.spc_stat_exp) / 4)) * self.level / 100) + 5)
+             floor(sqrt(self.spc_stat_exp) / 4)) * self.level / 100) + 5)

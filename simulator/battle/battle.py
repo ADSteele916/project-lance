@@ -2,10 +2,9 @@
 """Functionality for a Battle between two Pokemon teams, with user input."""
 
 from enum import IntEnum
+import random
 from threading import Lock
 from typing import Final, List, Optional, Tuple, TYPE_CHECKING
-
-import numpy as np
 
 from simulator.battle.action import Action
 from simulator.battle.action import MOVE_SLOTS
@@ -297,8 +296,7 @@ class Battle:
             faster_player = Player.P2
         else:
             faster_player = None
-        rand_player = Player.P1 if np.random.choice(
-            (True, False)) else Player.P2
+        rand_player = Player.P1 if random.choice((True, False)) else Player.P2
 
         if (self.p1_pending_action.is_switch and
                 self.p2_pending_action.is_switch):
