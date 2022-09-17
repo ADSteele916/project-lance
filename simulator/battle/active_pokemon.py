@@ -1,16 +1,19 @@
 """Functionality for the Pokemon in a battle that is currently active."""
 
-from typing import TYPE_CHECKING, List, Optional, Type
+from typing import List, Optional, Type, TYPE_CHECKING
 
 import numpy as np
 
 from simulator.battle.battling_pokemon import BattlingPokemon
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.move import Move
+from simulator.pokemon.party_pokemon import PartyPokemon
+from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.status import Status
 
 if TYPE_CHECKING:
-    from simulator.battle.battle import Battle, Player
+    from simulator.battle.battle import Battle
+    from simulator.battle.battle import Player
 
 
 class ZeroPPException(Exception):
@@ -35,6 +38,14 @@ class ActivePokemon:
         self.flinch = False
 
     @property
+    def species(self) -> PokemonSpecies:
+        return self.pokemon.species
+
+    @property
+    def party_member(self) -> PartyPokemon:
+        return self.pokemon.pokemon
+
+    @property
     def pokemon(self) -> BattlingPokemon:
         return self.__pokemon
 
@@ -57,37 +68,38 @@ class ActivePokemon:
     @property
     def attack(self) -> int:
         burn_multiplier = 0.5 if self.status == Status.BURN else 1.0
-        return int(
-                self.pokemon.attack * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.ATTACK])
-                * burn_multiplier
-        )
+        return int(self.pokemon.attack * self.__stat_change_multiplier(
+            self.__stat_modifiers[ModifiableStat.ATTACK]) * burn_multiplier)
 
     @property
     def defense(self) -> int:
-        return int(self.pokemon.defense * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.DEFENSE]))
+        return int(self.pokemon.defense * self.__stat_change_multiplier(
+            self.__stat_modifiers[ModifiableStat.DEFENSE]))
 
     @property
     def special(self) -> int:
-        return int(self.pokemon.special * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.SPECIAL]))
+        return int(self.pokemon.special * self.__stat_change_multiplier(
+            self.__stat_modifiers[ModifiableStat.SPECIAL]))
 
     @property
     def speed(self) -> int:
         paralysis_multiplier = 0.25 if self.status == Status.PARALYZE else 1.0
-        return int(
-                self.pokemon.speed * self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.SPEED])
-                * paralysis_multiplier
-        )
+        return int(self.pokemon.speed * self.__stat_change_multiplier(
+            self.__stat_modifiers[ModifiableStat.SPEED]) * paralysis_multiplier)
 
     @property
     def evasion_multiplier(self) -> float:
-        return self.__stat_change_multiplier(-self.__stat_modifiers[ModifiableStat.EVASION])
+        return self.__stat_change_multiplier(
+            -self.__stat_modifiers[ModifiableStat.EVASION])
 
     @property
     def accuracy_multiplier(self) -> float:
-        return self.__stat_change_multiplier(self.__stat_modifiers[ModifiableStat.ACCURACY])
+        return self.__stat_change_multiplier(
+            self.__stat_modifiers[ModifiableStat.ACCURACY])
 
     def modify_stat(self, stat: ModifiableStat, change: int):
-        self.__stat_modifiers[stat] = max(-6, min(6, self.__stat_modifiers[stat] + change))
+        self.__stat_modifiers[stat] = max(
+            -6, min(6, self.__stat_modifiers[stat] + change))
 
     @property
     def status(self) -> Status:
@@ -111,16 +123,17 @@ class ActivePokemon:
 
     @staticmethod
     def __stat_change_multiplier(modifier: int) -> float:
-        """Produces the stat multiplier corresponding to the given modifier amount
+        """Produces the stat multiplier for a given modifier amount.
 
         Args:
-            modifier (int): A stat modifier between -6 and 6, inclusive.
+            modifier: A stat modifier between -6 and 6, inclusive.
 
         Returns:
-            float: The number by which the stat being modified should be multiplied during calculations.
+            The number by which the stat being modified should be multiplied
+            during calculations.
 
         Raises:
-            ValueError: The given modifier is outside of the valid range.
+            ValueError: The given modifier is outside the valid range.
         """
         if not -6 <= modifier <= 6:
             raise ValueError("Modifier must be in [-6, 6].")
@@ -131,20 +144,17 @@ class ActivePokemon:
         self.hp = self.hp - damage if self.hp - damage > 0 else 0
 
     def heal(self, damage: int):
-        self.hp = self.hp + damage if self.hp + damage < self.max_hp else self.max_hp
+        self.hp = (self.hp +
+                   damage if self.hp + damage < self.max_hp else self.max_hp)
 
     def apply_status(self, status: Status):
         if self.status == Status.FREEZE and status == Status.BURN:
             self.status = Status.NONE
         elif status == Status.POISON and Type.POISON in (
-                self.pokemon.pokemon.species.primary_type,
-                self.pokemon.pokemon.species.secondary_type
-        ):
+                self.species.primary_type, self.species.secondary_type):
             return
         elif status == Status.BURN and Type.FIRE in (
-                self.pokemon.pokemon.species.primary_type,
-                self.pokemon.pokemon.species.secondary_type
-        ):
+                self.species.primary_type, self.species.secondary_type):
             return
         elif self.status == Status.NONE:
             self.status = status
@@ -152,14 +162,16 @@ class ActivePokemon:
     def use_move(self, move_index: int, battle: "Battle", player: "Player"):
         """Uses the move with the given index.
 
-        If the Pokemon is paralyzed, there is a 25% chance it cannot move. If frozen, it will not be able to move until
-        thawed. If burned or poisoned, one sixteenth of the Pokemon's max health will be dealt as damage if the opponent
-        was not just knocked out. If seeded, another sixteenth of the Pokemon's max health is given to the opponent.
+        If the Pokemon is paralyzed, there is a 25% chance it cannot move. If
+        frozen, it will not be able to move until thawed. If burned or poisoned,
+        one sixteenth of the Pokemon's max health will be dealt as damage if the
+        opponent was not just knocked out. If seeded, another sixteenth of the
+        Pokemon's max health is given to the opponent.
 
         Args:
-            move_index (int): The index of the move that should be used.
-            battle (Battle): The Battle in which the move is being used.
-            player (Player): The Player whose Pokemon is using the move.
+            move_index: The index of the move that should be used.
+            battle: The Battle in which the move is being used.
+            player: The Player whose Pokemon is using the move.
 
         Raises:
             ValueError: The given index is out of range.

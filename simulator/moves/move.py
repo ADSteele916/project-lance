@@ -1,7 +1,8 @@
 """Functionality related to Pokemon moves."""
 
-from abc import ABCMeta, abstractmethod
-from typing import TYPE_CHECKING, Optional
+from abc import ABCMeta
+from abc import abstractmethod
+from typing import Optional, TYPE_CHECKING
 
 import numpy as np
 
@@ -9,31 +10,45 @@ from simulator.type import Type
 
 if TYPE_CHECKING:
     from simulator.battle.active_pokemon import ActivePokemon
-    from simulator.battle.battle import Battle, Player
+    from simulator.battle.battle import Battle
+    from simulator.battle.battle import Player
 
 
 class InvalidPPException(Exception):
 
     def __init__(self, pp: int):
-        super().__init__(f"{pp} is not a valid PP. It must be a positive integer.")
+        super().__init__(
+            f"{pp} is not a valid PP. It must be a positive integer.")
 
 
 class InvalidAccuracyException(Exception):
 
     def __init__(self, accuracy: int):
-        super().__init__(f"{accuracy} is not a valid accuracy. It must be an integer between 1 and 255.")
+        super().__init__(
+            f"{accuracy} is not a valid accuracy. It must be an integer "
+            f"between 1 and 255.")
 
 
 class InvalidPriorityException(Exception):
 
     def __init__(self, priority: int):
-        super().__init__(f"{priority} is not a valid priority. It must be an integer between -1 and 1.")
+        super().__init__(
+            f"{priority} is not a valid priority. It must be an integer "
+            f"between -1 and 1.")
 
 
 class Move(metaclass=ABCMeta):
-    """Abstract Base Class for a Pokemon Move, that can freely modify that Battle state."""
+    """A Pokemon Move, that can freely modify that Battle state."""
 
-    def __init__(self, name: str, pp: int, move_type: str, accuracy: Optional[int], priority: int = 0, *args, **kwargs):
+    def __init__(self,
+                 name: str,
+                 pp: int,
+                 move_type: str,
+                 accuracy: Optional[int],
+                 *args,
+                 priority: int = 0,
+                 **kwargs):
+        # pylint: disable=unused-argument
         if pp <= 0:
             raise InvalidPPException(pp)
         if accuracy is not None and not 0 < accuracy <= 255:
@@ -49,15 +64,16 @@ class Move(metaclass=ABCMeta):
     def __str__(self):
         return self.name
 
-    def accuracy_check(self, attacker: "ActivePokemon", target: "ActivePokemon") -> bool:
-        """Randomly determines whether or not the attacker will be be able to hit the target using this Move.
+    def accuracy_check(self, attacker: "ActivePokemon",
+                       target: "ActivePokemon") -> bool:
+        """Randomly determines whether the attacker will hit the target.
 
         Args:
-            attacker (ActivePokemon): The Pokemon using this move.
-            target (ActivePokemon): The Pokemon targeted by this move.
+            attacker: The Pokemon using this move.
+            target: The Pokemon targeted by this move.
 
         Returns:
-            bool: Whether or not this Move will hit its target.
+            Whether this Move will hit its target.
         """
         if self.accuracy is None:
             return True
@@ -71,11 +87,11 @@ class Move(metaclass=ABCMeta):
         return accuracy_roll < threshold
 
     def execute(self, battle: "Battle", player: "Player"):
-        """Executes the move pending an accuracy check, updating the given Battle environment as necessary.
+        """Executes the move, updating the given Battle environment as needed.
 
         Args:
-            battle (Battle): The Battle environment in which the move is being used.
-            player (Player): The Player who used the move.
+            battle: The Battle environment in which the move is being used.
+            player: The Player who used the move.
         """
         attacker: "ActivePokemon" = battle.actives[player]
         target: "ActivePokemon" = battle.actives[player.opponent]
@@ -88,7 +104,7 @@ class Move(metaclass=ABCMeta):
         """Applies the effects of the move to the attacker and/or target.
 
         Args:
-            attacker (ActivePokemon): The Pokemon using this move.
-            target (ActivePokemon): The Pokemon targeted by this move.
+            attacker: The Pokemon using this move.
+            target: The Pokemon targeted by this move.
         """
         pass

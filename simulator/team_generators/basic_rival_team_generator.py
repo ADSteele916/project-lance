@@ -1,47 +1,38 @@
-"""A team generator that creates single-Pokemon teams consisting of the Kanto starters."""
+"""A TeamGenerator for single-Pokemon teams consisting of the Kanto starters."""
 
 from random import shuffle
 
 from simulator.dex.movedex import MOVEDEX
 from simulator.dex.pokedex import POKEDEX
 from simulator.pokemon.party_pokemon import PartyPokemon
-from simulator.team_generators.team_generator import NoMorePossibleTeamsException, TeamGenerator
+from simulator.team_generators.team_generator import \
+    NoMorePossibleTeamsException
+from simulator.team_generators.team_generator import TeamGenerator
 
 
 class BasicRivalTeamGenerator(TeamGenerator):
     """A team generator that produces single-Pokemon teams.
 
-    The Pokemon in each team is based on Blue's starters' level and movesets in the Cerulean City rival battle in the
-    original Pokemon Red and Blue, to ensure that every starter has a STAB move. DVs and STAT EXPs are at their
+    The Pokemon in each team is based on Blue's starters' level and movesets in
+    the Cerulean City rival battle in the original Pokemon Red and Blue, to
+    ensure that every starter has a STAB move. DVs and STAT EXPs are at their
     maximums.
     """
 
     MAX_ALLOWED_TEAMS = 3
     STARTERS = {
-            PartyPokemon(
-                    POKEDEX["Bulbasaur"],
-                    17,
-                    [MOVEDEX["Tackle"],
-                     MOVEDEX["Growl"],
-                     MOVEDEX["Leech Seed"],
-                     MOVEDEX["Vine Whip"]]
-            ),
-            PartyPokemon(
-                    POKEDEX["Charmander"],
-                    17,
-                    [MOVEDEX["Scratch"],
-                     MOVEDEX["Growl"],
-                     MOVEDEX["Ember"],
-                     MOVEDEX["Leer"]]
-            ),
-            PartyPokemon(
-                    POKEDEX["Squirtle"],
-                    17,
-                    [MOVEDEX["Tackle"],
-                     MOVEDEX["Tail Whip"],
-                     MOVEDEX["Bubble"],
-                     MOVEDEX["Water Gun"]]
-            )
+        PartyPokemon(POKEDEX["Bulbasaur"], 17, [
+            MOVEDEX["Tackle"], MOVEDEX["Growl"], MOVEDEX["Leech Seed"],
+            MOVEDEX["Vine Whip"]
+        ]),
+        PartyPokemon(POKEDEX["Charmander"], 17, [
+            MOVEDEX["Scratch"], MOVEDEX["Growl"], MOVEDEX["Ember"],
+            MOVEDEX["Leer"]
+        ]),
+        PartyPokemon(POKEDEX["Squirtle"], 17, [
+            MOVEDEX["Tackle"], MOVEDEX["Tail Whip"], MOVEDEX["Bubble"],
+            MOVEDEX["Water Gun"]
+        ])
     }
 
     def generate_team(self):

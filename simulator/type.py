@@ -1,6 +1,7 @@
 """Functionality related to Pokemon types and their interactions."""
 
-from enum import Enum, auto
+from enum import auto
+from enum import Enum
 
 import numpy as np
 
@@ -32,14 +33,14 @@ class Type(Enum):
             bool: Whether or not this Type has physical attacks.
         """
         return self in (
-                Type.NORMAL,
-                Type.FIGHTING,
-                Type.FLYING,
-                Type.POISON,
-                Type.GROUND,
-                Type.ROCK,
-                Type.BUG,
-                Type.GHOST,
+            Type.NORMAL,
+            Type.FIGHTING,
+            Type.FLYING,
+            Type.POISON,
+            Type.GROUND,
+            Type.ROCK,
+            Type.BUG,
+            Type.GHOST,
         )
 
     @property
@@ -50,165 +51,168 @@ class Type(Enum):
             bool: Whether or not this Type has special attacks.
         """
         return self in (
-                Type.FIRE,
-                Type.WATER,
-                Type.GRASS,
-                Type.ELECTRIC,
-                Type.PSYCHIC,
-                Type.ICE,
-                Type.DRAGON,
+            Type.FIRE,
+            Type.WATER,
+            Type.GRASS,
+            Type.ELECTRIC,
+            Type.PSYCHIC,
+            Type.ICE,
+            Type.DRAGON,
         )
 
 
-__WEAK = 2.0
-__RESIST = 0.5
-__IMMUNE = 0.0
+_WEAK = 2.0
+_RESIST = 0.5
+_IMMUNE = 0.0
 
-__ATTACK_EFFECTIVENESS = {
-        Type.NORMAL: {
-                Type.ROCK: __RESIST,
-                Type.GHOST: __IMMUNE
-        },
-        Type.FIGHTING: {
-                Type.NORMAL: __WEAK,
-                Type.FLYING: __RESIST,
-                Type.POISON: __RESIST,
-                Type.ROCK: __WEAK,
-                Type.BUG: __RESIST,
-                Type.GHOST: __IMMUNE,
-                Type.PSYCHIC: __RESIST,
-                Type.ICE: __WEAK,
-        },
-        Type.FLYING: {
-                Type.FIGHTING: __WEAK,
-                Type.ROCK: __RESIST,
-                Type.BUG: __WEAK,
-                Type.GRASS: __WEAK,
-                Type.ELECTRIC: __RESIST,
-        },
-        Type.POISON: {
-                Type.POISON: __RESIST,
-                Type.GROUND: __RESIST,
-                Type.ROCK: __RESIST,
-                Type.BUG: __WEAK,
-                Type.GHOST: __RESIST,
-                Type.GRASS: __WEAK,
-        },
-        Type.GROUND: {
-                Type.FLYING: __IMMUNE,
-                Type.POISON: __WEAK,
-                Type.ROCK: __WEAK,
-                Type.BUG: __RESIST,
-                Type.FIRE: __WEAK,
-                Type.GRASS: __RESIST,
-                Type.ELECTRIC: __WEAK,
-        },
-        Type.ROCK: {
-                Type.FIGHTING: __RESIST,
-                Type.FLYING: __WEAK,
-                Type.GROUND: __RESIST,
-                Type.BUG: __WEAK,
-                Type.FIRE: __WEAK,
-                Type.ICE: __WEAK,
-        },
-        Type.BUG: {
-                Type.FIGHTING: __RESIST,
-                Type.FLYING: __RESIST,
-                Type.POISON: __WEAK,
-                Type.GHOST: __RESIST,
-                Type.FIRE: __RESIST,
-                Type.GRASS: __WEAK,
-                Type.PSYCHIC: __WEAK,
-        },
-        Type.GHOST: {
-                Type.NORMAL: __IMMUNE,
-                Type.GHOST: __WEAK,
-                Type.PSYCHIC: __IMMUNE
-        },
-        Type.FIRE: {
-                Type.ROCK: __RESIST,
-                Type.BUG: __WEAK,
-                Type.FIRE: __RESIST,
-                Type.WATER: __RESIST,
-                Type.GRASS: __WEAK,
-                Type.ICE: __WEAK,
-                Type.DRAGON: __RESIST,
-        },
-        Type.WATER: {
-                Type.GROUND: __WEAK,
-                Type.ROCK: __WEAK,
-                Type.FIRE: __WEAK,
-                Type.WATER: __RESIST,
-                Type.GRASS: __RESIST,
-                Type.DRAGON: __RESIST,
-        },
-        Type.GRASS: {
-                Type.FLYING: __RESIST,
-                Type.POISON: __RESIST,
-                Type.GROUND: __WEAK,
-                Type.ROCK: __WEAK,
-                Type.BUG: __RESIST,
-                Type.FIRE: __RESIST,
-                Type.WATER: __WEAK,
-                Type.GRASS: __RESIST,
-                Type.DRAGON: __RESIST,
-        },
-        Type.ELECTRIC: {
-                Type.FLYING: __WEAK,
-                Type.GROUND: __IMMUNE,
-                Type.WATER: __WEAK,
-                Type.GRASS: __RESIST,
-                Type.ELECTRIC: __RESIST,
-                Type.DRAGON: __RESIST,
-        },
-        Type.PSYCHIC: {
-                Type.FIGHTING: __WEAK,
-                Type.POISON: __WEAK,
-                Type.PSYCHIC: __RESIST
-        },
-        Type.ICE: {
-                Type.FLYING: __WEAK,
-                Type.GROUND: __WEAK,
-                Type.WATER: __RESIST,
-                Type.GRASS: __WEAK,
-                Type.ICE: __RESIST,
-                Type.DRAGON: __WEAK,
-        },
-        Type.DRAGON: {
-                Type.DRAGON: __WEAK
-        },
+_ATTACK_EFFECTIVENESS = {
+    Type.NORMAL: {
+        Type.ROCK: _RESIST,
+        Type.GHOST: _IMMUNE
+    },
+    Type.FIGHTING: {
+        Type.NORMAL: _WEAK,
+        Type.FLYING: _RESIST,
+        Type.POISON: _RESIST,
+        Type.ROCK: _WEAK,
+        Type.BUG: _RESIST,
+        Type.GHOST: _IMMUNE,
+        Type.PSYCHIC: _RESIST,
+        Type.ICE: _WEAK,
+    },
+    Type.FLYING: {
+        Type.FIGHTING: _WEAK,
+        Type.ROCK: _RESIST,
+        Type.BUG: _WEAK,
+        Type.GRASS: _WEAK,
+        Type.ELECTRIC: _RESIST,
+    },
+    Type.POISON: {
+        Type.POISON: _RESIST,
+        Type.GROUND: _RESIST,
+        Type.ROCK: _RESIST,
+        Type.BUG: _WEAK,
+        Type.GHOST: _RESIST,
+        Type.GRASS: _WEAK,
+    },
+    Type.GROUND: {
+        Type.FLYING: _IMMUNE,
+        Type.POISON: _WEAK,
+        Type.ROCK: _WEAK,
+        Type.BUG: _RESIST,
+        Type.FIRE: _WEAK,
+        Type.GRASS: _RESIST,
+        Type.ELECTRIC: _WEAK,
+    },
+    Type.ROCK: {
+        Type.FIGHTING: _RESIST,
+        Type.FLYING: _WEAK,
+        Type.GROUND: _RESIST,
+        Type.BUG: _WEAK,
+        Type.FIRE: _WEAK,
+        Type.ICE: _WEAK,
+    },
+    Type.BUG: {
+        Type.FIGHTING: _RESIST,
+        Type.FLYING: _RESIST,
+        Type.POISON: _WEAK,
+        Type.GHOST: _RESIST,
+        Type.FIRE: _RESIST,
+        Type.GRASS: _WEAK,
+        Type.PSYCHIC: _WEAK,
+    },
+    Type.GHOST: {
+        Type.NORMAL: _IMMUNE,
+        Type.GHOST: _WEAK,
+        Type.PSYCHIC: _IMMUNE
+    },
+    Type.FIRE: {
+        Type.ROCK: _RESIST,
+        Type.BUG: _WEAK,
+        Type.FIRE: _RESIST,
+        Type.WATER: _RESIST,
+        Type.GRASS: _WEAK,
+        Type.ICE: _WEAK,
+        Type.DRAGON: _RESIST,
+    },
+    Type.WATER: {
+        Type.GROUND: _WEAK,
+        Type.ROCK: _WEAK,
+        Type.FIRE: _WEAK,
+        Type.WATER: _RESIST,
+        Type.GRASS: _RESIST,
+        Type.DRAGON: _RESIST,
+    },
+    Type.GRASS: {
+        Type.FLYING: _RESIST,
+        Type.POISON: _RESIST,
+        Type.GROUND: _WEAK,
+        Type.ROCK: _WEAK,
+        Type.BUG: _RESIST,
+        Type.FIRE: _RESIST,
+        Type.WATER: _WEAK,
+        Type.GRASS: _RESIST,
+        Type.DRAGON: _RESIST,
+    },
+    Type.ELECTRIC: {
+        Type.FLYING: _WEAK,
+        Type.GROUND: _IMMUNE,
+        Type.WATER: _WEAK,
+        Type.GRASS: _RESIST,
+        Type.ELECTRIC: _RESIST,
+        Type.DRAGON: _RESIST,
+    },
+    Type.PSYCHIC: {
+        Type.FIGHTING: _WEAK,
+        Type.POISON: _WEAK,
+        Type.PSYCHIC: _RESIST
+    },
+    Type.ICE: {
+        Type.FLYING: _WEAK,
+        Type.GROUND: _WEAK,
+        Type.WATER: _RESIST,
+        Type.GRASS: _WEAK,
+        Type.ICE: _RESIST,
+        Type.DRAGON: _WEAK,
+    },
+    Type.DRAGON: {
+        Type.DRAGON: _WEAK
+    },
 }
 
 
-def __gen_types_chart() -> np.ndarray:
-    """Uses the __ATTACK_EFFECTIVENESS constant to generate a table of type effectiveness matchups.
+def _gen_types_chart() -> np.ndarray:
+    """Generates a table of type effectiveness matchups.
 
     Returns:
-        np.ndarray: A 15 by 15 table of effectiveness multipliers where rows are attacking types and cols are
-            defending types.
+        A 15 by 15 table of effectiveness multipliers where rows are attacking
+        types and cols are defending types.
     """
     types = list(Type)
     chart = np.ones((15, 15))
 
     for idx, pokemon_type in enumerate(types):
-        for special_type, effectiveness in __ATTACK_EFFECTIVENESS[pokemon_type].items():
+        for special_type, effectiveness in _ATTACK_EFFECTIVENESS[
+                pokemon_type].items():
             chart[idx, types.index(special_type)] = effectiveness
 
     return chart
 
 
-EFFECTIVENESS_CHART = __gen_types_chart()
+EFFECTIVENESS_CHART = _gen_types_chart()
 
 
-def get_attack_effectiveness(attacking_type: Type, defending_type: Type) -> float:
-    """Uses the EFFECTIVENESS_CHART to look up the type multiplier for the given attacking and defending types.
+def get_attack_effectiveness(attacking_type: Type,
+                             defending_type: Type) -> float:
+    """Looks up the type multiplier for the given attacking and defending types.
 
     Args:
-        attacking_type (Type): The type of the attack being used.
-        defending_type (Type): The type of the target of the attack.
+        attacking_type: The type of the attack being used.
+        defending_type: The type of the target of the attack.
 
     Returns:
         float: The type effectiveness multiplier for the given types.
     """
     types = list(Type)
-    return EFFECTIVENESS_CHART[types.index(attacking_type), types.index(defending_type)]
+    return EFFECTIVENESS_CHART[types.index(attacking_type),
+                               types.index(defending_type)]

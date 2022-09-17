@@ -1,9 +1,10 @@
 """Representation of a Base Pokemon, without any DVs or EVs."""
-from typing import TYPE_CHECKING, Optional, Set
+from typing import Optional, Set, TYPE_CHECKING
 
 import numpy as np
 
-from simulator.type import Type, get_attack_effectiveness
+from simulator.type import get_attack_effectiveness
+from simulator.type import Type
 
 if TYPE_CHECKING:
     from simulator.moves.move import Move
@@ -12,24 +13,26 @@ if TYPE_CHECKING:
 class InvalidBaseStatException(Exception):
 
     def __init__(self, invalid_stat: int):
-        super().__init__(f"{invalid_stat} is an invalid base stat. It must be representable as a single unsigned byte.")
+        super().__init__(
+            f"{invalid_stat} is an invalid base stat. It must be representable "
+            f"as a single unsigned byte.")
 
 
 class PokemonSpecies:
-    """A Pokemon species with a name, dex number, base stats, type(s), and a moveset."""
+    """A Pokemon species with name, number, base stats, type(s), and moveset."""
 
     def __init__(
-            self,
-            name: str,
-            dex_num: int,
-            base_hp: int,
-            base_atk: int,
-            base_def: int,
-            base_spe: int,
-            base_spc: int,
-            moveset: Set["Move"],
-            primary_type: Type,
-            secondary_type: Optional[Type] = None,
+        self,
+        name: str,
+        dex_num: int,
+        base_hp: int,
+        base_atk: int,
+        base_def: int,
+        base_spe: int,
+        base_spc: int,
+        moveset: Set["Move"],
+        primary_type: Type,
+        secondary_type: Optional[Type] = None,
     ):
         for stat in (base_hp, base_atk, base_def, base_spe, base_spc):
             if not 0 <= stat <= 255:
@@ -49,37 +52,42 @@ class PokemonSpecies:
         return self.name
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({repr(self.name)}, {self.dex_num}, {self.base_hp}, {self.base_atk}, " \
-               f"{self.base_def}, {self.base_spe}, {self.base_spc}, {self.moveset}, {self.primary_type}, " \
-               f"{self.secondary_type})"
+        return (f"{self.__class__.__name__}({repr(self.name)}, {self.dex_num}, "
+                f"{self.base_hp}, {self.base_atk}, {self.base_def}, "
+                f"{self.base_spe}, {self.base_spc}, {self.moveset}, "
+                f"{self.primary_type}, {self.secondary_type})")
 
     def attack_effectiveness(self, attacking_type: Type) -> float:
-        """Produces the type effectiveness of a given attack type against this Pokemon.
+        """Produces the effectiveness of a given type against this Pokemon.
 
         Args:
-            attacking_type (Type): The type of the attack being used.
+            attacking_type: The type of the attack being used.
 
         Returns:
-            float: The damage multiplier for the given attack type.
+            The damage multiplier for the given attack type.
         """
         if self.secondary_type is not None:
-            return get_attack_effectiveness(attacking_type,
-                                            self.primary_type
-                                            ) * get_attack_effectiveness(attacking_type,
-                                                                         self.secondary_type)
+            return get_attack_effectiveness(
+                attacking_type, self.primary_type) * get_attack_effectiveness(
+                    attacking_type, self.secondary_type)
         return get_attack_effectiveness(attacking_type, self.primary_type)
 
-    def critical_hit_threshold(self, high_crit_ratio: bool = False, focus_energy: bool = False) -> int:
-        """Produces the critical hit threshold for this Pokemon under certain conditions.
+    def critical_hit_threshold(self,
+                               high_crit_ratio: bool = False,
+                               focus_energy: bool = False) -> int:
+        """Produces the critical hit threshold for this Pokemon under.
 
-        Note that Focus Energy will actually reduce the critical hit ratio, due to a bug in the original games.
+        Note that Focus Energy will actually reduce the critical hit ratio, due
+        to a bug in the original games.
 
         Args:
-            high_crit_ratio (bool): Whether or not the move used has a high critical hit ratio (Slash, etc.).
-            focus_energy (bool): Whether or not the user has the effects of Focus Energy.
+            high_crit_ratio: Whether the move used has a high critical hit ratio
+              (Slash, etc.).
+            focus_energy: Whether the user has the effects of Focus Energy.
 
         Returns:
-            int: Number between 0 and 255 used as a maximum for a random int to calculate a critical hit.
+            Number between 0 and 255 used as a maximum for a random byte to
+            calculate a critical hit.
         """
         if not high_crit_ratio and not focus_energy:
             return np.floor(self.base_spe / 2)

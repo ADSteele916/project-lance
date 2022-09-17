@@ -1,17 +1,17 @@
-"""An Agent that uses a NEAT genome to construct a neural network that it uses to make decisions."""
+"""An neural network Agent that uses a NEAT genome to construct its network."""
 
 from typing import List
 
-import numpy as np
 from neat import Config
 from neat.genome import DefaultGenome
 from neat.nn import FeedForwardNetwork
+import numpy as np
 
 from simulator.agents.basic_nn_agent import BasicNeuralNetworkAgent
 
 
 class NEATAgent(BasicNeuralNetworkAgent):
-    """An implementation of the BasicNeuralNetworkAgent that uses a NEAT network."""
+    """A version of the BasicNeuralNetworkAgent that uses a NEAT network."""
 
     def __init__(self, genome: DefaultGenome, config: Config):
         self.genome = genome

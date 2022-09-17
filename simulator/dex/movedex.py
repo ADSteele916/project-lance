@@ -1,47 +1,53 @@
-"""Loads a dictionary containing an instance of a Move subclass for every available move."""
+"""A dictionary containing a Move subclass for every Pokemon move."""
 
 import json
 import os.path
 from typing import Dict
 
 from simulator.modifiable_stat import ModifiableStat
+from simulator.moves.damaging_move import ConstantDamageMove
 from simulator.moves.damaging_move import DamagingMove
-from simulator.moves.debuffing_damaging_move import DebuffingDamagingMove
-from simulator.moves.double_hit_move import DoubleHitMove
-from simulator.moves.flinching_damaging_move import FlinchingDamagingMove
-from simulator.moves.high_critical_chance_damaging_move import HighCriticalChanceDamagingMove
-from simulator.moves.misc_moves import ConstantDamageMove, LeechSeed, LevelDamagingMove, Mist, Psywave, Toxic
+from simulator.moves.damaging_move import HighCriticalChanceDamagingMove
+from simulator.moves.damaging_move import LevelDamagingMove
+from simulator.moves.misc_moves import LeechSeed
+from simulator.moves.misc_moves import Mist
+from simulator.moves.misc_moves import Psywave
+from simulator.moves.misc_moves import Toxic
 from simulator.moves.move import Move
-from simulator.moves.multi_hit_move import MultiHitMove
-from simulator.moves.stat_lowering_move import StatLoweringMove
-from simulator.moves.stat_raising_move import StatRaisingMove
-from simulator.moves.status_damaging_move import StatusDamagingMove
+from simulator.moves.repeating_move import DoubleHitMove
+from simulator.moves.repeating_move import MultiHitMove
+from simulator.moves.side_effect_damaging_move import DebuffingDamagingMove
+from simulator.moves.side_effect_damaging_move import FlinchingDamagingMove
+from simulator.moves.side_effect_damaging_move import StatusDamagingMove
+from simulator.moves.stat_modifying_move import StatLoweringMove
+from simulator.moves.stat_modifying_move import StatRaisingMove
 from simulator.moves.status_effect_move import StatusEffectMove
 
 
 def _gen_movedex() -> Dict[str, Move]:
-    with open(os.path.join(os.path.dirname(__file__), "movedex.json")) as json_file:
+    with open(os.path.join(os.path.dirname(__file__), "movedex.json"),
+              encoding="utf-8") as json_file:
         movedex_dict_list = json.load(json_file)
 
     movedex = {}
 
     classes = {
-            "DamagingMove": DamagingMove,
-            "HighCriticalChanceDamagingMove": HighCriticalChanceDamagingMove,
-            "DoubleHitMove": DoubleHitMove,
-            "MultiHitMove": MultiHitMove,
-            "StatusEffectMove": StatusEffectMove,
-            "StatRaisingMove": StatRaisingMove,
-            "StatLoweringMove": StatLoweringMove,
-            "FlinchingDamagingMove": FlinchingDamagingMove,
-            "DebuffingDamagingMove": DebuffingDamagingMove,
-            "StatusDamagingMove": StatusDamagingMove,
-            "ConstantDamageMove": ConstantDamageMove,
-            "LevelDamagingMove": LevelDamagingMove,
-            "LeechSeed": LeechSeed,
-            "Mist": Mist,
-            "Psywave": Psywave,
-            "Toxic": Toxic,
+        "DamagingMove": DamagingMove,
+        "HighCriticalChanceDamagingMove": HighCriticalChanceDamagingMove,
+        "DoubleHitMove": DoubleHitMove,
+        "MultiHitMove": MultiHitMove,
+        "StatusEffectMove": StatusEffectMove,
+        "StatRaisingMove": StatRaisingMove,
+        "StatLoweringMove": StatLoweringMove,
+        "FlinchingDamagingMove": FlinchingDamagingMove,
+        "DebuffingDamagingMove": DebuffingDamagingMove,
+        "StatusDamagingMove": StatusDamagingMove,
+        "ConstantDamageMove": ConstantDamageMove,
+        "LevelDamagingMove": LevelDamagingMove,
+        "LeechSeed": LeechSeed,
+        "Mist": Mist,
+        "Psywave": Psywave,
+        "Toxic": Toxic,
     }
 
     stat_mapping = {

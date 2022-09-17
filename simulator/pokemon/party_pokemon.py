@@ -1,6 +1,6 @@
 """Functionality for Pokemon with customized builds."""
 
-from typing import TYPE_CHECKING, List
+from typing import List, TYPE_CHECKING
 
 import numpy as np
 
@@ -13,7 +13,9 @@ if TYPE_CHECKING:
 class InvalidLevelException(Exception):
 
     def __init__(self, invalid_level: int):
-        super().__init__(f"{invalid_level} is an invalid level. It must be between 1 and 100, inclusive.")
+        super().__init__(
+            f"{invalid_level} is an invalid level. It must be between 1 and "
+            f"100, inclusive.")
 
 
 class InvalidMoveException(Exception):
@@ -25,48 +27,50 @@ class InvalidMoveException(Exception):
 class InvalidDiversificationValueException(Exception):
 
     def __init__(self, invalid_dv: int):
-        super().__init__(f"{invalid_dv} is not a valid DV. DVs must be between 0 and {PartyPokemon.MAX_DV}, inclusive.")
+        super().__init__(
+            f"{invalid_dv} is not a valid DV. DVs must be between 0 and "
+            f"{PartyPokemon.MAX_DV}, inclusive.")
 
 
 class InvalidStatExperienceValueException(Exception):
 
     def __init__(self, invalid_se: int):
         super().__init__(
-                f"{invalid_se} is not a valid Stat Exp value. Stat Exps must be between 0 and "
-                f"{PartyPokemon.MAX_STAT_EXP}, inclusive."
-        )
+            f"{invalid_se} is not a valid Stat Exp value. Stat Exps must be "
+            f"between 0 and {PartyPokemon.MAX_STAT_EXP}, inclusive.")
 
 
 class InvalidMoveCountException(Exception):
 
     def __init__(self, size: int):
-        super(
-        ).__init__(f"{size} is an invalid number of moves. Each Pokemon must have between 1 and 4 moves, inclusive.")
+        super().__init__(
+            f"{size} is an invalid number of moves. Each Pokemon must have "
+            f"between 1 and 4 moves, inclusive.")
 
 
 class PartyPokemon:
-    """A Pokemon with a species, level, moves, DVs, STAT EXP, and a nickname, but no in-battle stats."""
+    """A Pokemon with player-customizable attributes, but no in-battle stats."""
 
-    MAX_DV = 2**4 - 1
-    MAX_STAT_EXP = 2**16 - 1
+    MAX_DV = 0b1111
+    MAX_STAT_EXP = 0xFFFF
 
     def __init__(
-            self,
-            species: PokemonSpecies,
-            level: int,
-            moves: List["Move"],
-            atk_dv: int = MAX_DV,
-            def_dv: int = MAX_DV,
-            spe_dv: int = MAX_DV,
-            spc_dv: int = MAX_DV,
-            hp_stat_exp: int = MAX_STAT_EXP,
-            atk_stat_exp: int = MAX_STAT_EXP,
-            def_stat_exp: int = MAX_STAT_EXP,
-            spe_stat_exp: int = MAX_STAT_EXP,
-            spc_stat_exp: int = MAX_STAT_EXP,
-            nickname: str = "",
+        self,
+        species: PokemonSpecies,
+        level: int,
+        moves: List["Move"],
+        atk_dv: int = MAX_DV,
+        def_dv: int = MAX_DV,
+        spe_dv: int = MAX_DV,
+        spc_dv: int = MAX_DV,
+        hp_stat_exp: int = MAX_STAT_EXP,
+        atk_stat_exp: int = MAX_STAT_EXP,
+        def_stat_exp: int = MAX_STAT_EXP,
+        spe_stat_exp: int = MAX_STAT_EXP,
+        spc_stat_exp: int = MAX_STAT_EXP,
+        nickname: str = "",
     ):
-        self.__pokemon_species = species
+        self.__species = species
         self.level = level
         self.moves = moves
         self.atk_dv = atk_dv
@@ -84,14 +88,16 @@ class PartyPokemon:
         return self.nickname if len(self.nickname) > 0 else self.species.name
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({repr(self.__pokemon_species)}, {self.level}, {self.moves}, " \
-               f"{self.atk_dv}, {self.def_dv}, {self.spe_dv}, {self.spc_dv}, {self.hp_stat_exp}, " \
-               f"{self.atk_stat_exp}, {self.def_stat_exp}, {self.spe_stat_exp}, {self.spc_stat_exp}, " \
-               f"{repr(self.nickname)})"
+        return (f"{self.__class__.__name__}({repr(self.__species)}, "
+                f"{self.level}, {self.moves}, {self.atk_dv}, {self.def_dv}, "
+                f"{self.spe_dv}, {self.spc_dv}, {self.hp_stat_exp}, "
+                f"{self.atk_stat_exp}, {self.def_stat_exp}, "
+                f"{self.spe_stat_exp}, {self.spc_stat_exp}, "
+                f"{repr(self.nickname)})")
 
     @property
     def species(self) -> PokemonSpecies:
-        return self.__pokemon_species
+        return self.__species
 
     @property
     def level(self) -> int:
@@ -109,8 +115,8 @@ class PartyPokemon:
 
     @moves.setter
     def moves(
-            self,
-            new_moves: List["Move"],
+        self,
+        new_moves: List["Move"],
     ):
         if not 1 <= len(new_moves) <= 4:
             raise InvalidMoveCountException(len(new_moves))
@@ -121,12 +127,15 @@ class PartyPokemon:
 
     @property
     def hp_dv(self) -> int:
-        return 8 * (self.__atk_dv % 2) + 4 * (self.__def_dv % 2) + 2 * (self.__spe_dv % 2) + (self.__spc_dv % 2)
+        return 8 * (self.__atk_dv % 2) + 4 * (self.__def_dv % 2) + 2 * (
+            self.__spe_dv % 2) + (self.__spc_dv % 2)
 
     @hp_dv.setter
     def hp_dv(self, dv: int):
         if not 0 <= dv <= PartyPokemon.MAX_DV:
-            raise ValueError(f"{dv} is not a valid DV. DVs must be between 0 and 15, inclusive.")
+            raise ValueError(
+                f"{dv} is not a valid DV. DVs must be between 0 and 15, "
+                f"inclusive.")
         hp_bits = list(f"{dv:004b}")  # 4-bit binary string, e.g. "0100"
 
         atk_bits = f"{self.__atk_dv:004b}"
@@ -231,35 +240,31 @@ class PartyPokemon:
 
     @property
     def hp(self) -> int:
-        return (
-                np.floor(((self.species.base_hp + self.hp_dv) + np.floor(np.sqrt(self.hp_stat_exp) / 4)) * self.level
-                         / 100) + self.level + 10
-        )
+        return (np.floor(
+            ((self.species.base_hp + self.hp_dv) +
+             np.floor(np.sqrt(self.hp_stat_exp) / 4)) * self.level / 100) +
+                self.level + 10)
 
     @property
     def attack(self) -> int:
-        return (
-                np.floor(((self.species.base_atk + self.__atk_dv) + np.floor(np.sqrt(self.atk_stat_exp) / 4))
-                         * self.level / 100) + 5
-        )
+        return (np.floor(
+            ((self.species.base_atk + self.__atk_dv) +
+             np.floor(np.sqrt(self.atk_stat_exp) / 4)) * self.level / 100) + 5)
 
     @property
     def defense(self) -> int:
-        return (
-                np.floor(((self.species.base_def + self.__def_dv) + np.floor(np.sqrt(self.def_stat_exp) / 4))
-                         * self.level / 100) + 5
-        )
+        return (np.floor(
+            ((self.species.base_def + self.__def_dv) +
+             np.floor(np.sqrt(self.def_stat_exp) / 4)) * self.level / 100) + 5)
 
     @property
     def speed(self) -> int:
-        return (
-                np.floor(((self.species.base_spe + self.__spe_dv) + np.floor(np.sqrt(self.spe_stat_exp) / 4))
-                         * self.level / 100) + 5
-        )
+        return (np.floor(
+            ((self.species.base_spe + self.__spe_dv) +
+             np.floor(np.sqrt(self.spe_stat_exp) / 4)) * self.level / 100) + 5)
 
     @property
     def special(self) -> int:
-        return (
-                np.floor(((self.species.base_spc + self.__spc_dv) + np.floor(np.sqrt(self.spc_stat_exp) / 4))
-                         * self.level / 100) + 5
-        )
+        return (np.floor(
+            ((self.species.base_spc + self.__spc_dv) +
+             np.floor(np.sqrt(self.spc_stat_exp) / 4)) * self.level / 100) + 5)

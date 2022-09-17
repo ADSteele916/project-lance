@@ -1,26 +1,34 @@
-"""Functionality for a Pokemon currently in battle, with variable HP, Status, and PP"""
+"""A Pokemon currently in battle, with variable HP, Status, and PP"""
 
 from typing import List
 
 from simulator.moves.move import Move
 from simulator.pokemon.party_pokemon import PartyPokemon
+from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.status import Status
 
 
 class InvalidHPException(Exception):
 
     def __init__(self, invalid_hp: int):
-        super().__init__(f"{invalid_hp} is an invalid HP. HP values must be between 0 and the Pokemon's maximum HP.")
+        super().__init__(
+            f"{invalid_hp} is an invalid HP. HP values must be between 0 and "
+            f"the Pokemon's maximum HP.")
 
 
 class BattlingPokemon:
     """A Pokemon that is currently in a battle, but may or may not be active."""
 
-    def __init__(self, pokemon: PartyPokemon):
-        self.__party_pokemon = pokemon
-        self.__hp = pokemon.hp
+    def __init__(self, party_pokemon: PartyPokemon):
+        self.__party_pokemon = party_pokemon
+        self.__hp = party_pokemon.hp
         self.__status = Status.NONE
-        self.__pp = list(map(lambda m: None if m is None else m.pp, pokemon.moves))
+        self.__pp = list(
+            map(lambda m: None if m is None else m.pp, party_pokemon.moves))
+
+    @property
+    def species(self) -> PokemonSpecies:
+        return self.pokemon.species
 
     @property
     def pokemon(self) -> PartyPokemon:

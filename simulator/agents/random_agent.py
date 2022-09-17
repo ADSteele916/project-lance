@@ -2,18 +2,17 @@
 
 from random import shuffle
 
-from simulator.agents.agent import Agent, NoValidActionsException
-from simulator.battle.battle import (
-        AlreadyInBattleException,
-        Battle,
-        FaintedPokemonException,
-        MoveNotSwitchException,
-        NoMoveInSlotException,
-        NoPokemonInSlotException,
-        OutOfPPException,
-        Player,
-        SwitchNotRequestedException
-)
+from simulator.agents.agent import Agent
+from simulator.agents.agent import NoValidActionsException
+from simulator.battle.battle import AlreadyInBattleException
+from simulator.battle.battle import Battle
+from simulator.battle.battle import FaintedPokemonException
+from simulator.battle.battle import MoveNotSwitchException
+from simulator.battle.battle import NoMoveInSlotException
+from simulator.battle.battle import NoPokemonInSlotException
+from simulator.battle.battle import OutOfPPException
+from simulator.battle.battle import Player
+from simulator.battle.battle import SwitchNotRequestedException
 
 
 class RandomAgent(Agent):
@@ -25,13 +24,9 @@ class RandomAgent(Agent):
         for switch in switches:
             try:
                 battle.set_pending_switch(player, switch)
-            except (
-                    SwitchNotRequestedException,
-                    MoveNotSwitchException,
-                    AlreadyInBattleException,
-                    NoPokemonInSlotException,
-                    FaintedPokemonException
-            ):
+            except (SwitchNotRequestedException, MoveNotSwitchException,
+                    AlreadyInBattleException, NoPokemonInSlotException,
+                    FaintedPokemonException):
                 pass
             else:
                 return
@@ -43,13 +38,9 @@ class RandomAgent(Agent):
         for action in actions:
             try:
                 battle.set_pending_action(player, action)
-            except (
-                    AlreadyInBattleException,
-                    NoPokemonInSlotException,
-                    FaintedPokemonException,
-                    NoMoveInSlotException,
-                    OutOfPPException
-            ):
+            except (AlreadyInBattleException, NoPokemonInSlotException,
+                    FaintedPokemonException, NoMoveInSlotException,
+                    OutOfPPException):
                 pass
             else:
                 return

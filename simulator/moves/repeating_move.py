@@ -1,6 +1,9 @@
+"""Moves that hit multiple times."""
+
+from abc import ABCMeta
+from abc import abstractmethod
 import random
-from abc import ABCMeta, abstractmethod
-from typing import TYPE_CHECKING, Dict, List
+from typing import Dict, List, TYPE_CHECKING
 
 from simulator.moves.damaging_move import DamagingMove
 
@@ -9,6 +12,7 @@ if TYPE_CHECKING:
 
 
 class RepeatingMove(DamagingMove, metaclass=ABCMeta):
+    """Abstract class for a move that hits repeatedly."""
 
     @property
     @abstractmethod
@@ -24,3 +28,19 @@ class RepeatingMove(DamagingMove, metaclass=ABCMeta):
         repetitions = random.choices(attacks, weights)
         for _ in repetitions:
             super().apply_effects(attacker, target)
+
+
+class DoubleHitMove(RepeatingMove):
+    """A move that hits twice."""
+
+    @property
+    def repetitions(self) -> Dict[int, float]:
+        return {2: 1.0}
+
+
+class MultiHitMove(RepeatingMove):
+    """A move that hits between two and five times."""
+
+    @property
+    def repetitions(self) -> Dict[int, float]:
+        return {2: 0.375, 3: 0.375, 4: 0.125, 5: 0.125}
