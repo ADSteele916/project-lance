@@ -80,9 +80,7 @@ class DamagingMove(Move):
                                 else attacker.special)
             effective_defense = (target.defense if self.move_type.is_physical
                                  else target.special)
-        stab = (1.5
-                if self.move_type in (attacker.species.primary_type,
-                                      attacker.species.secondary_type) else 1.0)
+        stab = 1.5 if self.move_type in attacker.species.types else 1.0
         type_effectiveness = target.species.attack_effectiveness(self.move_type)
         rand = np.random.randint(217, high=256)
 

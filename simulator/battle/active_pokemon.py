@@ -151,11 +151,9 @@ class ActivePokemon:
     def apply_status(self, status: Status):
         if self.status == Status.FREEZE and status == Status.BURN:
             self.status = Status.NONE
-        elif status == Status.POISON and Type.POISON in (
-                self.species.primary_type, self.species.secondary_type):
+        elif status == Status.POISON and Type.POISON in self.species.types:
             return
-        elif status == Status.BURN and Type.FIRE in (
-                self.species.primary_type, self.species.secondary_type):
+        elif status == Status.BURN and Type.FIRE in self.species.types:
             return
         elif self.status == Status.NONE:
             self.status = status

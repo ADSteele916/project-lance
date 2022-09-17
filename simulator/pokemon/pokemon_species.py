@@ -1,6 +1,6 @@
 """Representation of a Base Pokemon, without any DVs or EVs."""
 
-from typing import Optional, Set, TYPE_CHECKING
+from typing import List, Optional, Set, TYPE_CHECKING
 
 import numpy as np
 
@@ -57,6 +57,11 @@ class PokemonSpecies:
                 f"{self.base_hp}, {self.base_atk}, {self.base_def}, "
                 f"{self.base_spe}, {self.base_spc}, {self.moveset}, "
                 f"{self.primary_type}, {self.secondary_type})")
+
+    @property
+    def types(self) -> List[Type]:
+        return ([self.primary_type] if self.secondary_type is None else
+                [self.primary_type, self.secondary_type])
 
     def attack_effectiveness(self, attacking_type: Type) -> float:
         """Produces the effectiveness of a given type against this Pokemon.

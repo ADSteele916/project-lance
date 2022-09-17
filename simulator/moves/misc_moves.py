@@ -17,9 +17,7 @@ class LeechSeed(Move):
     """Applies the leech seed volatile status condition to its target."""
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
-        if Type.GRASS in (
-                target.species.primary_type,
-                target.species.secondary_type) and not target.leech_seed:
+        if Type.GRASS in target.species.types and not target.leech_seed:
             target.leech_seed = True
 
 
@@ -44,8 +42,6 @@ class Psywave(DamagingMove):
 class Toxic(Move):
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
-        if Type.POISON not in (
-                target.species.primary_type,
-                target.species.secondary_type) and not target.status:
+        if Type.POISON not in target.species.types and not target.status:
             target.status = Status.POISON
             target.toxic_counter = 1
