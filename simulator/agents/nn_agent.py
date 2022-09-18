@@ -9,45 +9,18 @@ import numpy as np
 from simulator.agents.agent import Agent
 from simulator.agents.agent import NoValidActionsException
 from simulator.battle.action import Action
-from simulator.battle.battle import AlreadyInBattleException
 from simulator.battle.battle import Battle
-from simulator.battle.battle import FaintedPokemonException
-from simulator.battle.battle import MoveNotSwitchException
-from simulator.battle.battle import NoMoveInSlotException
-from simulator.battle.battle import NoPokemonInSlotException
-from simulator.battle.battle import OutOfPPException
 from simulator.battle.battle import Player
-from simulator.battle.battle import SwitchNotRequestedException
 
 
 class NeuralNetworkAgent(Agent, metaclass=ABCMeta):
     """An Agent whose decisions are made by a neural network."""
 
-    def notify_switch_required(self, battle: Battle, player: Player):
-        for switch in list(
-                filter(lambda a: a.is_switch, self.rank_actions(battle,
-                                                                player))):
-            try:
-                battle.set_pending_switch(player, switch)
-            except (SwitchNotRequestedException, MoveNotSwitchException,
-                    AlreadyInBattleException, NoPokemonInSlotException,
-                    FaintedPokemonException):
-                pass
-            else:
-                return
-        raise NoValidActionsException()
-
-    def notify_action_required(self, battle: Battle, player: Player):
-        actions = self.rank_actions(battle, player)
-        for action in actions:
-            try:
-                battle.set_pending_action(player, action)
-            except (AlreadyInBattleException, NoPokemonInSlotException,
-                    FaintedPokemonException, NoMoveInSlotException,
-                    OutOfPPException):
-                pass
-            else:
-                return
+    def request_action(self, battle: Battle, player: Player,
+                       choices: List[Action]) -> Action:
+        for action in self.rank_actions(battle, player):
+            if action in choices:
+                return action
         raise NoValidActionsException()
 
     @abstractmethod

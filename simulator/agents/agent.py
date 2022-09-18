@@ -2,6 +2,7 @@
 
 from abc import ABCMeta
 from abc import abstractmethod
+from typing import List
 
 from simulator.battle.battle import Action
 from simulator.battle.battle import Battle
@@ -22,28 +23,37 @@ class Agent(metaclass=ABCMeta):
     ACTIONS = [Action.MOVE_1, Action.MOVE_2, Action.MOVE_3, Action.MOVE_4
               ] + SWITCHES
 
-    @abstractmethod
-    def notify_switch_required(self, battle: Battle, player: Player):
-        """Notify the agent that a switch is required in the given battle.
+    def request_switch(self, battle: Battle, player: Player,
+                       choices: List[Action]) -> Action:
+        """Request the agent to make a switch in the given battle.
 
-        Can either update internal flags to allow user input, or immediately
-        return a computed response.
+        Can decide based on internal functionality or user input.
+
+        Defaults to the same functionality as actions, but can be overriden.
 
         Args:
             battle: The Battle in which the switch must be made.
             player: The Player who needs a pending switch added.
+            choices: The possible Actions the agent can take.
+
+        Returns:
+            An element of choices that will be executed.
         """
-        pass
+        return self.request_action(battle, player, choices)
 
     @abstractmethod
-    def notify_action_required(self, battle: Battle, player: Player):
-        """Notify the agent that an action is required in the given battle.
+    def request_action(self, battle: Battle, player: Player,
+                       choices: List[Action]) -> Action:
+        """Request the agent to take an action in the given battle.
 
-        Can either update internal flags to allow user input, or immediately
-        return a computed response.
+        Can decide based on internal functionality or user input.
 
         Args:
             battle: The Battle in which the action must be taken.
             player: The Player who needs a pending action added.
+            choices: The possible Actions the agent can take.
+
+        Returns:
+            An element of choices that will be executed.
         """
         pass

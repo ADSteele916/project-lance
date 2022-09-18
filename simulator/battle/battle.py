@@ -1,17 +1,16 @@
-# pylint: disable=consider-using-with
 """Functionality for a Battle between two Pokemon teams, with user input."""
 
+from enum import auto
+from enum import Enum
 from enum import IntEnum
 import random
-from threading import Lock
-from typing import Final, List, Optional, Tuple, TYPE_CHECKING
+from typing import List, Optional, Tuple, TYPE_CHECKING
 
 from simulator.battle.action import Action
 from simulator.battle.action import MOVE_SLOTS
 from simulator.battle.action import SWITCH_SLOTS
 from simulator.battle.active_pokemon import ActivePokemon
 from simulator.battle.battling_pokemon import BattlingPokemon
-from simulator.moves.move import Move
 from simulator.pokemon.party_pokemon import PartyPokemon
 
 if TYPE_CHECKING:
@@ -29,34 +28,18 @@ class Player(IntEnum):
         return Player.P1 if self == Player.P2 else Player.P2
 
 
-class NoMoveInSlotException(Exception):
+class Result(Enum):
+    """Possible outcomes of a battle"""
 
-    def __init__(self, slot: int):
-        super().__init__(f"There is no move in move slot {slot}")
+    P1_WIN = Player.P1
+    P2_WIN = Player.P2
+    DRAW = auto()
 
-
-class OutOfPPException(Exception):
-
-    def __init__(self, move: Move):
-        super().__init__(f"{move.name} is out of PP and cannot be used.")
-
-
-class AlreadyInBattleException(Exception):
-
-    def __init__(self, pokemon: ActivePokemon):
-        super().__init__(f"{pokemon} is already in battle.")
-
-
-class FaintedPokemonException(Exception):
-
-    def __init__(self, pokemon: BattlingPokemon):
-        super().__init__(f"{pokemon} has fainted and cannot switch in.")
-
-
-class NoPokemonInSlotException(Exception):
-
-    def __init__(self, slot: int):
-        super().__init__(f"There is no pokemon in slot {slot}")
+    @property
+    def victor(self) -> Optional[Player]:
+        if self == Result.DRAW:
+            return None
+        return Player.P1 if self == Result.P1_WIN else Player.P2
 
 
 class InvalidTeamSizeException(Exception):
@@ -67,32 +50,8 @@ class InvalidTeamSizeException(Exception):
             f"members.")
 
 
-class SwitchNotRequestedException(Exception):
-
-    def __init__(self, player: Player):
-        super().__init__(
-            f"{player.name} is not being prompted to switch at the moment.")
-
-
-class MoveNotSwitchException(Exception):
-
-    def __init__(self, player: Player):
-        super().__init__(
-            f"{player.name} must provide a slot to switch to, not a move.")
-
-
-class ActionNotSetException(Exception):
-    pass
-
-
-class SwitchNotSetException(Exception):
-    pass
-
-
 class Battle:
     """A Pokemon battle with all state information for both teams"""
-
-    PLAYERS: Final[Tuple[Player, Player]] = (Player.P1, Player.P2)
 
     def __init__(self,
                  team_one: List[PartyPokemon],
@@ -105,175 +64,145 @@ class Battle:
         if not 1 <= len(team_two) <= 6:
             raise InvalidTeamSizeException(len(team_two))
 
-        self.teams = (list(map(BattlingPokemon,
-                               team_one)), list(map(BattlingPokemon, team_two)))
-        self.agents = (agent_one, agent_two)
+        self.teams = ([BattlingPokemon(p) for p in team_one],
+                      [BattlingPokemon(p) for p in team_two])
+        self.agents: Tuple["Agent", "Agent"] = (agent_one, agent_two)
         self.team_cursors: List[int] = [0, 0]
-        self.__active_pokemon: List[ActivePokemon] = [
+        self._actives: List[ActivePokemon] = [
             ActivePokemon(self.teams[0][0]),
             ActivePokemon(self.teams[1][0])
         ]
 
-        self.__turn = 0
-        self.__max_allowed_turns = max_allowed_turns
-        self.victor: Optional[Player] = None
-
-        self.__action_lock = Lock()
-        self.__pending_actions: List[Optional[Action]] = [None, None]
-
-        self.__switch_lock = Lock()
-        self.__waiting_for_switch: List[bool] = [False, False]
-        self.__pending_switches: List[Optional[Action]] = [None, None]
+        self._turn = 0
+        self._max_allowed_turns = max_allowed_turns
+        self.result: Optional[Result] = None
 
     @property
-    def actives(self) -> List[ActivePokemon]:
-        return [self.p1_active_pokemon, self.p2_active_pokemon]
+    def p1_agent(self) -> "Agent":
+        return self.agents[Player.P1]
+
+    @property
+    def p2_agent(self) -> "Agent":
+        return self.agents[Player.P2]
 
     @property
     def p1_active_pokemon(self) -> ActivePokemon:
-        return self.__active_pokemon[Player.P1]
+        return self._actives[Player.P1]
 
     @property
     def p2_active_pokemon(self) -> ActivePokemon:
-        return self.__active_pokemon[Player.P2]
+        return self._actives[Player.P2]
 
     @property
-    def p1_pending_action(self) -> Optional[Action]:
-        return self.__pending_actions[Player.P1]
+    def p1_team(self) -> List[BattlingPokemon]:
+        return self.teams[Player.P1]
 
     @property
-    def p2_pending_action(self) -> Optional[Action]:
-        return self.__pending_actions[Player.P2]
+    def p2_team(self) -> List[BattlingPokemon]:
+        return self.teams[Player.P2]
+
+    @property
+    def actives(self) -> Tuple[ActivePokemon, ActivePokemon]:
+        return self.p1_active_pokemon, self.p2_active_pokemon
 
     @property
     def turn(self) -> int:
-        return self.__turn
+        return self._turn
 
     def increment_turn(self):
-        self.__turn += 1
+        self._turn += 1
 
-    def __switch_checks(self, player: Player, switch: Action):
-        """Raises an exception if the pending switch is invalid.
+    def validate_switch(self, player: Player, switch: Action) -> bool:
+        """Checks whether the given switch can be executed.
+
+        Returns False if the given action is a move.
+
+        Returns False if the player is trying to switch to a Pokemon that is
+        already active, trying to switch to a slot that he or she has not,
+        filled, or trying to switch to a Pokemon that has fainted.
 
         Args:
             player: The Player whose pending action will be set.
             switch: The switch that the player wishes to make.
 
-        Raises:
-            AlreadyInBattleException: The player is trying to switch to a
-              Pokemon that is already active.
-            NoPokemonInSlotException: The player is trying to switch to a slot
-              that he or she has not filled.
-            FaintedPokemonException: The player is trying to switch to a Pokemon
-              that has fainted.
+        Returns:
+            Whether the pending switch is valid.
         """
+        if switch.is_move:
+            return False
         if SWITCH_SLOTS[switch] == self.team_cursors[player]:
-            raise AlreadyInBattleException(self.__active_pokemon[player])
+            return False
         if len(self.teams[player]) <= SWITCH_SLOTS[switch]:
-            raise NoPokemonInSlotException(SWITCH_SLOTS[switch] + 1)
+            return False
         if self.teams[player][SWITCH_SLOTS[switch]].knocked_out:
-            raise FaintedPokemonException(
-                self.teams[player][SWITCH_SLOTS[switch]])
+            return False
+        return True
 
-    def set_pending_action(self, player: Player, action: Action):
-        """Sets the Player's pending action to the given Action.
+    def request_switch(self, player: Player) -> Action:
+        choices = [s for s in Action if self.validate_switch(player, s)]
+        switch = self.agents[player].request_switch(self, player, choices)
+        assert self.validate_switch(player, switch)
+        return switch
+
+    def validate_action(self, player: Player, action: Action) -> bool:
+        """Checks whether the given action can be executed.
+
+        In addition to the checks performed for switches in validate_switch,
+        returns False if the player is trying to use a move slot that he or she
+        has not filled or use a move that is out of PP without having to
+        Struggle.
 
         Args:
             player: The Player whose pending action should be set.
             action: The Action that the player wishes to take.
 
-        Raises:
-            AlreadyInBattleException: The player is trying to switch to a
-              Pokemon that is already active.
-            NoPokemonInSlotException: The player is trying to switch to a slot
-              that he or she has not filled.
-            FaintedPokemonException: The player is trying to switch to a Pokemon
-              that has fainted.
-            NoMoveInSlotException: The player is trying to use a move slot that
-              he or she has not filled.
-            OutOfPPException: The player is trying to use a move that is out of
-              PP.
+        Returns:
+            Whether the pending action is valid.
         """
         if action.is_switch:
-            self.__switch_checks(player, action)
-        if action.is_move:
-            if len(self.__active_pokemon[player].moves) <= MOVE_SLOTS[action]:
-                raise NoMoveInSlotException(MOVE_SLOTS[action] + 1)
-            if self.__active_pokemon[player].pp[MOVE_SLOTS[action]] == 0:
-                raise OutOfPPException(
-                    self.teams[player][self.team_cursors[player]].pokemon.moves[
-                        MOVE_SLOTS[action]])
+            return self.validate_switch(player, action)
+        if len(self._actives[player].moves) <= MOVE_SLOTS[action]:
+            return False
+        if (self.actives[player].pp[MOVE_SLOTS[action]] == 0 and
+                not all(pp is None or pp == 0
+                        for pp in self.actives[player].pp)):
+            return False
+        return True
 
-        self.__pending_actions[player] = action
+    def request_action(self, player: Player) -> Action:
+        choices = [a for a in Action if self.validate_action(player, a)]
+        action = self.agents[player].request_action(self, player, choices)
+        assert self.validate_action(player, action)
+        return action
 
-        if None not in self.__pending_actions:
-            self.__action_lock.release()
-
-    def set_pending_switch(self, player, action: Action):
-        """Sets the Player's pending switch to the given one.
-
-        Args:
-            player: The Player whose pending action should be set.
-            action: The switch that the player wishes to make.
-
-        Raises:
-            SwitchNotRequestedException: The player is trying to make a switch
-              when he or she has not been asked to.
-            MoveNotSwitchException: The player is trying to make a move, not a
-              switch.
-            AlreadyInBattleException: The player is trying to switch to a
-              Pokemon that is already active.
-            NoPokemonInSlotException: The player is trying to switch to a slot
-              that he or she has not filled.
-            FaintedPokemonException: The player is trying to switch to a Pokemon
-              that has fainted.
-        """
-        if not self.__waiting_for_switch[player]:
-            raise SwitchNotRequestedException(player)
-        if action.is_move:
-            raise MoveNotSwitchException(player)
-        self.__switch_checks(player, action)
-
-        self.__pending_switches[player] = action
-
-        unlock = True
-        for waiting, switch in zip(self.__waiting_for_switch,
-                                   self.__pending_switches):
-            if waiting and switch is None:
-                unlock = False
-        if unlock:
-            self.__switch_lock.release()
-
-    def __execute_switch(self, player: Player, slot: int):
+    def _execute_switch(self, player: Player, action: Action):
         """Executes the given player's pending switch.
 
         Args:
             player: The player to switch.
-            slot: The slot to switch to.
+            action: The switch Action to take.
         """
+        assert action.is_switch
+        slot = SWITCH_SLOTS[action]
         self.team_cursors[player] = slot
-        self.__active_pokemon[player] = ActivePokemon(self.teams[player][slot])
+        self._actives[player] = ActivePokemon(self.teams[player][slot])
 
-    def __execute_action(self, player: Player):
+    def _execute_action(self, player: Player, action: Action):
         """Executes the given player's pending action.
 
         Args:
             player: The player to move or switch.
+            action: The Action the player will take.
         """
 
-        assert self.p1_pending_action is not None
-        assert self.p2_pending_action is not None
+        active_pokemon = self.actives[player]
 
-        action = (self.p1_pending_action
-                  if player == Player.P1 else self.p2_pending_action)
-        active_pokemon = (self.p1_active_pokemon
-                          if player == Player.P1 else self.p2_active_pokemon)
         if action.is_switch:
-            self.__execute_switch(player, SWITCH_SLOTS[action])
+            self._execute_switch(player, action)
         else:
             active_pokemon.use_move(MOVE_SLOTS[action], self, player)
 
-    def __first_to_move(self) -> Player:
+    def _first_to_move(self, p1_action: Action, p2_action: Action) -> Player:
         """Determines which player should move first in the coming turn.
 
         If a player is switching out, that player gets priority. If both are
@@ -287,127 +216,96 @@ class Battle:
             The Player who will move first this turn.
         """
 
-        assert self.p1_pending_action is not None
-        assert self.p2_pending_action is not None
-
         if self.p1_active_pokemon.speed > self.p2_active_pokemon.speed:
             faster_player = Player.P1
         elif self.p1_active_pokemon.speed < self.p2_active_pokemon.speed:
             faster_player = Player.P2
         else:
-            faster_player = None
-        rand_player = Player.P1 if random.choice((True, False)) else Player.P2
+            faster_player = (Player.P1 if random.choice(
+                (True, False)) else Player.P2)
 
-        if (self.p1_pending_action.is_switch and
-                self.p2_pending_action.is_switch):
-            return faster_player if faster_player is not None else rand_player
-        if self.p1_pending_action.is_switch:
+        if p1_action.is_switch and p2_action.is_switch:
+            return faster_player
+        if p1_action.is_switch:
             return Player.P1
-        if self.p2_pending_action.is_switch:
+        if p2_action.is_switch:
             return Player.P2
 
-        p1_priority = self.p1_active_pokemon.moves[MOVE_SLOTS[
-            self.p1_pending_action]].priority
-        p2_priority = self.p2_active_pokemon.moves[MOVE_SLOTS[
-            self.p2_pending_action]].priority
+        p1_priority = self.p1_active_pokemon.moves[
+            MOVE_SLOTS[p1_action]].priority
+        p2_priority = self.p2_active_pokemon.moves[
+            MOVE_SLOTS[p2_action]].priority
 
-        if p1_priority == p2_priority:
-            return faster_player if faster_player is not None else rand_player
+        if p1_priority < p2_priority:
+            return Player.P2
         if p1_priority > p2_priority:
             return Player.P1
-        return Player.P2
+        return faster_player
 
-    def __wait_for_action(self, player: Player):
-        """Require the given player to choose an action.
-
-        Args:
-            player: The player who must provide an action.
-        """
-        if not self.__action_lock.locked():
-            self.__action_lock.acquire()
-        self.agents[player].notify_action_required(self, player)
-
-    def __wait_for_switch(self, player: Player):
-        """Require the given player to switch Pokemon.
-
-        Args:
-            player: The player who must switch.
-        """
-        self.__waiting_for_switch[player] = True
-        if not self.__switch_lock.locked():
-            self.__switch_lock.acquire()
-        self.agents[player].notify_switch_required(self, player)
-
-    def __execute_actions(self):
+    def _execute_actions(self, p1_action: Action, p2_action: Action):
         """Execute the pending actions for all players in sequence"""
-        if None in self.__pending_actions:
-            raise ActionNotSetException
 
-        first_mover = self.__first_to_move()
+        first_mover = self._first_to_move(p1_action, p2_action)
         second_mover = first_mover.opponent
 
-        self.__execute_action(first_mover)
-        if not self.__active_pokemon[
-                first_mover].knocked_out and not self.__active_pokemon[
-                    second_mover].knocked_out:
-            self.__execute_action(second_mover)
+        if first_mover == Player.P1:
+            first_action = p1_action
+            second_action = p2_action
+        else:
+            first_action = p2_action
+            second_action = p1_action
 
-        for pokemon in self.__active_pokemon:
+        self._execute_action(first_mover, first_action)
+        if not any(pokemon.knocked_out for pokemon in self.actives):
+            self._execute_action(second_mover, second_action)
+
+    def _end_of_turn(self):
+        for pokemon in self._actives:
             pokemon.flinch = False
 
-        if all(map(lambda p: p.knocked_out, self.teams[first_mover])):
-            self.victor = second_mover
-            return
-        if all(map(lambda p: p.knocked_out, self.teams[second_mover])):
-            self.victor = first_mover
-            return
-
-        if self.p1_active_pokemon.knocked_out:
-            self.__wait_for_switch(Player.P1)
-        elif self.p1_active_pokemon.toxic_counter is not None:
+        if self.p1_active_pokemon.toxic_counter is not None:
             self.p1_active_pokemon.toxic_counter += 1
-        if self.p2_active_pokemon.knocked_out:
-            self.__wait_for_switch(Player.P2)
-        elif self.p2_active_pokemon.toxic_counter is not None:
+        if self.p2_active_pokemon.toxic_counter is not None:
             self.p2_active_pokemon.toxic_counter += 1
 
-    def __execute_switches(self):
-        """Execute switches for any players with pending switches."""
-        for waiting, switch in zip(self.__waiting_for_switch,
-                                   self.__pending_switches):
-            if waiting and switch is None:
-                raise SwitchNotSetException()
-        for player, waiting, switch in zip(Battle.PLAYERS,
-                                           self.__waiting_for_switch,
-                                           self.__pending_switches):
-            if waiting:
-                self.__execute_switch(player, SWITCH_SLOTS[switch])
-        self.__waiting_for_switch = list(
-            map(lambda _: False, self.__waiting_for_switch))
+    def _update_result(self):
+        p1_eliminated = all(pokemon.knocked_out for pokemon in self.p1_team)
+        p2_eliminated = all(pokemon.knocked_out for pokemon in self.p2_team)
+        if p1_eliminated and p2_eliminated:
+            self.result = Result.DRAW
+        elif p1_eliminated:
+            self.result = Result.P2_WIN
+        elif p2_eliminated:
+            self.result = Result.P1_WIN
 
     def play_turn(self):
         """Plays out one turn of the battle."""
-        self.__turn += 1
 
-        self.__wait_for_action(Player.P1)
-        self.__wait_for_action(Player.P2)
+        p1_action = self.request_action(Player.P1)
+        p2_action = self.request_action(Player.P2)
 
-        with self.__action_lock:
-            # Execute switches and moves of the currently-active Pokemon.
-            self.__execute_actions()
+        self._execute_actions(p1_action, p2_action)
 
-        if self.victor is not None:
+        self._update_result()
+        if self.result is not None:
             return
 
-        with self.__switch_lock:
-            # Replace any Pokemon that have fainted.
-            self.__execute_switches()
+        self._end_of_turn()
 
-        self.__action_lock.acquire()
+        self._update_result()
+        if self.result is not None:
+            return
 
-    def __under_turn_max(self):
-        return (self.__max_allowed_turns is None or
-                self.turn < self.__max_allowed_turns)
+        if self.p1_active_pokemon.knocked_out:
+            p1_switch = self.request_action(Player.P1)
+            self._execute_switch(Player.P1, p1_switch)
+        if self.p1_active_pokemon.knocked_out:
+            p2_switch = self.request_action(Player.P2)
+            self._execute_switch(Player.P2, p2_switch)
+
+    def _under_turn_max(self):
+        return (self._max_allowed_turns is None or
+                self.turn < self._max_allowed_turns)
 
     def play(self) -> Tuple[Optional[Player], int]:
         """Plays out the entire battle to completion.
@@ -415,9 +313,12 @@ class Battle:
         Returns:
             The winner and the turn count of the battle.
         """
-        self.__action_lock.acquire()
 
-        while self.victor is None and self.__under_turn_max():
+        while self.result is None and self._under_turn_max():
+            self.increment_turn()
             self.play_turn()
 
-        return self.victor, self.turn
+        if self.result is None:
+            self.result = Result.DRAW
+
+        return self.result.victor, self.turn
