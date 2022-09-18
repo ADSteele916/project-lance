@@ -141,11 +141,10 @@ class ActivePokemon:
         return numerators[modifier + 6] / 100
 
     def deal_damage(self, damage: int):
-        self.hp = self.hp - damage if self.hp - damage > 0 else 0
+        self.hp = max(self.hp - damage, 0)
 
     def heal(self, damage: int):
-        self.hp = (self.hp +
-                   damage if self.hp + damage < self.max_hp else self.max_hp)
+        self.hp = min(self.hp + damage, self.max_hp)
 
     def apply_status(self, status: Status):
         if self.status == Status.FREEZE and status == Status.BURN:
