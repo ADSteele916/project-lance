@@ -1,7 +1,8 @@
 """Representation of a Base Pokemon, without any DVs or EVs."""
 
 from math import floor
-from typing import List, Optional, Set, TYPE_CHECKING
+from math import prod
+from typing import Optional, Set, TYPE_CHECKING
 
 from simulator.type import get_attack_effectiveness
 from simulator.type import Type
@@ -34,11 +35,13 @@ class PokemonSpecies:
         primary_type: Type,
         secondary_type: Optional[Type] = None,
     ):
+
+        self.name = name
+        self.dex_num = dex_num
+
         for stat in (base_hp, base_atk, base_def, base_spe, base_spc):
             if not 0 <= stat <= 255:
                 raise InvalidBaseStatException(stat)
-        self.name = name
-        self.dex_num = dex_num
         self.base_hp = base_hp
         self.base_atk = base_atk
         self.base_def = base_def
@@ -47,6 +50,14 @@ class PokemonSpecies:
         self.moveset = moveset
         self.primary_type = primary_type
         self.secondary_type = secondary_type
+        self.types = ([self.primary_type] if self.secondary_type is None else
+                      [self.primary_type, self.secondary_type])
+
+        self._effectivenesses = {
+            attacking_type: prod(
+                get_attack_effectiveness(attacking_type, own_type)
+                for own_type in self.types) for attacking_type in Type
+        }
 
     def __str__(self):
         return self.name
@@ -57,11 +68,6 @@ class PokemonSpecies:
                 f"{self.base_spe}, {self.base_spc}, {self.moveset}, "
                 f"{self.primary_type}, {self.secondary_type})")
 
-    @property
-    def types(self) -> List[Type]:
-        return ([self.primary_type] if self.secondary_type is None else
-                [self.primary_type, self.secondary_type])
-
     def attack_effectiveness(self, attacking_type: Type) -> float:
         """Produces the effectiveness of a given type against this Pokemon.
 
@@ -71,11 +77,7 @@ class PokemonSpecies:
         Returns:
             The damage multiplier for the given attack type.
         """
-        if self.secondary_type is not None:
-            return get_attack_effectiveness(
-                attacking_type, self.primary_type) * get_attack_effectiveness(
-                    attacking_type, self.secondary_type)
-        return get_attack_effectiveness(attacking_type, self.primary_type)
+        return self._effectivenesses[attacking_type]
 
     def critical_hit_threshold(self,
                                high_crit_ratio: bool = False,
