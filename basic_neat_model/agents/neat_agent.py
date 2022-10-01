@@ -5,7 +5,6 @@ from typing import List
 from neat import Config
 from neat.genome import DefaultGenome
 from neat.nn import FeedForwardNetwork
-import numpy as np
 
 from simulator.agents.basic_nn_agent import BasicNeuralNetworkAgent
 
@@ -21,6 +20,5 @@ class NEATAgent(BasicNeuralNetworkAgent):
     def reward(self, amount):
         self.genome.fitness += amount
 
-    def evaluate_network(self, input_vector: np.ndarray) -> List[float]:
-        list_input = input_vector.flatten().tolist()
-        return self.network.activate(list_input)
+    def evaluate_network(self, input_vector: List[float]) -> List[float]:
+        return self.network.activate(input_vector)

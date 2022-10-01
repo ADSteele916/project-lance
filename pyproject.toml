@@ -9,7 +9,6 @@ packages = [{include = "project_lance"}]
 [tool.poetry.dependencies]
 python = "^3.8"
 neat-python = "^0.92"
-numpy = "^1.23.3"
 
 
 [tool.poetry.group.dev.dependencies]

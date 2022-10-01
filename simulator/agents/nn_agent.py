@@ -4,8 +4,6 @@ from abc import ABCMeta
 from abc import abstractmethod
 from typing import List
 
-import numpy as np
-
 from simulator.agents.agent import Agent
 from simulator.agents.agent import NoValidActionsException
 from simulator.battle.action import Action
@@ -24,7 +22,7 @@ class NeuralNetworkAgent(Agent, metaclass=ABCMeta):
         raise NoValidActionsException()
 
     @abstractmethod
-    def evaluate_network(self, input_vector: np.ndarray) -> List[float]:
+    def evaluate_network(self, input_vector: List[float]) -> List[float]:
         """Ranks available actions using neural network.
 
         Args:
@@ -36,7 +34,7 @@ class NeuralNetworkAgent(Agent, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def vectorize_battle(self, battle: Battle, player: Player) -> np.ndarray:
+    def vectorize_battle(self, battle: Battle, player: Player) -> List[float]:
         """Produces a vector of requisite data for evaluate_network.
 
         Args:
