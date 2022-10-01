@@ -31,6 +31,6 @@ class Action(IntEnum):
         return self
 
     @property
-    def switch_slot(self):
+    def switch_slot(self) -> int:
         assert self.is_switch
         return self - 4

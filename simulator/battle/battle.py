@@ -66,10 +66,24 @@ class Battle:
                       [BattlingPokemon(p) for p in team_two])
         self.agents: Tuple["Agent", "Agent"] = (agent_one, agent_two)
         self.team_cursors: List[int] = [0, 0]
-        self._actives: List[ActivePokemon] = [
+        self.actives: List[ActivePokemon] = [
             ActivePokemon(self.teams[0][0]),
             ActivePokemon(self.teams[1][0])
         ]
+
+        self._valid_actions: Tuple[List[bool],
+                                   List[bool]] = ([False for _ in range(10)],
+                                                  [False for _ in range(10)])
+        for i in range(len(self.p1_active_pokemon.moves)):
+            self._valid_actions[Player.P1][i] = True
+        for i in range(len(self.p2_active_pokemon.moves)):
+            self._valid_actions[Player.P2][i] = True
+        for i in range(len(self.p1_team)):
+            self._valid_actions[Player.P1][i + 6] = (
+                self.team_cursors[Player.P1] != i)
+        for i in range(len(self.p2_team)):
+            self._valid_actions[Player.P2][i + 6] = (
+                self.team_cursors[Player.P2] != i)
 
         self._turn = 0
         self._max_allowed_turns = max_allowed_turns
@@ -85,11 +99,11 @@ class Battle:
 
     @property
     def p1_active_pokemon(self) -> ActivePokemon:
-        return self._actives[Player.P1]
+        return self.actives[Player.P1]
 
     @property
     def p2_active_pokemon(self) -> ActivePokemon:
-        return self._actives[Player.P2]
+        return self.actives[Player.P2]
 
     @property
     def p1_team(self) -> List[BattlingPokemon]:
@@ -100,77 +114,24 @@ class Battle:
         return self.teams[Player.P2]
 
     @property
-    def actives(self) -> Tuple[ActivePokemon, ActivePokemon]:
-        return self.p1_active_pokemon, self.p2_active_pokemon
-
-    @property
     def turn(self) -> int:
         return self._turn
 
     def increment_turn(self):
         self._turn += 1
 
-    def validate_switch(self, player: Player, switch: Action) -> bool:
-        """Checks whether the given switch can be executed.
-
-        Returns False if the given action is a move.
-
-        Returns False if the player is trying to switch to a Pokemon that is
-        already active, trying to switch to a slot that he or she has not,
-        filled, or trying to switch to a Pokemon that has fainted.
-
-        Args:
-            player: The Player whose pending action will be set.
-            switch: The switch that the player wishes to make.
-
-        Returns:
-            Whether the pending switch is valid.
-        """
-        if switch.is_move:
-            return False
-        if switch.switch_slot == self.team_cursors[player]:
-            return False
-        if len(self.teams[player]) <= switch.switch_slot:
-            return False
-        if self.teams[player][switch.switch_slot].knocked_out:
-            return False
-        return True
-
     def request_switch(self, player: Player) -> Action:
-        choices = [s for s in Action if self.validate_switch(player, s)]
+        choices = [
+            s for s in Action if s.is_switch and self._valid_actions[player][s]
+        ]
         switch = self.agents[player].request_switch(self, player, choices)
-        assert self.validate_switch(player, switch)
+        assert self._valid_actions[player][switch]
         return switch
 
-    def validate_action(self, player: Player, action: Action) -> bool:
-        """Checks whether the given action can be executed.
-
-        In addition to the checks performed for switches in validate_switch,
-        returns False if the player is trying to use a move slot that he or she
-        has not filled or use a move that is out of PP without having to
-        Struggle.
-
-        Args:
-            player: The Player whose pending action should be set.
-            action: The Action that the player wishes to take.
-
-        Returns:
-            Whether the pending action is valid.
-        """
-        if action.is_switch:
-            return self.validate_switch(player, action)
-        if len(self._actives[player].moves) <= action.move_slot:
-            return False
-        if (self.actives[player].pp[action.move_slot] == 0 and
-                not all(pp is None or pp == 0
-                        for pp in self.actives[player].pp)):
-            return False
-        return True
-
     def request_action(self, player: Player) -> Action:
-        choices = [a for a in Action if self.validate_action(player, a)]
+        choices = [a for a in Action if self._valid_actions[player][a]]
         action = self.agents[player].request_action(self, player, choices)
-        assert self.validate_action(player, action)
+        assert self._valid_actions[player][action]
         return action
 
     def _execute_switch(self, player: Player, action: Action):
@@ -181,9 +142,19 @@ class Battle:
             action: The switch Action to take.
         """
         assert action.is_switch
+
+        old_slot = self.team_cursors[player]
         slot = action.switch_slot
         self.team_cursors[player] = slot
-        self._actives[player] = ActivePokemon(self.teams[player][slot])
+
+        if not self.actives[player].knocked_out:
+            self._valid_actions[player][old_slot + 6] = True
+        self._valid_actions[player][slot + 6] = False
+
+        self.actives[player] = ActivePokemon(self.teams[player][slot])
+
+        for i in range(len(self.actives[player].moves)):
+            self._valid_actions[Player.P1][i] = True
 
     def _execute_action(self, player: Player, action: Action):
         """Executes the given player's pending action.
@@ -199,6 +170,8 @@ class Battle:
             self._execute_switch(player, action)
         else:
             active_pokemon.use_move(action.move_slot, self, player)
+            if active_pokemon.pp[action.move_slot] == 0:
+                self._valid_actions[player][action] = False
 
     def _first_to_move(self, p1_action: Action, p2_action: Action) -> Player:
         """Determines which player should move first in the coming turn.
@@ -256,7 +229,7 @@ class Battle:
             self._execute_action(second_mover, second_action)
 
     def _end_of_turn(self):
-        for pokemon in self._actives:
+        for pokemon in self.actives:
             pokemon.flinch = False
 
         if self.p1_active_pokemon.toxic_counter is not None:
