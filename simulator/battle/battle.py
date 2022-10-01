@@ -7,8 +7,6 @@ import random
 from typing import List, Optional, Tuple, TYPE_CHECKING
 
 from simulator.battle.action import Action
-from simulator.battle.action import MOVE_SLOTS
-from simulator.battle.action import SWITCH_SLOTS
 from simulator.battle.active_pokemon import ActivePokemon
 from simulator.battle.battling_pokemon import BattlingPokemon
 from simulator.pokemon.party_pokemon import PartyPokemon
@@ -130,11 +128,11 @@ class Battle:
         """
         if switch.is_move:
             return False
-        if SWITCH_SLOTS[switch] == self.team_cursors[player]:
+        if switch.switch_slot == self.team_cursors[player]:
             return False
-        if len(self.teams[player]) <= SWITCH_SLOTS[switch]:
+        if len(self.teams[player]) <= switch.switch_slot:
             return False
-        if self.teams[player][SWITCH_SLOTS[switch]].knocked_out:
+        if self.teams[player][switch.switch_slot].knocked_out:
             return False
         return True
 
@@ -161,9 +159,9 @@ class Battle:
         """
         if action.is_switch:
             return self.validate_switch(player, action)
-        if len(self._actives[player].moves) <= MOVE_SLOTS[action]:
+        if len(self._actives[player].moves) <= action.move_slot:
             return False
-        if (self.actives[player].pp[MOVE_SLOTS[action]] == 0 and
+        if (self.actives[player].pp[action.move_slot] == 0 and
                 not all(pp is None or pp == 0
                         for pp in self.actives[player].pp)):
             return False
@@ -183,7 +181,7 @@ class Battle:
             action: The switch Action to take.
         """
         assert action.is_switch
-        slot = SWITCH_SLOTS[action]
+        slot = action.switch_slot
         self.team_cursors[player] = slot
         self._actives[player] = ActivePokemon(self.teams[player][slot])
 
@@ -200,7 +198,7 @@ class Battle:
         if action.is_switch:
             self._execute_switch(player, action)
         else:
-            active_pokemon.use_move(MOVE_SLOTS[action], self, player)
+            active_pokemon.use_move(action.move_slot, self, player)
 
     def _first_to_move(self, p1_action: Action, p2_action: Action) -> Player:
         """Determines which player should move first in the coming turn.
@@ -231,10 +229,8 @@ class Battle:
         if p2_action.is_switch:
             return Player.P2
 
-        p1_priority = self.p1_active_pokemon.moves[
-            MOVE_SLOTS[p1_action]].priority
-        p2_priority = self.p2_active_pokemon.moves[
-            MOVE_SLOTS[p2_action]].priority
+        p1_priority = self.p1_active_pokemon.moves[p1_action.move_slot].priority
+        p2_priority = self.p2_active_pokemon.moves[p2_action.move_slot].priority
 
         if p1_priority < p2_priority:
             return Player.P2
