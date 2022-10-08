@@ -9,6 +9,7 @@ from simulator.moves.damaging_move import ConstantDamageMove
 from simulator.moves.damaging_move import DamagingMove
 from simulator.moves.damaging_move import HighCriticalChanceDamagingMove
 from simulator.moves.damaging_move import LevelDamagingMove
+from simulator.moves.damaging_move import RecoilDamagingMove
 from simulator.moves.misc_moves import LeechSeed
 from simulator.moves.misc_moves import Mist
 from simulator.moves.misc_moves import Psywave
@@ -44,6 +45,7 @@ def _gen_movedex() -> Dict[str, Move]:
         "StatusDamagingMove": StatusDamagingMove,
         "ConstantDamageMove": ConstantDamageMove,
         "LevelDamagingMove": LevelDamagingMove,
+        "RecoilDamagingMove": RecoilDamagingMove,
         "LeechSeed": LeechSeed,
         "Mist": Mist,
         "Psywave": Psywave,

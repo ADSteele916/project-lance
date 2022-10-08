@@ -4,6 +4,7 @@ import random
 from typing import List, Optional, TYPE_CHECKING
 
 from simulator.battle.battling_pokemon import BattlingPokemon
+from simulator.dex.movedex import MOVEDEX
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.move import Move
 from simulator.pokemon.party_pokemon import PartyPokemon
@@ -185,8 +186,12 @@ class ActivePokemon:
                 return
         if self.status == Status.FREEZE:
             return
-        self.decrement_pp(move_index)
-        self.moves[move_index].execute(battle, player)
+
+        if self.pp[move_index] > 0:
+            self.decrement_pp(move_index)
+            self.moves[move_index].execute(battle, player)
+        else:
+            MOVEDEX["Struggle"].execute(battle, player)
 
         opponent = battle.actives[player.opponent]
         if not opponent.knocked_out:

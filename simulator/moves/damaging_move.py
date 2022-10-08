@@ -1,5 +1,6 @@
 """Functionality for a move that deals damage to the opposing ActivePokemon."""
 
+from math import floor
 import random
 from typing import Optional, TYPE_CHECKING
 
@@ -122,3 +123,27 @@ class LevelDamagingMove(DamagingMove):
     def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon",
                    critical: bool) -> int:
         return attacker.party_member.level
+
+
+class RecoilDamagingMove(DamagingMove):
+    """Move that deals some fraction of its damage to its user as recoil."""
+
+    def __init__(self,
+                 name: str,
+                 pp: int,
+                 move_type: str,
+                 power: int,
+                 accuracy: Optional[int],
+                 recoil: float,
+                 *args,
+                 priority: int = 0,
+                 **kwargs):
+        super().__init__(name, pp, move_type, power, accuracy, priority, *args,
+                         **kwargs)
+        self.recoil = recoil
+
+    def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
+        critical = self.is_critical_hit(attacker)
+        damage = self.get_damage(attacker, target, critical)
+        target.deal_damage(damage)
+        attacker.deal_damage(max(1, floor(damage * self.recoil)))

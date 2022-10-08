@@ -289,7 +289,13 @@
     },
     {
         "cls": "RecoilDamagingMove",
-        "name": "Take Down"
+        "name": "Take Down",
+        "pp": 32,
+        "move_type": "Normal",
+        "power": 90,
+        "accuracy": 85,
+        "priority": 0,
+        "recoil": 0.25
     },
     {
         "cls": "MultiTurnAttack",
@@ -297,7 +303,13 @@
     },
     {
         "cls": "RecoilDamagingMove",
-        "name": "Double-Edge"
+        "name": "Double-Edge",
+        "pp": 24,
+        "move_type": "Normal",
+        "power": 100,
+        "accuracy": 100,
+        "priority": 0,
+        "recoil": 0.25
     },
     {
         "cls": "StatLoweringMove",
@@ -546,7 +558,13 @@
     },
     {
         "cls": "RecoilDamagingMove",
-        "name": "Submission"
+        "name": "Submission",
+        "pp": 40,
+        "move_type": "Fighting",
+        "power": 80,
+        "accuracy": 80,
+        "priority": 0,
+        "recoil": 0.25
     },
     {
         "cls": "FlinchingDamagingMove",
@@ -1288,6 +1306,12 @@
     },
     {
         "cls": "RecoilDamagingMove",
-        "name": "Struggle"
+        "name": "Struggle",
+        "pp": 16,
+        "move_type": "Normal",
+        "power": 50,
+        "accuracy": 100,
+        "priority": 0,
+        "recoil": 0.5
     }
 ]
