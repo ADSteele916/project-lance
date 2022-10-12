@@ -13,6 +13,7 @@ from simulator.moves.damaging_move import RecoilDamagingMove
 from simulator.moves.misc_moves import LeechSeed
 from simulator.moves.misc_moves import Mist
 from simulator.moves.misc_moves import Psywave
+from simulator.moves.misc_moves import SuperFang
 from simulator.moves.misc_moves import Toxic
 from simulator.moves.move import Move
 from simulator.moves.repeating_move import DoubleHitMove
@@ -50,6 +51,7 @@ def _gen_movedex() -> Dict[str, Move]:
         "Mist": Mist,
         "Psywave": Psywave,
         "Toxic": Toxic,
+        "SuperFang": SuperFang
     }
 
     stat_mapping = {

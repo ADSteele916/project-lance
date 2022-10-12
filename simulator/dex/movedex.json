@@ -1289,7 +1289,12 @@
     },
     {
         "cls": "SuperFang",
-        "name": "Super Fang"
+        "name": "Super Fang",
+        "pp": 16,
+        "move_type": "Normal",
+        "power": 1,
+        "accuracy": 90,
+        "priority": 0
     },
     {
         "cls": "HighCriticalChanceDamagingMove",

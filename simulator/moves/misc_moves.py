@@ -45,3 +45,14 @@ class Toxic(Move):
         if Type.POISON not in target.species.types and not target.status:
             target.status = Status.POISON
             target.toxic_counter = 1
+
+
+class SuperFang(DamagingMove):
+
+    @staticmethod
+    def is_critical_hit(attacker: "ActivePokemon") -> bool:
+        return False
+
+    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon",
+                   critical: bool) -> int:
+        return max(1, floor(target.hp / 2))
