@@ -20,11 +20,10 @@ class BattlingPokemon:
     """A Pokemon that is currently in a battle, but may or may not be active."""
 
     def __init__(self, party_pokemon: PartyPokemon):
-        self.__party_pokemon = party_pokemon
-        self.__hp = party_pokemon.hp
-        self.__status = Status.NONE
-        self.__pp = list(
-            map(lambda m: None if m is None else m.pp, party_pokemon.moves))
+        self._party_pokemon = party_pokemon
+        self._hp = party_pokemon.hp
+        self._status = Status.NONE
+        self._pp = [m.pp for m in party_pokemon.moves]
 
     @property
     def species(self) -> PokemonSpecies:
@@ -32,17 +31,17 @@ class BattlingPokemon:
 
     @property
     def pokemon(self) -> PartyPokemon:
-        return self.__party_pokemon
+        return self._party_pokemon
 
     @property
     def hp(self) -> int:
-        return self.__hp
+        return self._hp
 
     @hp.setter
     def hp(self, new_hp: int):
         if not 0 <= new_hp <= self.max_hp:
             raise InvalidHPException(new_hp)
-        self.__hp = new_hp
+        self._hp = new_hp
 
     @property
     def max_hp(self) -> int:
@@ -66,11 +65,11 @@ class BattlingPokemon:
 
     @property
     def status(self) -> Status:
-        return self.__status
+        return self._status
 
     @status.setter
     def status(self, new_status: Status):
-        self.__status = new_status
+        self._status = new_status
 
     @property
     def moves(self) -> List[Move]:
@@ -78,7 +77,7 @@ class BattlingPokemon:
 
     @property
     def pp(self) -> List[int]:
-        return self.__pp
+        return self._pp
 
     @property
     def knocked_out(self) -> bool:

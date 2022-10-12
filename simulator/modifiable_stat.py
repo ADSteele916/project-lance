@@ -4,7 +4,7 @@ from enum import IntEnum
 
 
 class ModifiableStat(IntEnum):
-    """Indices for ActivePokemon.__stat_modifiers' modifier values."""
+    """Indices for ActivePokemon._stat_modifiers' modifier values."""
 
     ATTACK = 0
     DEFENSE = 1

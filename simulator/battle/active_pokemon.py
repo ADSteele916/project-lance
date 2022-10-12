@@ -27,8 +27,8 @@ class ActivePokemon:
     """Pokemon currently in battle, with stat changes, toxic counter, etc."""
 
     def __init__(self, pokemon: BattlingPokemon):
-        self.__pokemon = pokemon
-        self.__stat_modifiers = [0 for _ in range(6)]
+        self._pokemon = pokemon
+        self._stat_modifiers = [0 for _ in range(6)]
         self.confused = False
         self.leech_seed = False
         self.toxic_counter: Optional[int] = None
@@ -37,6 +37,9 @@ class ActivePokemon:
         self.focus_energy = False
         self.mist = False
         self.flinch = False
+
+    def __str__(self):
+        return str(self.pokemon)
 
     @property
     def species(self) -> PokemonSpecies:
@@ -48,11 +51,11 @@ class ActivePokemon:
 
     @property
     def pokemon(self) -> BattlingPokemon:
-        return self.__pokemon
+        return self._pokemon
 
     @property
     def stat_modifiers(self) -> List[int]:
-        return self.__stat_modifiers.copy()
+        return self._stat_modifiers.copy()
 
     @property
     def hp(self) -> int:
@@ -69,38 +72,38 @@ class ActivePokemon:
     @property
     def attack(self) -> int:
         burn_multiplier = 0.5 if self.status == Status.BURN else 1.0
-        return int(self.pokemon.attack * self.__stat_change_multiplier(
-            self.__stat_modifiers[ModifiableStat.ATTACK]) * burn_multiplier)
+        return int(self.pokemon.attack * self._stat_change_multiplier(
+            self._stat_modifiers[ModifiableStat.ATTACK]) * burn_multiplier)
 
     @property
     def defense(self) -> int:
-        return int(self.pokemon.defense * self.__stat_change_multiplier(
-            self.__stat_modifiers[ModifiableStat.DEFENSE]))
+        return int(self.pokemon.defense * self._stat_change_multiplier(
+            self._stat_modifiers[ModifiableStat.DEFENSE]))
 
     @property
     def special(self) -> int:
-        return int(self.pokemon.special * self.__stat_change_multiplier(
-            self.__stat_modifiers[ModifiableStat.SPECIAL]))
+        return int(self.pokemon.special * self._stat_change_multiplier(
+            self._stat_modifiers[ModifiableStat.SPECIAL]))
 
     @property
     def speed(self) -> int:
         paralysis_multiplier = 0.25 if self.status == Status.PARALYZE else 1.0
-        return int(self.pokemon.speed * self.__stat_change_multiplier(
-            self.__stat_modifiers[ModifiableStat.SPEED]) * paralysis_multiplier)
+        return int(self.pokemon.speed * self._stat_change_multiplier(
+            self._stat_modifiers[ModifiableStat.SPEED]) * paralysis_multiplier)
 
     @property
     def evasion_multiplier(self) -> float:
-        return self.__stat_change_multiplier(
-            -self.__stat_modifiers[ModifiableStat.EVASION])
+        return self._stat_change_multiplier(
+            -self._stat_modifiers[ModifiableStat.EVASION])
 
     @property
     def accuracy_multiplier(self) -> float:
-        return self.__stat_change_multiplier(
-            self.__stat_modifiers[ModifiableStat.ACCURACY])
+        return self._stat_change_multiplier(
+            self._stat_modifiers[ModifiableStat.ACCURACY])
 
     def modify_stat(self, stat: ModifiableStat, change: int):
-        self.__stat_modifiers[stat] = max(
-            -6, min(6, self.__stat_modifiers[stat] + change))
+        self._stat_modifiers[stat] = max(
+            -6, min(6, self._stat_modifiers[stat] + change))
 
     @property
     def status(self) -> Status:
@@ -123,7 +126,7 @@ class ActivePokemon:
         return self.pokemon.pp
 
     @staticmethod
-    def __stat_change_multiplier(modifier: int) -> float:
+    def _stat_change_multiplier(modifier: int) -> float:
         """Produces the stat multiplier for a given modifier amount.
 
         Args:
