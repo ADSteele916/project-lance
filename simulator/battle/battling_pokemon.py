@@ -25,6 +25,9 @@ class BattlingPokemon:
         self._status = Status.NONE
         self._pp = [m.pp for m in party_pokemon.moves]
 
+    def __str__(self):
+        return str(self._party_pokemon)
+
     @property
     def species(self) -> PokemonSpecies:
         return self.pokemon.species

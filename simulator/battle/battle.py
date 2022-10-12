@@ -9,6 +9,7 @@ from typing import List, Optional, Tuple, TYPE_CHECKING
 from simulator.battle.action import Action
 from simulator.battle.active_pokemon import ActivePokemon
 from simulator.battle.battling_pokemon import BattlingPokemon
+from simulator.battle_log import BattleLog
 from simulator.pokemon.party_pokemon import PartyPokemon
 
 if TYPE_CHECKING:
@@ -88,6 +89,7 @@ class Battle:
         self._turn = 0
         self._max_allowed_turns = max_allowed_turns
         self.result: Optional[Result] = None
+        self.log: Optional[BattleLog] = None
 
     @property
     def p1_agent(self) -> "Agent":
@@ -119,6 +121,8 @@ class Battle:
 
     def increment_turn(self):
         self._turn += 1
+        if self.log is not None:
+            self.log.advance_turn()
 
     def request_switch(self, player: Player) -> Action:
         choices = [
@@ -152,6 +156,8 @@ class Battle:
         self._valid_actions[player][slot + 6] = False
 
         self.actives[player] = ActivePokemon(self.teams[player][slot])
+        if self.log is not None:
+            self.log.log(f"{player} sent in {self.actives[player]}")
 
         for i in range(len(self.actives[player].moves)):
             self._valid_actions[Player.P1][i] = True
@@ -169,7 +175,7 @@ class Battle:
         if action.is_switch:
             self._execute_switch(player, action)
         else:
-            active_pokemon.use_move(action.move_slot, self, player)
+            active_pokemon.use_move(action.move_slot, self, player, self.log)
             if active_pokemon.pp[action.move_slot] == 0:
                 self._valid_actions[player][action] = False
 
@@ -276,12 +282,18 @@ class Battle:
         return (self._max_allowed_turns is None or
                 self.turn < self._max_allowed_turns)
 
-    def play(self) -> Tuple[Optional[Player], int]:
+    def play(
+        self,
+        do_logging: bool = False
+    ) -> Tuple[Optional[Player], int, Optional[BattleLog]]:
         """Plays out the entire battle to completion.
 
         Returns:
             The winner and the turn count of the battle.
         """
+
+        if do_logging:
+            self.log = BattleLog()
 
         while self.result is None and self._under_turn_max():
             self.increment_turn()
@@ -290,4 +302,4 @@ class Battle:
         if self.result is None:
             self.result = Result.DRAW
 
-        return self.result.victor, self.turn
+        return self.result.victor, self.turn, self.log

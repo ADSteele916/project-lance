@@ -4,6 +4,7 @@ import random
 from typing import List, Optional, TYPE_CHECKING
 
 from simulator.battle.battling_pokemon import BattlingPokemon
+from simulator.battle_log import BattleLog
 from simulator.dex.movedex import MOVEDEX
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.move import Move
@@ -160,7 +161,11 @@ class ActivePokemon:
         elif self.status == Status.NONE:
             self.status = status
 
-    def use_move(self, move_index: int, battle: "Battle", player: "Player"):
+    def use_move(self,
+                 move_index: int,
+                 battle: "Battle",
+                 player: "Player",
+                 log: Optional[BattleLog] = None):
         """Uses the move with the given index.
 
         If the Pokemon is paralyzed, there is a 25% chance it cannot move. If
@@ -181,19 +186,31 @@ class ActivePokemon:
             raise ValueError(f"Move index must be in [0, {len(self.moves)}).")
 
         if self.flinch:
+            if log is not None:
+                log.log(f"{player}'s {self} flinched and couldn't move.")
             return
 
         if self.status == Status.PARALYZE:
             roll = random.random()
             if roll < 0.25:
+                if log is not None:
+                    log.log(
+                        f"{player}'s {self} is paralyzed and couldn't move.")
                 return
         if self.status == Status.FREEZE:
+            if log is not None:
+                log.log(f"{player}'s {self} is frozen and couldn't move.")
             return
 
         if self.pp[move_index] > 0:
             self.decrement_pp(move_index)
-            self.moves[move_index].execute(battle, player)
+            move = self.moves[move_index]
+            if log is not None:
+                log.log(f"{player}'s {self} used {move}")
+            move.execute(battle, player)
         else:
+            if log is not None:
+                log.log(f"{player}'s {self} is out of PP and used Struggle.")
             MOVEDEX["Struggle"].execute(battle, player)
 
         opponent = battle.actives[player.opponent]
