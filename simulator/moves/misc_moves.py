@@ -22,25 +22,23 @@ class LeechSeed(Move):
 
 
 class Mist(Move):
-
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
         attacker.mist = True
 
 
 class Psywave(DamagingMove):
-
     @staticmethod
     def is_critical_hit(attacker: "ActivePokemon") -> bool:
         return False
 
-    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon",
-                   critical: bool) -> int:
+    def get_damage(
+        self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool
+    ) -> int:
         max_damage = max(floor(1.5 * attacker.party_member.level - 1), 1)
         return randint(0, max_damage)
 
 
 class Toxic(Move):
-
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
         if Type.POISON not in target.species.types and not target.status:
             target.status = Status.POISON
@@ -48,11 +46,11 @@ class Toxic(Move):
 
 
 class SuperFang(DamagingMove):
-
     @staticmethod
     def is_critical_hit(attacker: "ActivePokemon") -> bool:
         return False
 
-    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon",
-                   critical: bool) -> int:
+    def get_damage(
+        self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool
+    ) -> int:
         return max(1, floor(target.hp / 2))

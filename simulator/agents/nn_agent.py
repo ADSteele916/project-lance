@@ -1,21 +1,19 @@
 """Functionality for an Agent that interfaces with a neural network."""
 
-from abc import ABCMeta
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 from typing import List
 
-from simulator.agents.agent import Agent
-from simulator.agents.agent import NoValidActionsException
+from simulator.agents.agent import Agent, NoValidActionsException
 from simulator.battle.action import Action
-from simulator.battle.battle import Battle
-from simulator.battle.battle import Player
+from simulator.battle.battle import Battle, Player
 
 
 class NeuralNetworkAgent(Agent, metaclass=ABCMeta):
     """An Agent whose decisions are made by a neural network."""
 
-    def request_action(self, battle: Battle, player: Player,
-                       choices: List[Action]) -> Action:
+    def request_action(
+        self, battle: Battle, player: Player, choices: List[Action]
+    ) -> Action:
         for action in self.rank_actions(battle, player):
             if action in choices:
                 return action

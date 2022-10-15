@@ -5,30 +5,29 @@ import os.path
 from typing import Dict
 
 from simulator.modifiable_stat import ModifiableStat
-from simulator.moves.damaging_move import ConstantDamageMove
-from simulator.moves.damaging_move import DamagingMove
-from simulator.moves.damaging_move import HighCriticalChanceDamagingMove
-from simulator.moves.damaging_move import LevelDamagingMove
-from simulator.moves.damaging_move import RecoilDamagingMove
-from simulator.moves.misc_moves import LeechSeed
-from simulator.moves.misc_moves import Mist
-from simulator.moves.misc_moves import Psywave
-from simulator.moves.misc_moves import SuperFang
-from simulator.moves.misc_moves import Toxic
+from simulator.moves.damaging_move import (
+    ConstantDamageMove,
+    DamagingMove,
+    HighCriticalChanceDamagingMove,
+    LevelDamagingMove,
+    RecoilDamagingMove,
+)
+from simulator.moves.misc_moves import LeechSeed, Mist, Psywave, SuperFang, Toxic
 from simulator.moves.move import Move
-from simulator.moves.repeating_move import DoubleHitMove
-from simulator.moves.repeating_move import MultiHitMove
-from simulator.moves.side_effect_damaging_move import DebuffingDamagingMove
-from simulator.moves.side_effect_damaging_move import FlinchingDamagingMove
-from simulator.moves.side_effect_damaging_move import StatusDamagingMove
-from simulator.moves.stat_modifying_move import StatLoweringMove
-from simulator.moves.stat_modifying_move import StatRaisingMove
+from simulator.moves.repeating_move import DoubleHitMove, MultiHitMove
+from simulator.moves.side_effect_damaging_move import (
+    DebuffingDamagingMove,
+    FlinchingDamagingMove,
+    StatusDamagingMove,
+)
+from simulator.moves.stat_modifying_move import StatLoweringMove, StatRaisingMove
 from simulator.moves.status_effect_move import StatusEffectMove
 
 
 def _gen_movedex() -> Dict[str, Move]:
-    with open(os.path.join(os.path.dirname(__file__), "movedex.json"),
-              encoding="utf-8") as json_file:
+    with open(
+        os.path.join(os.path.dirname(__file__), "movedex.json"), encoding="utf-8"
+    ) as json_file:
         movedex_dict_list = json.load(json_file)
 
     movedex = {}
@@ -51,7 +50,7 @@ def _gen_movedex() -> Dict[str, Move]:
         "Mist": Mist,
         "Psywave": Psywave,
         "Toxic": Toxic,
-        "SuperFang": SuperFang
+        "SuperFang": SuperFang,
     }
 
     stat_mapping = {

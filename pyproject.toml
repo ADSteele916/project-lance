@@ -13,18 +13,14 @@ neat-python = "^0.92"
 
 [tool.poetry.group.dev.dependencies]
 pylint = "^2.15.2"
-yapf = "^0.32.0"
+black = {extras = ["d"], version = "^22.10.0"}
 isort = "^5.10.1"
 pytest = "^7.1.3"
-toml = "^0.10.2"
 mypy = "^0.971"
 
 [tool.isort]
-profile = "google"
+profile = "black"
 src_paths = ["simulator", "basic_neat_model"]
-
-[tool.yapf]
-based_on_style = "google"
 
 [build-system]
 requires = ["poetry-core"]

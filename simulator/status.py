@@ -1,7 +1,6 @@
 """Enum for non-volatile status conditions."""
 
-from enum import auto
-from enum import Enum
+from enum import Enum, auto
 
 
 class Status(Enum):

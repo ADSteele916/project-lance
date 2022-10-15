@@ -1,8 +1,8 @@
 """Functionality for a move that deals damage to the opposing ActivePokemon."""
 
-from math import floor
 import random
-from typing import Optional, TYPE_CHECKING
+from math import floor
+from typing import TYPE_CHECKING, Optional
 
 from simulator.moves.move import Move
 
@@ -11,28 +11,29 @@ if TYPE_CHECKING:
 
 
 class InvalidDamageException(Exception):
-
     def __init__(self, damage: int):
         super().__init__(
-            f"{damage} is not a valid damage. It must be a postive integer.")
+            f"{damage} is not a valid damage. It must be a postive integer."
+        )
 
 
 class DamagingMove(Move):
     """A Pokemon move that deals damage to its target."""
 
-    def __init__(self,
-                 name: str,
-                 pp: int,
-                 move_type: str,
-                 power: int,
-                 accuracy: Optional[int],
-                 *args,
-                 priority: int = 0,
-                 **kwargs):
+    def __init__(
+        self,
+        name: str,
+        pp: int,
+        move_type: str,
+        power: int,
+        accuracy: Optional[int],
+        *args,
+        priority: int = 0,
+        **kwargs,
+    ):
         if power <= 0:
             raise InvalidDamageException(power)
-        super().__init__(name, pp, move_type, accuracy, priority, *args,
-                         **kwargs)
+        super().__init__(name, pp, move_type, accuracy, priority, *args, **kwargs)
         self.power = power
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):
@@ -51,11 +52,13 @@ class DamagingMove(Move):
         """
         crit_roll = random.randint(0, 255)
         threshold = attacker.pokemon.pokemon.species.critical_hit_threshold(
-            False, attacker.focus_energy)
+            False, attacker.focus_energy
+        )
         return crit_roll < threshold
 
-    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon",
-                   critical: bool) -> int:
+    def get_damage(
+        self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool
+    ) -> int:
         """Produces the total HP damage that will be dealt to the target.
 
         Args:
@@ -66,20 +69,29 @@ class DamagingMove(Move):
         Returns:
             The damage (in HP) that this move will do to its target.
         """
-        level = (attacker.party_member.level if not critical else 2 *
-                 attacker.party_member.level)
+        level = (
+            attacker.party_member.level
+            if not critical
+            else 2 * attacker.party_member.level
+        )
         if critical:
-            effective_attack = (attacker.pokemon.attack
-                                if self.move_type.is_physical else
-                                attacker.pokemon.special)
-            effective_defense = (target.pokemon.defense
-                                 if self.move_type.is_physical else
-                                 target.pokemon.special)
+            effective_attack = (
+                attacker.pokemon.attack
+                if self.move_type.is_physical
+                else attacker.pokemon.special
+            )
+            effective_defense = (
+                target.pokemon.defense
+                if self.move_type.is_physical
+                else target.pokemon.special
+            )
         else:
-            effective_attack = (attacker.attack if self.move_type.is_physical
-                                else attacker.special)
-            effective_defense = (target.defense if self.move_type.is_physical
-                                 else target.special)
+            effective_attack = (
+                attacker.attack if self.move_type.is_physical else attacker.special
+            )
+            effective_defense = (
+                target.defense if self.move_type.is_physical else target.special
+            )
         stab = 1.5 if self.move_type in attacker.species.types else 1.0
         type_effectiveness = target.species.attack_effectiveness(self.move_type)
         rand = random.randint(217, 255)
@@ -87,7 +99,8 @@ class DamagingMove(Move):
         adjusted_level = (2 * level) / 5 + 2
         attack_defense_ratio = effective_attack / effective_defense
         unmodified_damage = (
-            (adjusted_level * self.power * attack_defense_ratio) / 50 + 2)
+            adjusted_level * self.power * attack_defense_ratio
+        ) / 50 + 2
 
         return int(unmodified_damage * stab * type_effectiveness * rand) // 255
 
@@ -98,48 +111,50 @@ class HighCriticalChanceDamagingMove(DamagingMove):
     @staticmethod
     def is_critical_hit(attacker: "ActivePokemon"):
         crit_roll = random.randint(0, 255)
-        threshold = attacker.species.critical_hit_threshold(
-            True, attacker.focus_energy)
+        threshold = attacker.species.critical_hit_threshold(True, attacker.focus_energy)
         return crit_roll < threshold
 
 
 class ConstantDamageMove(DamagingMove):
-
     @staticmethod
     def is_critical_hit(attacker: "ActivePokemon") -> bool:
         return False
 
-    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon",
-                   critical: bool) -> int:
+    def get_damage(
+        self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool
+    ) -> int:
         return self.power
 
 
 class LevelDamagingMove(DamagingMove):
-
     @staticmethod
     def is_critical_hit(attacker: "ActivePokemon") -> bool:
         return False
 
-    def get_damage(self, attacker: "ActivePokemon", target: "ActivePokemon",
-                   critical: bool) -> int:
+    def get_damage(
+        self, attacker: "ActivePokemon", target: "ActivePokemon", critical: bool
+    ) -> int:
         return attacker.party_member.level
 
 
 class RecoilDamagingMove(DamagingMove):
     """Move that deals some fraction of its damage to its user as recoil."""
 
-    def __init__(self,
-                 name: str,
-                 pp: int,
-                 move_type: str,
-                 power: int,
-                 accuracy: Optional[int],
-                 recoil: float,
-                 *args,
-                 priority: int = 0,
-                 **kwargs):
-        super().__init__(name, pp, move_type, power, accuracy, priority, *args,
-                         **kwargs)
+    def __init__(
+        self,
+        name: str,
+        pp: int,
+        move_type: str,
+        power: int,
+        accuracy: Optional[int],
+        recoil: float,
+        *args,
+        priority: int = 0,
+        **kwargs,
+    ):
+        super().__init__(
+            name, pp, move_type, power, accuracy, priority, *args, **kwargs
+        )
         self.recoil = recoil
 
     def apply_effects(self, attacker: "ActivePokemon", target: "ActivePokemon"):

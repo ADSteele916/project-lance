@@ -1,9 +1,8 @@
 """Moves that hit multiple times."""
 
-from abc import ABCMeta
-from abc import abstractmethod
 import random
-from typing import Dict, List, TYPE_CHECKING
+from abc import ABCMeta, abstractmethod
+from typing import TYPE_CHECKING, Dict, List
 
 from simulator.moves.damaging_move import DamagingMove
 

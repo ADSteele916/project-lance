@@ -1,7 +1,6 @@
 """Specification for a class that can generate team rosters."""
 
-from abc import ABCMeta
-from abc import abstractmethod
+from abc import ABCMeta, abstractmethod
 
 
 class NoMorePossibleTeamsException(Exception):

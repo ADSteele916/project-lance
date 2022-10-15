@@ -1,7 +1,6 @@
 """Functionality related to Pokemon types and their interactions."""
 
-from enum import auto
-from enum import Enum
+from enum import Enum, auto
 
 
 class Type(Enum):
@@ -64,10 +63,7 @@ _RESIST = 0.5
 _IMMUNE = 0.0
 
 _ATTACK_EFFECTIVENESS = {
-    Type.NORMAL: {
-        Type.ROCK: _RESIST,
-        Type.GHOST: _IMMUNE
-    },
+    Type.NORMAL: {Type.ROCK: _RESIST, Type.GHOST: _IMMUNE},
     Type.FIGHTING: {
         Type.NORMAL: _WEAK,
         Type.FLYING: _RESIST,
@@ -119,11 +115,7 @@ _ATTACK_EFFECTIVENESS = {
         Type.GRASS: _WEAK,
         Type.PSYCHIC: _WEAK,
     },
-    Type.GHOST: {
-        Type.NORMAL: _IMMUNE,
-        Type.GHOST: _WEAK,
-        Type.PSYCHIC: _IMMUNE
-    },
+    Type.GHOST: {Type.NORMAL: _IMMUNE, Type.GHOST: _WEAK, Type.PSYCHIC: _IMMUNE},
     Type.FIRE: {
         Type.ROCK: _RESIST,
         Type.BUG: _WEAK,
@@ -160,11 +152,7 @@ _ATTACK_EFFECTIVENESS = {
         Type.ELECTRIC: _RESIST,
         Type.DRAGON: _RESIST,
     },
-    Type.PSYCHIC: {
-        Type.FIGHTING: _WEAK,
-        Type.POISON: _WEAK,
-        Type.PSYCHIC: _RESIST
-    },
+    Type.PSYCHIC: {Type.FIGHTING: _WEAK, Type.POISON: _WEAK, Type.PSYCHIC: _RESIST},
     Type.ICE: {
         Type.FLYING: _WEAK,
         Type.GROUND: _WEAK,
@@ -173,14 +161,11 @@ _ATTACK_EFFECTIVENESS = {
         Type.ICE: _RESIST,
         Type.DRAGON: _WEAK,
     },
-    Type.DRAGON: {
-        Type.DRAGON: _WEAK
-    },
+    Type.DRAGON: {Type.DRAGON: _WEAK},
 }
 
 
-def get_attack_effectiveness(attacking_type: Type,
-                             defending_type: Type) -> float:
+def get_attack_effectiveness(attacking_type: Type, defending_type: Type) -> float:
     """Looks up the type multiplier for the given attacking and defending types.
 
     Args:

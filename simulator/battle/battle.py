@@ -1,10 +1,8 @@
 """Functionality for a Battle between two Pokemon teams, with user input."""
 
-from enum import auto
-from enum import Enum
-from enum import IntEnum
 import random
-from typing import List, Optional, Tuple, TYPE_CHECKING
+from enum import Enum, IntEnum, auto
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
 from simulator.battle.action import Action
 from simulator.battle.active_pokemon import ActivePokemon
@@ -42,49 +40,52 @@ class Result(Enum):
 
 
 class InvalidTeamSizeException(Exception):
-
     def __init__(self, size: int):
         super().__init__(
             f"{size} is an invalid team size. Teams must have between 1 and 6 "
-            f"members.")
+            f"members."
+        )
 
 
 class Battle:
     """A Pokemon battle with all state information for both teams"""
 
-    def __init__(self,
-                 team_one: List[PartyPokemon],
-                 team_two: List[PartyPokemon],
-                 agent_one: "Agent",
-                 agent_two: "Agent",
-                 max_allowed_turns: Optional[int] = 1000):
+    def __init__(
+        self,
+        team_one: List[PartyPokemon],
+        team_two: List[PartyPokemon],
+        agent_one: "Agent",
+        agent_two: "Agent",
+        max_allowed_turns: Optional[int] = 1000,
+    ):
         if not 1 <= len(team_one) <= 6:
             raise InvalidTeamSizeException(len(team_one))
         if not 1 <= len(team_two) <= 6:
             raise InvalidTeamSizeException(len(team_two))
 
-        self.teams = ([BattlingPokemon(p) for p in team_one],
-                      [BattlingPokemon(p) for p in team_two])
+        self.teams = (
+            [BattlingPokemon(p) for p in team_one],
+            [BattlingPokemon(p) for p in team_two],
+        )
         self.agents: Tuple["Agent", "Agent"] = (agent_one, agent_two)
         self.team_cursors: List[int] = [0, 0]
         self.actives: List[ActivePokemon] = [
             ActivePokemon(self.teams[0][0]),
-            ActivePokemon(self.teams[1][0])
+            ActivePokemon(self.teams[1][0]),
         ]
 
-        self._valid_actions: Tuple[List[bool],
-                                   List[bool]] = ([False for _ in range(10)],
-                                                  [False for _ in range(10)])
+        self._valid_actions: Tuple[List[bool], List[bool]] = (
+            [False for _ in range(10)],
+            [False for _ in range(10)],
+        )
         for i in range(len(self.p1_active_pokemon.moves)):
             self._valid_actions[Player.P1][i] = True
         for i in range(len(self.p2_active_pokemon.moves)):
             self._valid_actions[Player.P2][i] = True
         for i in range(len(self.p1_team)):
-            self._valid_actions[Player.P1][i + 6] = (
-                self.team_cursors[Player.P1] != i)
+            self._valid_actions[Player.P1][i + 6] = self.team_cursors[Player.P1] != i
         for i in range(len(self.p2_team)):
-            self._valid_actions[Player.P2][i + 6] = (
-                self.team_cursors[Player.P2] != i)
+            self._valid_actions[Player.P2][i + 6] = self.team_cursors[Player.P2] != i
 
         self._turn = 0
         self._max_allowed_turns = max_allowed_turns
@@ -125,9 +126,7 @@ class Battle:
             self.log.advance_turn()
 
     def request_switch(self, player: Player) -> Action:
-        choices = [
-            s for s in Action if s.is_switch and self._valid_actions[player][s]
-        ]
+        choices = [s for s in Action if s.is_switch and self._valid_actions[player][s]]
         switch = self.agents[player].request_switch(self, player, choices)
         assert self._valid_actions[player][switch]
         return switch
@@ -198,8 +197,7 @@ class Battle:
         elif self.p1_active_pokemon.speed < self.p2_active_pokemon.speed:
             faster_player = Player.P2
         else:
-            faster_player = (Player.P1 if random.choice(
-                (True, False)) else Player.P2)
+            faster_player = Player.P1 if random.choice((True, False)) else Player.P2
 
         if p1_action.is_switch and p2_action.is_switch:
             return faster_player
@@ -279,12 +277,10 @@ class Battle:
             self._execute_switch(Player.P2, p2_switch)
 
     def _under_turn_max(self):
-        return (self._max_allowed_turns is None or
-                self.turn < self._max_allowed_turns)
+        return self._max_allowed_turns is None or self.turn < self._max_allowed_turns
 
     def play(
-        self,
-        do_logging: bool = False
+        self, do_logging: bool = False
     ) -> Tuple[Optional[Player], int, Optional[BattleLog]]:
         """Plays out the entire battle to completion.
 

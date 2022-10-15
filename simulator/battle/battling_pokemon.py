@@ -9,11 +9,11 @@ from simulator.status import Status
 
 
 class InvalidHPException(Exception):
-
     def __init__(self, invalid_hp: int):
         super().__init__(
             f"{invalid_hp} is an invalid HP. HP values must be between 0 and "
-            f"the Pokemon's maximum HP.")
+            f"the Pokemon's maximum HP."
+        )
 
 
 class BattlingPokemon:

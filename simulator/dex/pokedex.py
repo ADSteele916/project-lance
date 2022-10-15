@@ -10,8 +10,9 @@ from simulator.type import Type
 
 
 def _gen_pokedex() -> Dict[str, PokemonSpecies]:
-    with open(os.path.join(os.path.dirname(__file__), "pokedex.json"),
-              encoding="utf-8") as json_file:
+    with open(
+        os.path.join(os.path.dirname(__file__), "pokedex.json"), encoding="utf-8"
+    ) as json_file:
         dex_dict_list = json.load(json_file)
 
     pokedex = {}
@@ -25,12 +26,11 @@ def _gen_pokedex() -> Dict[str, PokemonSpecies]:
             pokemon["base_def"],
             pokemon["base_spe"],
             pokemon["base_spc"],
-            set(MOVEDEX[move]
-                for move in pokemon["learnset"]
-                if move in MOVEDEX),
+            set(MOVEDEX[move] for move in pokemon["learnset"] if move in MOVEDEX),
             Type[pokemon["primary_type"].upper()],
-            None if pokemon["secondary_type"] is None else
-            Type[pokemon["secondary_type"].upper()],
+            None
+            if pokemon["secondary_type"] is None
+            else Type[pokemon["secondary_type"].upper()],
         )
 
     return pokedex

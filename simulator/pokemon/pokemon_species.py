@@ -1,22 +1,20 @@
 """Representation of a Base Pokemon, without any DVs or EVs."""
 
-from math import floor
-from math import prod
-from typing import Optional, Set, TYPE_CHECKING
+from math import floor, prod
+from typing import TYPE_CHECKING, Optional, Set
 
-from simulator.type import get_attack_effectiveness
-from simulator.type import Type
+from simulator.type import Type, get_attack_effectiveness
 
 if TYPE_CHECKING:
     from simulator.moves.move import Move
 
 
 class InvalidBaseStatException(Exception):
-
     def __init__(self, invalid_stat: int):
         super().__init__(
             f"{invalid_stat} is an invalid base stat. It must be representable "
-            f"as a single unsigned byte.")
+            f"as a single unsigned byte."
+        )
 
 
 class PokemonSpecies:
@@ -50,23 +48,30 @@ class PokemonSpecies:
         self.moveset = moveset
         self.primary_type = primary_type
         self.secondary_type = secondary_type
-        self.types = ([self.primary_type] if self.secondary_type is None else
-                      [self.primary_type, self.secondary_type])
+        self.types = (
+            [self.primary_type]
+            if self.secondary_type is None
+            else [self.primary_type, self.secondary_type]
+        )
 
         self._effectivenesses = {
             attacking_type: prod(
                 get_attack_effectiveness(attacking_type, own_type)
-                for own_type in self.types) for attacking_type in Type
+                for own_type in self.types
+            )
+            for attacking_type in Type
         }
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}({repr(self.name)}, {self.dex_num}, "
-                f"{self.base_hp}, {self.base_atk}, {self.base_def}, "
-                f"{self.base_spe}, {self.base_spc}, {self.moveset}, "
-                f"{self.primary_type}, {self.secondary_type})")
+        return (
+            f"{self.__class__.__name__}({repr(self.name)}, {self.dex_num}, "
+            f"{self.base_hp}, {self.base_atk}, {self.base_def}, "
+            f"{self.base_spe}, {self.base_spc}, {self.moveset}, "
+            f"{self.primary_type}, {self.secondary_type})"
+        )
 
     def attack_effectiveness(self, attacking_type: Type) -> float:
         """Produces the effectiveness of a given type against this Pokemon.
@@ -79,9 +84,9 @@ class PokemonSpecies:
         """
         return self._effectivenesses[attacking_type]
 
-    def critical_hit_threshold(self,
-                               high_crit_ratio: bool = False,
-                               focus_energy: bool = False) -> int:
+    def critical_hit_threshold(
+        self, high_crit_ratio: bool = False, focus_energy: bool = False
+    ) -> int:
         """Produces the critical hit threshold for this Pokemon under.
 
         Note that Focus Energy will actually reduce the critical hit ratio, due

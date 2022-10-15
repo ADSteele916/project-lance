@@ -5,9 +5,10 @@ from random import shuffle
 from simulator.dex.movedex import MOVEDEX
 from simulator.dex.pokedex import POKEDEX
 from simulator.pokemon.party_pokemon import PartyPokemon
-from simulator.team_generators.team_generator import \
-    NoMorePossibleTeamsException
-from simulator.team_generators.team_generator import TeamGenerator
+from simulator.team_generators.team_generator import (
+    NoMorePossibleTeamsException,
+    TeamGenerator,
+)
 
 
 class BasicRivalTeamGenerator(TeamGenerator):
@@ -21,18 +22,31 @@ class BasicRivalTeamGenerator(TeamGenerator):
 
     MAX_ALLOWED_TEAMS = 3
     STARTERS = {
-        PartyPokemon(POKEDEX["Bulbasaur"], 17, [
-            MOVEDEX["Tackle"], MOVEDEX["Growl"], MOVEDEX["Leech Seed"],
-            MOVEDEX["Vine Whip"]
-        ]),
-        PartyPokemon(POKEDEX["Charmander"], 17, [
-            MOVEDEX["Scratch"], MOVEDEX["Growl"], MOVEDEX["Ember"],
-            MOVEDEX["Leer"]
-        ]),
-        PartyPokemon(POKEDEX["Squirtle"], 17, [
-            MOVEDEX["Tackle"], MOVEDEX["Tail Whip"], MOVEDEX["Bubble"],
-            MOVEDEX["Water Gun"]
-        ])
+        PartyPokemon(
+            POKEDEX["Bulbasaur"],
+            17,
+            [
+                MOVEDEX["Tackle"],
+                MOVEDEX["Growl"],
+                MOVEDEX["Leech Seed"],
+                MOVEDEX["Vine Whip"],
+            ],
+        ),
+        PartyPokemon(
+            POKEDEX["Charmander"],
+            17,
+            [MOVEDEX["Scratch"], MOVEDEX["Growl"], MOVEDEX["Ember"], MOVEDEX["Leer"]],
+        ),
+        PartyPokemon(
+            POKEDEX["Squirtle"],
+            17,
+            [
+                MOVEDEX["Tackle"],
+                MOVEDEX["Tail Whip"],
+                MOVEDEX["Bubble"],
+                MOVEDEX["Water Gun"],
+            ],
+        ),
     }
 
     def generate_team(self):

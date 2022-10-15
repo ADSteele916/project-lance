@@ -1,8 +1,7 @@
 """Functionality for Pokemon with customized builds."""
 
-from math import floor
-from math import sqrt
-from typing import Final, List, Optional, TYPE_CHECKING
+from math import floor, sqrt
+from typing import TYPE_CHECKING, Final, List, Optional
 
 from simulator.pokemon.pokemon_species import PokemonSpecies
 
@@ -11,41 +10,40 @@ if TYPE_CHECKING:
 
 
 class InvalidLevelException(Exception):
-
     def __init__(self, invalid_level: int):
         super().__init__(
             f"{invalid_level} is an invalid level. It must be between 1 and "
-            f"100, inclusive.")
+            f"100, inclusive."
+        )
 
 
 class InvalidMoveException(Exception):
-
     def __init__(self, invalid_move: "Move", pokemon: PokemonSpecies):
         super().__init__(f"{invalid_move} cannot be learned by {pokemon}")
 
 
 class InvalidDiversificationValueException(Exception):
-
     def __init__(self, invalid_dv: int):
         super().__init__(
             f"{invalid_dv} is not a valid DV. DVs must be between 0 and "
-            f"{PartyPokemon.MAX_DV}, inclusive.")
+            f"{PartyPokemon.MAX_DV}, inclusive."
+        )
 
 
 class InvalidStatExperienceValueException(Exception):
-
     def __init__(self, invalid_se: int):
         super().__init__(
             f"{invalid_se} is not a valid Stat Exp value. Stat Exps must be "
-            f"between 0 and {PartyPokemon.MAX_STAT_EXP}, inclusive.")
+            f"between 0 and {PartyPokemon.MAX_STAT_EXP}, inclusive."
+        )
 
 
 class InvalidMoveCountException(Exception):
-
     def __init__(self, size: int):
         super().__init__(
             f"{size} is an invalid number of moves. Each Pokemon must have "
-            f"between 1 and 4 moves, inclusive.")
+            f"between 1 and 4 moves, inclusive."
+        )
 
 
 class PartyPokemon:
@@ -86,15 +84,21 @@ class PartyPokemon:
         for dv in (atk_dv, def_dv, spe_dv, spc_dv):
             if not 0 <= dv <= PartyPokemon.MAX_DV:
                 raise InvalidDiversificationValueException(dv)
-        self._hp_dv = (8 * (atk_dv % 2) + 4 * (def_dv % 2) + 2 * (spe_dv % 2) +
-                       (spc_dv % 2))
+        self._hp_dv = (
+            8 * (atk_dv % 2) + 4 * (def_dv % 2) + 2 * (spe_dv % 2) + (spc_dv % 2)
+        )
         self._atk_dv = atk_dv
         self._def_dv = def_dv
         self._spe_dv = spe_dv
         self._spc_dv = spc_dv
 
-        for stat_exp in (hp_stat_exp, atk_stat_exp, def_stat_exp, spe_stat_exp,
-                         spc_stat_exp):
+        for stat_exp in (
+            hp_stat_exp,
+            atk_stat_exp,
+            def_stat_exp,
+            spe_stat_exp,
+            spc_stat_exp,
+        ):
             if not 0 <= stat_exp <= PartyPokemon.MAX_STAT_EXP:
                 raise InvalidStatExperienceValueException(stat_exp)
         self._hp_stat_exp = hp_stat_exp
@@ -105,32 +109,60 @@ class PartyPokemon:
 
         self._nickname = nickname
 
-        self._hp = (floor(
-            ((species.base_hp + self._hp_dv) + floor(sqrt(hp_stat_exp) / 4)) *
-            level / 100) + level + 10)
-        self._attack = (floor(
-            ((species.base_atk + atk_dv) + floor(sqrt(atk_stat_exp) / 4)) *
-            level / 100) + 5)
-        self._defense = (floor(
-            ((species.base_def + def_dv) + floor(sqrt(def_stat_exp) / 4)) *
-            level / 100) + 5)
-        self._speed = (floor(
-            ((species.base_spe + spe_dv) + floor(sqrt(spe_stat_exp) / 4)) *
-            level / 100) + 5)
-        self._special = (floor(
-            ((species.base_spc + spc_dv) + floor(sqrt(spc_stat_exp) / 4)) *
-            level / 100) + 5)
+        self._hp = (
+            floor(
+                ((species.base_hp + self._hp_dv) + floor(sqrt(hp_stat_exp) / 4))
+                * level
+                / 100
+            )
+            + level
+            + 10
+        )
+        self._attack = (
+            floor(
+                ((species.base_atk + atk_dv) + floor(sqrt(atk_stat_exp) / 4))
+                * level
+                / 100
+            )
+            + 5
+        )
+        self._defense = (
+            floor(
+                ((species.base_def + def_dv) + floor(sqrt(def_stat_exp) / 4))
+                * level
+                / 100
+            )
+            + 5
+        )
+        self._speed = (
+            floor(
+                ((species.base_spe + spe_dv) + floor(sqrt(spe_stat_exp) / 4))
+                * level
+                / 100
+            )
+            + 5
+        )
+        self._special = (
+            floor(
+                ((species.base_spc + spc_dv) + floor(sqrt(spc_stat_exp) / 4))
+                * level
+                / 100
+            )
+            + 5
+        )
 
     def __str__(self):
         return str(self.species) if self._nickname is None else self._nickname
 
     def __repr__(self):
-        return (f"{self.__class__.__name__}({repr(self.species)}, "
-                f"{self.level}, {self.moves}, {self.atk_dv}, {self.def_dv}, "
-                f"{self.spe_dv}, {self.spc_dv}, {self.hp_stat_exp}, "
-                f"{self.atk_stat_exp}, {self.def_stat_exp}, "
-                f"{self.spe_stat_exp}, {self.spc_stat_exp}, "
-                f"{repr(self.nickname)})")
+        return (
+            f"{self.__class__.__name__}({repr(self.species)}, "
+            f"{self.level}, {self.moves}, {self.atk_dv}, {self.def_dv}, "
+            f"{self.spe_dv}, {self.spc_dv}, {self.hp_stat_exp}, "
+            f"{self.atk_stat_exp}, {self.def_stat_exp}, "
+            f"{self.spe_stat_exp}, {self.spc_stat_exp}, "
+            f"{repr(self.nickname)})"
+        )
 
     @property
     def species(self) -> PokemonSpecies:
@@ -141,13 +173,19 @@ class PartyPokemon:
         return self._level
 
     @property
-    def moves(self,) -> List["Move"]:
+    def moves(
+        self,
+    ) -> List["Move"]:
         return self._moves
 
     @property
     def hp_dv(self) -> int:
-        return 8 * (self.atk_dv % 2) + 4 * (self.def_dv % 2) + 2 * (
-            self.spe_dv % 2) + (self.spc_dv % 2)
+        return (
+            8 * (self.atk_dv % 2)
+            + 4 * (self.def_dv % 2)
+            + 2 * (self.spe_dv % 2)
+            + (self.spc_dv % 2)
+        )
 
     @property
     def atk_dv(self) -> int:

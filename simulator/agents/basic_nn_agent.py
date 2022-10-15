@@ -5,8 +5,7 @@ from typing import List
 
 from simulator.agents.nn_agent import NeuralNetworkAgent
 from simulator.battle.active_pokemon import ActivePokemon
-from simulator.battle.battle import Battle
-from simulator.battle.battle import Player
+from simulator.battle.battle import Battle, Player
 from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.status import Status
 
@@ -37,7 +36,8 @@ class BasicNeuralNetworkAgent(NeuralNetworkAgent, metaclass=ABCMeta):
             index = pokemon.dex_num // 3
         else:
             raise ValueError(
-                "The Basic Ruleset only allows for the three starter Pokemon.")
+                "The Basic Ruleset only allows for the three starter Pokemon."
+            )
         encoding[index] = 1
         return encoding
 
@@ -77,11 +77,14 @@ class BasicNeuralNetworkAgent(NeuralNetworkAgent, metaclass=ABCMeta):
         Returns:
             A vector representation of the given ActivePokemon.
         """
-        return (self._encode_one_hot_pokedex(pokemon.species) +
-                [pokemon.hp / pokemon.max_hp] +
-                self._encode_stat_modifiers(pokemon.stat_modifiers) +
-                self._encode_one_hot_status(pokemon.status))
+        return (
+            self._encode_one_hot_pokedex(pokemon.species)
+            + [pokemon.hp / pokemon.max_hp]
+            + self._encode_stat_modifiers(pokemon.stat_modifiers)
+            + self._encode_one_hot_status(pokemon.status)
+        )
 
     def vectorize_battle(self, battle: Battle, player: Player) -> List[float]:
-        return (self._encode_active_pokemon(battle.actives[player]) +
-                self._encode_active_pokemon(battle.actives[player.opponent]))
+        return self._encode_active_pokemon(
+            battle.actives[player]
+        ) + self._encode_active_pokemon(battle.actives[player.opponent])

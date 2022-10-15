@@ -1,7 +1,7 @@
 """Functionality for the Pokemon in a battle that is currently active."""
 
 import random
-from typing import List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Optional
 
 from simulator.battle.battling_pokemon import BattlingPokemon
 from simulator.battle_log import BattleLog
@@ -14,12 +14,10 @@ from simulator.status import Status
 from simulator.type import Type
 
 if TYPE_CHECKING:
-    from simulator.battle.battle import Battle
-    from simulator.battle.battle import Player
+    from simulator.battle.battle import Battle, Player
 
 
 class ZeroPPException(Exception):
-
     def __init__(self):
         super().__init__("PP is zero and cannot be decremented further.")
 
@@ -73,38 +71,51 @@ class ActivePokemon:
     @property
     def attack(self) -> int:
         burn_multiplier = 0.5 if self.status == Status.BURN else 1.0
-        return int(self.pokemon.attack * self._stat_change_multiplier(
-            self._stat_modifiers[ModifiableStat.ATTACK]) * burn_multiplier)
+        return int(
+            self.pokemon.attack
+            * self._stat_change_multiplier(self._stat_modifiers[ModifiableStat.ATTACK])
+            * burn_multiplier
+        )
 
     @property
     def defense(self) -> int:
-        return int(self.pokemon.defense * self._stat_change_multiplier(
-            self._stat_modifiers[ModifiableStat.DEFENSE]))
+        return int(
+            self.pokemon.defense
+            * self._stat_change_multiplier(self._stat_modifiers[ModifiableStat.DEFENSE])
+        )
 
     @property
     def special(self) -> int:
-        return int(self.pokemon.special * self._stat_change_multiplier(
-            self._stat_modifiers[ModifiableStat.SPECIAL]))
+        return int(
+            self.pokemon.special
+            * self._stat_change_multiplier(self._stat_modifiers[ModifiableStat.SPECIAL])
+        )
 
     @property
     def speed(self) -> int:
         paralysis_multiplier = 0.25 if self.status == Status.PARALYZE else 1.0
-        return int(self.pokemon.speed * self._stat_change_multiplier(
-            self._stat_modifiers[ModifiableStat.SPEED]) * paralysis_multiplier)
+        return int(
+            self.pokemon.speed
+            * self._stat_change_multiplier(self._stat_modifiers[ModifiableStat.SPEED])
+            * paralysis_multiplier
+        )
 
     @property
     def evasion_multiplier(self) -> float:
         return self._stat_change_multiplier(
-            -self._stat_modifiers[ModifiableStat.EVASION])
+            -self._stat_modifiers[ModifiableStat.EVASION]
+        )
 
     @property
     def accuracy_multiplier(self) -> float:
         return self._stat_change_multiplier(
-            self._stat_modifiers[ModifiableStat.ACCURACY])
+            self._stat_modifiers[ModifiableStat.ACCURACY]
+        )
 
     def modify_stat(self, stat: ModifiableStat, change: int):
         self._stat_modifiers[stat] = max(
-            -6, min(6, self._stat_modifiers[stat] + change))
+            -6, min(6, self._stat_modifiers[stat] + change)
+        )
 
     @property
     def status(self) -> Status:
@@ -161,11 +172,13 @@ class ActivePokemon:
         elif self.status == Status.NONE:
             self.status = status
 
-    def use_move(self,
-                 move_index: int,
-                 battle: "Battle",
-                 player: "Player",
-                 log: Optional[BattleLog] = None):
+    def use_move(
+        self,
+        move_index: int,
+        battle: "Battle",
+        player: "Player",
+        log: Optional[BattleLog] = None,
+    ):
         """Uses the move with the given index.
 
         If the Pokemon is paralyzed, there is a 25% chance it cannot move. If
@@ -194,8 +207,7 @@ class ActivePokemon:
             roll = random.random()
             if roll < 0.25:
                 if log is not None:
-                    log.log(
-                        f"{player}'s {self} is paralyzed and couldn't move.")
+                    log.log(f"{player}'s {self} is paralyzed and couldn't move.")
                 return
         if self.status == Status.FREEZE:
             if log is not None:
