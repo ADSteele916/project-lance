@@ -94,7 +94,11 @@ class DamagingMove(Move):
             )
         stab = 1.5 if self.move_type in attacker.species.types else 1.0
         type_effectiveness = target.species.attack_effectiveness(self.move_type)
-        rand = random.randint(217, 255)
+        rand = (
+            random.randint(217, 255)
+            if not attacker.battle.ruleset.deterministic_damage
+            else 255
+        )
 
         adjusted_level = (2 * level) / 5 + 2
         attack_defense_ratio = effective_attack / effective_defense

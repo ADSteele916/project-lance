@@ -9,6 +9,7 @@ from simulator.battle.active_pokemon import ActivePokemon
 from simulator.battle.battling_pokemon import BattlingPokemon
 from simulator.battle_log import BattleLog
 from simulator.pokemon.party_pokemon import PartyPokemon
+from simulator.ruleset import FULL_RULESET, Ruleset
 
 if TYPE_CHECKING:
     from simulator.agents.agent import Agent
@@ -39,14 +40,6 @@ class Result(Enum):
         return Player.P1 if self == Result.P1_WIN else Player.P2
 
 
-class InvalidTeamSizeException(Exception):
-    def __init__(self, size: int):
-        super().__init__(
-            f"{size} is an invalid team size. Teams must have between 1 and 6 "
-            f"members."
-        )
-
-
 class Battle:
     """A Pokemon battle with all state information for both teams"""
 
@@ -56,16 +49,19 @@ class Battle:
         team_two: List[PartyPokemon],
         agent_one: "Agent",
         agent_two: "Agent",
-        max_allowed_turns: Optional[int] = 1000,
+        ruleset: Ruleset = FULL_RULESET,
     ):
-        if not 1 <= len(team_one) <= 6:
-            raise InvalidTeamSizeException(len(team_one))
-        if not 1 <= len(team_two) <= 6:
-            raise InvalidTeamSizeException(len(team_two))
 
-        self.teams = (
-            [BattlingPokemon(p) for p in team_one],
-            [BattlingPokemon(p) for p in team_two],
+        self.ruleset = ruleset
+
+        if not self.ruleset.team_is_valid(team_one):
+            raise ValueError(f"{team_one} is not a valid team for this ruleset.")
+        if not self.ruleset.team_is_valid(team_one):
+            raise ValueError(f"{team_two} is not a valid team for this ruleset.")
+
+        self.teams: Tuple[List[BattlingPokemon], List[BattlingPokemon]] = (
+            [BattlingPokemon(p, self, Player.P1) for p in team_one],
+            [BattlingPokemon(p, self, Player.P2) for p in team_two],
         )
         self.agents: Tuple["Agent", "Agent"] = (agent_one, agent_two)
         self.team_cursors: List[int] = [0, 0]
@@ -88,7 +84,6 @@ class Battle:
             self._valid_actions[Player.P2][i + 6] = self.team_cursors[Player.P2] != i
 
         self._turn = 0
-        self._max_allowed_turns = max_allowed_turns
         self.result: Optional[Result] = None
         self.log: Optional[BattleLog] = None
 
@@ -174,7 +169,7 @@ class Battle:
         if action.is_switch:
             self._execute_switch(player, action)
         else:
-            active_pokemon.use_move(action.move_slot, self, player, self.log)
+            active_pokemon.use_move(action.move_slot)
             if active_pokemon.pp[action.move_slot] == 0:
                 self._valid_actions[player][action] = False
 
@@ -277,7 +272,7 @@ class Battle:
             self._execute_switch(Player.P2, p2_switch)
 
     def _under_turn_max(self):
-        return self._max_allowed_turns is None or self.turn < self._max_allowed_turns
+        return self.ruleset.max_turns is None or self.turn < self.ruleset.max_turns
 
     def play(
         self, do_logging: bool = False

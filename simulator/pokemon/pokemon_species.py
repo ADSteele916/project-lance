@@ -62,6 +62,14 @@ class PokemonSpecies:
             for attacking_type in Type
         }
 
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, PokemonSpecies):
+            return (self.name, self.dex_num) == (other.name, other.dex_num)
+        return False
+
+    def __hash__(self) -> int:
+        return hash((self.name, self.dex_num))
+
     def __str__(self):
         return self.name
 

@@ -4,7 +4,6 @@ import random
 from typing import TYPE_CHECKING, List, Optional
 
 from simulator.battle.battling_pokemon import BattlingPokemon
-from simulator.battle_log import BattleLog
 from simulator.dex.movedex import MOVEDEX
 from simulator.modifiable_stat import ModifiableStat
 from simulator.moves.move import Move
@@ -51,6 +50,14 @@ class ActivePokemon:
     @property
     def pokemon(self) -> BattlingPokemon:
         return self._pokemon
+
+    @property
+    def battle(self) -> "Battle":
+        return self.pokemon.battle
+
+    @property
+    def player(self) -> "Player":
+        return self.pokemon.player
 
     @property
     def stat_modifiers(self) -> List[int]:
@@ -165,19 +172,35 @@ class ActivePokemon:
     def apply_status(self, status: Status):
         if self.status == Status.FREEZE and status == Status.BURN:
             self.status = Status.NONE
-        elif status == Status.POISON and Type.POISON in self.species.types:
             return
-        elif status == Status.BURN and Type.FIRE in self.species.types:
+        if status == Status.POISON and Type.POISON in self.species.types:
             return
-        elif self.status == Status.NONE:
-            self.status = status
+        if status == Status.BURN and Type.FIRE in self.species.types:
+            return
+        if self.status != Status.NONE:
+            return
+
+        ruleset = self.battle.ruleset
+        team: List[BattlingPokemon] = self.battle.teams[self.player]
+
+        if (
+            ruleset.sleep_clause
+            and status == Status.SLEEP
+            and any(p.status == Status.SLEEP for p in team)
+        ):
+            return
+        if (
+            ruleset.freeze_clause
+            and status == Status.FREEZE
+            and any(p.status == Status.FREEZE for p in team)
+        ):
+            return
+
+        self.status = status
 
     def use_move(
         self,
         move_index: int,
-        battle: "Battle",
-        player: "Player",
-        log: Optional[BattleLog] = None,
     ):
         """Uses the move with the given index.
 
@@ -189,14 +212,17 @@ class ActivePokemon:
 
         Args:
             move_index: The index of the move that should be used.
-            battle: The Battle in which the move is being used.
-            player: The Player whose Pokemon is using the move.
 
         Raises:
             ValueError: The given index is out of range.
         """
         if not 0 <= move_index < len(self.moves):
             raise ValueError(f"Move index must be in [0, {len(self.moves)}).")
+
+        battle = self.battle
+        player = self.player
+        target = battle.actives[player.opponent]
+        log = battle.log
 
         if self.flinch:
             if log is not None:
@@ -214,16 +240,17 @@ class ActivePokemon:
                 log.log(f"{player}'s {self} is frozen and couldn't move.")
             return
 
-        if self.pp[move_index] > 0:
-            self.decrement_pp(move_index)
+        if self.pp[move_index] == 0:
+            if log is not None:
+                log.log(f"{player}'s {self} is out of PP and used Struggle.")
+            MOVEDEX["Struggle"].execute(self, target)
+        else:
+            if self.battle.ruleset.use_pp:
+                self.decrement_pp(move_index)
             move = self.moves[move_index]
             if log is not None:
                 log.log(f"{player}'s {self} used {move}")
-            move.execute(battle, player)
-        else:
-            if log is not None:
-                log.log(f"{player}'s {self} is out of PP and used Struggle.")
-            MOVEDEX["Struggle"].execute(battle, player)
+            move.execute(self, target)
 
         opponent = battle.actives[player.opponent]
         if not opponent.knocked_out:

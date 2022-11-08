@@ -57,6 +57,14 @@ class Move(metaclass=ABCMeta):
         self.accuracy = None if accuracy is None else (accuracy * 255) // 100
         self.priority = priority
 
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Move):
+            return self.name == other.name
+        return False
+
+    def __hash__(self) -> int:
+        return hash(self.name)
+
     def __str__(self):
         return self.name
 
@@ -72,7 +80,7 @@ class Move(metaclass=ABCMeta):
         Returns:
             Whether this Move will hit its target.
         """
-        if self.accuracy is None:
+        if self.accuracy is None or not attacker.battle.ruleset.accuracy_checks:
             return True
 
         accuracy = attacker.accuracy_multiplier
@@ -83,16 +91,14 @@ class Move(metaclass=ABCMeta):
 
         return accuracy_roll < threshold
 
-    def execute(self, battle: "Battle", player: "Player"):
+    def execute(self, attacker: "ActivePokemon", target: "ActivePokemon"):
         """Executes the move, updating the given Battle environment as needed.
 
         Args:
-            battle: The Battle environment in which the move is being used.
-            player: The Player who used the move.
+            attacker: The Pokemon using this move.
+            target: The Pokemon targeted by this move.
         """
-        attacker: "ActivePokemon" = battle.actives[player]
-        target: "ActivePokemon" = battle.actives[player.opponent]
-
+        assert attacker.battle is target.battle
         if self.accuracy_check(attacker, target):
             self.apply_effects(attacker, target)
 

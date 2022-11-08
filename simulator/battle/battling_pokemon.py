@@ -1,11 +1,14 @@
 """A Pokemon currently in battle, with variable HP, Status, and PP"""
 
-from typing import List
+from typing import TYPE_CHECKING, List
 
 from simulator.moves.move import Move
 from simulator.pokemon.party_pokemon import PartyPokemon
 from simulator.pokemon.pokemon_species import PokemonSpecies
 from simulator.status import Status
+
+if TYPE_CHECKING:
+    from simulator.battle.battle import Battle, Player
 
 
 class InvalidHPException(Exception):
@@ -19,11 +22,14 @@ class InvalidHPException(Exception):
 class BattlingPokemon:
     """A Pokemon that is currently in a battle, but may or may not be active."""
 
-    def __init__(self, party_pokemon: PartyPokemon):
+    def __init__(self, party_pokemon: PartyPokemon, battle: "Battle", player: "Player"):
         self._party_pokemon = party_pokemon
         self._hp = party_pokemon.hp
         self._status = Status.NONE
         self._pp = [m.pp for m in party_pokemon.moves]
+
+        self._battle = battle
+        self._player = player
 
     def __str__(self):
         return str(self._party_pokemon)
@@ -35,6 +41,14 @@ class BattlingPokemon:
     @property
     def pokemon(self) -> PartyPokemon:
         return self._party_pokemon
+
+    @property
+    def battle(self) -> "Battle":
+        return self._battle
+
+    @property
+    def player(self) -> "Player":
+        return self._player
 
     @property
     def hp(self) -> int:
